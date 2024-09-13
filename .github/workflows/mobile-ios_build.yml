@@ -12,7 +12,7 @@ jobs:
 
     steps:
       # Step 1: Checkout the code from your repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Step 2: Set up JDK 11 (required for building Kotlin)
       - name: Set up JDK 11
@@ -32,7 +32,7 @@ jobs:
 
       # Step 5: Upload the iOS framework (or package)
       - name: Upload iOS Package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: iosPackage
           path: mobile/build/xcode-frameworks  # This path depends on your build output; adjust as needed
@@ -45,11 +45,11 @@ jobs:
     steps:
       # Step 6: Checkout code for the push job
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Step 7: Download the iOS package artifact created during the build step
       - name: Download iOS package
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: iosPackage
           path: iosPackage
