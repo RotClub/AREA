@@ -1,0 +1,64 @@
+# Trigger on tag creation and manual dispatch
+name: Mobile - Build iOS Package
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      # Step 1: Checkout the code from your repository
+      - uses: actions/checkout@v2
+
+      # Step 2: Set up JDK 11 (required for building Kotlin)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      # Step 3: Set up Kotlin Multiplatform Mobile dependencies
+      # (use setup-java if you are using Java dependencies for the Kotlin code)
+
+      # Step 4: Build the iOS framework for Kotlin Multiplatform
+      - name: Build iOS framework (KMM)
+        id: buildKMMiOS
+        run: |
+          cd mobile  # Navigate to the mobile directory
+          ./gradlew packForXcode # Adjust this to your task if it's different
+
+      # Step 5: Upload the iOS framework (or package)
+      - name: Upload iOS Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: iosPackage
+          path: mobile/build/xcode-frameworks  # This path depends on your build output; adjust as needed
+          retention-days: 1
+
+  push:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 6: Checkout code for the push job
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Step 7: Download the iOS package artifact created during the build step
+      - name: Download iOS package
+        uses: actions/download-artifact@v2
+        with:
+          name: iosPackage
+          path: iosPackage
+
+      # Step 8: Publish the iOS package to the GitHub repository
+      # You may want to push it as a release or attach it to a specific tag
+      - name: Create a new release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: iosPackage/  # Path to your iOS package/framework directory
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
