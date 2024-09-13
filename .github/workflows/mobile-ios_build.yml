@@ -14,11 +14,11 @@ jobs:
       # Step 1: Checkout the code from your repository
       - uses: actions/checkout@v4
 
-      # Step 2: Set up JDK 11 (required for building Kotlin)
-      - name: Set up JDK 11
+      # Step 2: Set up JDK 22 (required for building Kotlin)
+      - name: Set up JDK 22
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 22
 
       # Step 3: Set up Kotlin Multiplatform Mobile dependencies
       # (use setup-java if you are using Java dependencies for the Kotlin code)
