@@ -3,13 +3,14 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - web/dev
-      - dev
+        - dev
   workflow_dispatch:
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'web/dev'
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
