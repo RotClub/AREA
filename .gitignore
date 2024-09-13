@@ -352,3 +352,4 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/svelte,gradle,android,androidstudio,kotlin,macos,java,swift
 .vercel
+.kotlin
