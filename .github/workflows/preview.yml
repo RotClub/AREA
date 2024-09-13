@@ -7,9 +7,6 @@ on:
     branches:
       - web/*
       - dev
-    branches-ignore:
-      - main
-      - mobile/*
 jobs:
   deploy:
     runs-on: ubuntu-latest
