@@ -23,12 +23,11 @@ jobs:
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: 'wrapper'
-          working-directory: "./mobile"
+          wrapper-directory: "./mobile"
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
-          working-directory: "./mobile"
 
       - name: Build iOS framework (KMM)
         run: ./gradlew embedAndSignAppleFrameworkForXcode
