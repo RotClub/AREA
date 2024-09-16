@@ -50,9 +50,9 @@ jobs:
           prerelease: 'false'
           draft: 'true'
 
-      - name: List Files Recursively
+      - name: List Output APK Recursively
         run: |
-          ls -lR
+          ls -lR ./mobile/${{ env.APK_NAME }}/build/outputs
 
       - name: Upload APK to Draft Release
         uses: actions/upload-release-asset@v1
