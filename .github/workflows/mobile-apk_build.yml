@@ -50,6 +50,10 @@ jobs:
           prerelease: 'false'
           draft: 'true'
 
+      - name: List Files Recursively
+        run: |
+          ls -lR
+
       - name: Upload APK to Draft Release
         uses: actions/upload-release-asset@v1
         env:
