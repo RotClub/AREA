@@ -47,9 +47,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "v${{ github.run_number }}.dev"
-          release_name: Release Pre-Prod Android N°${{ github.run_number }}
-          prerelease: 'false'
-          draft: 'true'
+          release_name: Release Pre-Prod Android ${{ github.run_number }}
+          prerelease: 'true'
+          draft: 'false'
 
       - name: Upload APK to Draft Release
         uses: actions/upload-release-asset@v1
