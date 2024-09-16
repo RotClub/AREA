@@ -72,10 +72,6 @@ jobs:
           project-path: mobile/ios-app
           scheme: ios-app
           configuration: Release
-          sdk: iphonesimulator
-          xcodebuild-arguments: -quiet
-          output-directory: mobile/build/xcode-frameworks
-          output-name: area-preview.ipa
 
       - name: Upload IPA Package
         uses: actions/upload-artifact@v4
@@ -141,8 +137,12 @@ jobs:
     if: failure()
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Delete tag
         run: |
+          git fetch --tags
           git tag -d ${{ github.ref }}
           git push origin --delete ${{ github.ref }}
         env:
