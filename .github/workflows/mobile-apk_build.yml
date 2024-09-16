@@ -26,6 +26,15 @@ jobs:
         run: |
           echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
 
+      - name: Force AAPT2 to run in command-line mode
+        run: |
+          echo "android.enableAapt2=true" >> gradle.properties
+          echo "android.aapt2FromMavenOverride=ENABLE" >> gradle.properties
+          echo "android.useAapt2FromMaven=true" >> gradle.properties
+
+      - name: Disable AAPT2 incremental mode
+        run: echo "android.aapt2.incremental=false" >> gradle.properties
+
       - name: Run Android Unit Tests
         run: ./gradlew --no-daemon testDebugUnitTest
         working-directory: "./mobile"
