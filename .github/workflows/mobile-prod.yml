@@ -47,9 +47,7 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
-    env:
-      DEBUG: false
-    if: ${{ env.DEBUG == 'false' }}
+    if: ${{ false }}
     steps:
       - uses: actions/checkout@v4
 
