@@ -1,10 +1,8 @@
 # Trigger on tag creation and manual dispatch
 name: Mobile - Build iOS Package
 on:
-  push:
-    branches:
-      - dev
-      - mobile/dev
+  tag:
+    - '[0-9]+.[0-9]+.[0-9]+.dev'
   workflow_dispatch:
 
 jobs:
