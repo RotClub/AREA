@@ -49,7 +49,7 @@ jobs:
 
       - name: Locate new APK
         run: |
-          apk_path=$(find ./mobile/app/build/outputs/apk/release -name "*.apk")
+          apk_path=$(find . -name "*.apk")
           echo "::set-output name=apk_path::$apk_path"
         working-directory: "./mobile"
 
