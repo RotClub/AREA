@@ -1,12 +1,8 @@
 name: Mobile - Build & Publish pre-release
-env:
-  APK_NAME: "composeApp"
 on:
   push:
     tags:
       - '*.*.*.dev'
-    branches:
-      - "mobile/dev"
   workflow_dispatch:
 
 permissions:
@@ -95,6 +91,7 @@ jobs:
           if-no-files-found: 'error'
 
   publish:
+    needs: [build-android, build-ios]
     runs-on: ubuntu-latest
     steps:
       - name: Download APK Package
@@ -143,3 +140,15 @@ jobs:
           asset_path: .
           asset_name: "area-preview.ipa"
           asset_content_type: application/octet-stream
+
+  check-tag:
+    needs: [publish]
+    if: ${{ github.event.action == 'push' && jobs.publish.status != 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete tag
+        run: |
+          git tag -d ${{ github.ref }}
+          git push origin --delete ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
