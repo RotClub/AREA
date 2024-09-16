@@ -19,6 +19,9 @@ jobs:
           apk update
           apk add openjdk21
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+
       - name: Set Gradle properties
         run: |
           echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
