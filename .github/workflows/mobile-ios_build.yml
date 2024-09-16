@@ -2,7 +2,7 @@
 name: Mobile - Build iOS Debug Package
 on:
   tag:
-    - '*.*.*.dev'
+    - '*.dev'
   workflow_dispatch:
 
 jobs:
