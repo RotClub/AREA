@@ -1,4 +1,4 @@
-name: web-check.yml
+name: Web - Check Syntax and run Tests
 on:
   push:
     branches:
