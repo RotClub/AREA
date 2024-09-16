@@ -43,4 +43,3 @@ jobs:
           release_name: Release v${{ github.run_number }}
           draft: false
           prerelease: false
-          repo: ${{ github.repositoryUrl }}
