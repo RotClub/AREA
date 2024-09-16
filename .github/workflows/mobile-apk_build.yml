@@ -1,4 +1,6 @@
 name: Mobile - Build Android Package
+env:
+  APK_NAME: "composeApp"
 on:
   push:
     branches:
@@ -42,23 +44,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release v${{ github.run_number }}
-          draft: false
-          prerelease: false
+          tag_name: "v${{ github.run_number }}.dev"
+          release_name: Release Pre-Prod Android N°${{ github.run_number }}
+          prerelease: 'false'
+          draft: 'true'
 
-      - name: Locate new APK
-        run: |
-          apk_path=$(find . -name "*.apk")
-          echo "::set-output name=apk_path::$apk_path"
-        working-directory: "./mobile"
-
-      - name: Upload APK to Release
+      - name: Upload APK to Draft Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./mobile/app/build/outputs/apk/release/app-release.apk  # Path to your APK
-          asset_name: app-release.apk  # Name of the asset in the release
-          asset_content_type: application/vnd.android.package-archive  # Content type for APK files
+          asset_path: "./mobile/${{ env.APK_NAME }}/build/outputs/apk/debug"
+          asset_name: "${{ env.APK_NAME }}-debug.apk"
+          asset_content_type: application/vnd.android.package-archive
