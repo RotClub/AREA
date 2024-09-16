@@ -43,4 +43,4 @@ jobs:
           release_name: Release v${{ github.run_number }}
           draft: false
           prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repositoryUrl }}
