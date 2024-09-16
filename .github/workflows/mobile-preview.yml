@@ -95,6 +95,8 @@ jobs:
           if-no-files-found: 'error'
 
   publish:
+    runs-on: ubuntu-latest
+    steps:
       - name: Download APK Package
         uses: actions/download-artifact@v4
         with:
