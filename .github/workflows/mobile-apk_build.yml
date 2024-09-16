@@ -27,7 +27,6 @@ jobs:
       - name: Force AAPT2 to run in command-line mode
         run: |
           echo "android.enableAapt2=true" >> gradle.properties
-          echo "android.aapt2FromMavenOverride=ENABLE" >> gradle.properties
           echo "android.useAapt2FromMaven=true" >> gradle.properties
         working-directory: "./mobile"
 
