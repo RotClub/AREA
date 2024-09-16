@@ -6,7 +6,10 @@ on:
   pull_request:
     types: [closed]
     branches:
-        - dev
+      - dev
+  push:
+    branches:
+      - dev
   workflow_dispatch:
 jobs:
   deploy:
