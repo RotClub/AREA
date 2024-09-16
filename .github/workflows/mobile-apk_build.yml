@@ -27,7 +27,6 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
-        working-directory: "./mobile"
 
       - name: Run Android Unit Tests
         run: ./gradlew testDebugUnitTest
