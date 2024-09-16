@@ -5,9 +5,6 @@ on:
       - '*.*.*.dev'
   workflow_dispatch:
 
-env:
-  DEBUG: false
-
 permissions:
   contents: write
   packages: write
@@ -50,6 +47,8 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    env:
+      DEBUG: false
     if: ${{ env.DEBUG }}
     steps:
       - uses: actions/checkout@v4

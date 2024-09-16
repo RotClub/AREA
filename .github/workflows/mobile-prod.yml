@@ -5,9 +5,6 @@ on:
       - '*.*.*.rc'
   workflow_dispatch:
 
-env:
-  DEBUG: false
-
 permissions:
   contents: write
   packages: write
@@ -50,6 +47,8 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    env:
+      DEBUG: false
     if: ${{ env.DEBUG }}
     steps:
       - uses: actions/checkout@v4
@@ -114,27 +113,27 @@ jobs:
 
       - name: Rename packages
         run: |
-          mv apkPackage/composeApp-debug.apk area-preview.apk
-          mv ipaPackage/ios-app.ipa area-preview.ipa
+          mv apkPackage/composeApp-debug.apk area.apk
+          mv ipaPackage/ios-app.ipa area.ipa
 
-      - name: Upload APK to Pre Release
+      - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: .
-          asset_name: "area-preview.apk"
+          asset_name: "area.apk"
           asset_content_type: application/vnd.android.package-archive
 
-      - name: Upload IPA to Pre Release
+      - name: Upload IPA to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: .
-          asset_name: "area-preview.ipa"
+          asset_name: "area.ipa"
           asset_content_type: application/octet-stream
 
   check-tag:
