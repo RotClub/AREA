@@ -49,7 +49,7 @@ jobs:
     runs-on: macos-latest
     env:
       DEBUG: false
-    if: ${{ env.DEBUG }}
+    if: ${{ env.DEBUG == 'false' }}
     steps:
       - uses: actions/checkout@v4
 
