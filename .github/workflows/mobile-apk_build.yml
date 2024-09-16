@@ -36,11 +36,11 @@ jobs:
         run: echo "android.aapt2.incremental=false" >> gradle.properties
 
       - name: Run Android Unit Tests
-        run: ./gradlew --no-daemon testDebugUnitTest
+        run: ./gradlew testDebugUnitTest
         working-directory: "./mobile"
 
       - name: Build APK
-        run: ./gradlew --no-daemon assembleRelease
+        run: ./gradlew assembleRelease
         working-directory: "./mobile"
 
       - name: Create Release
