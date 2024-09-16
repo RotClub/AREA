@@ -17,6 +17,7 @@ jobs:
           apk update
           apk add bash curl nodejs npm
           npm install
+        working-directory: "./web"
       - name: Run ESLint
         run: npm run lint
         working-directory: "./web"
@@ -30,6 +31,8 @@ jobs:
         run: |
           apk update
           apk add bash curl nodejs npm
+          npm install
+        working-directory: "./web"
       - name: Run tests
         run: npm run test
         working-directory: "./web"
