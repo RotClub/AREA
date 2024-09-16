@@ -24,6 +24,7 @@ jobs:
         with:
           arguments: 'wrapper'
           wrapper-directory: "./mobile"
+          build-root-directory: "./mobile"
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
