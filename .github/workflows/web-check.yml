@@ -1,0 +1,35 @@
+name: web-check.yml
+on:
+  push:
+    branches:
+      - dev
+      - web/*
+
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          apk update
+          apk add bash curl nodejs npm
+          npm install
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: "./web"
+  testing:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          apk update
+          apk add bash curl nodejs npm
+      - name: Run tests
+        run: npm run test
+        working-directory: "./web"
