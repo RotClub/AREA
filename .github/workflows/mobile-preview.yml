@@ -116,8 +116,7 @@ jobs:
 
       - name: Rename packages
         run: |
-          ls -lR .
-          mv apkPackage/composeApp-debug.apk area-preview.apk
+          mv composeApp-debug.apk area-preview.apk
 
       - name: Upload APK to Pre Release
         uses: actions/upload-release-asset@v1
