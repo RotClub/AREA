@@ -1,0 +1,23 @@
+name: Common - Mirror to Epitech Repository
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - web/dev
+      - mobile/dev
+
+jobs:
+    mirror-push:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Mirror to Epitech Repository
+          uses: wei/git-sync@v3
+          with:
+            source_repo: ${{ github.repositoryUrl }}
+            source_branch: ${{ github.ref }}
+            destination_repo: ${{ secrets.EPITECH_REPO }}
+            destination_branch: ${{ github.ref }}
+            ssh_private_key: ${{ secrets.EPITECH_SSH_KEY }}
