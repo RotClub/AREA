@@ -101,7 +101,7 @@ jobs:
 
       - name: Extract tag name
         id: get_tag
-        run: echo "TAG_NAME=" >> $GITHUB_ENV
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
