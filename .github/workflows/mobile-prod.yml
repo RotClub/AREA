@@ -87,8 +87,6 @@ jobs:
   publish:
     needs: [build-android]
     runs-on: ubuntu-latest
-    outputs:
-      tag_name: ${{ steps.get_tag.outputs.TAG_NAME }}
     steps:
       - name: Download APK Package
         uses: actions/download-artifact@v4
@@ -118,7 +116,7 @@ jobs:
 
       - name: Rename packages
         run: |
-          mv apkPackage/composeApp-debug.apk area.apk
+          mv apkPackage/composeApp-release.apk area.apk
 
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
@@ -149,10 +147,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Extract tag name
+        id: get_tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - name: Delete tag
         run: |
           git fetch --tags
-          git tag -d ${{ job.publish.outputs.tag_name }}
-          git push origin --delete ${{ job.publish.outputs.tag_name }}
+          git tag -d $TAG_NAME
+          git push origin --delete $TAG_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
