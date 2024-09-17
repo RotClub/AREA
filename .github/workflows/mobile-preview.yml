@@ -97,6 +97,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ipaPackage
+        continue-on-error: true
 
       - name: Create Release
         uses: actions/create-release@v1
