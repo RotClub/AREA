@@ -87,6 +87,8 @@ jobs:
   publish:
     needs: [build-android]
     runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.get_tag.outputs.TAG_NAME }}
     steps:
       - name: Download APK Package
         uses: actions/download-artifact@v4
@@ -97,6 +99,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ipaPackage
+        continue-on-error: true
+
+      - name: Extract tag name
+        id: get_tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -104,8 +111,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Production ${{ github.ref }}
+          tag_name: $TAG_NAME
+          release_name: Production $TAG_NAME
           prerelease: false
           draft: false
 
@@ -133,6 +140,7 @@ jobs:
           asset_path: .
           asset_name: "area.ipa"
           asset_content_type: application/octet-stream
+        continue-on-error: true
 
   check-tag:
     needs: [publish]
@@ -145,7 +153,7 @@ jobs:
       - name: Delete tag
         run: |
           git fetch --tags
-          git tag -d ${{ github.ref }}
-          git push origin --delete ${{ github.ref }}
+          git tag -d ${{ job.publish.outputs.tag_name }}
+          git push origin --delete ${{ job.publish.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
