@@ -101,7 +101,7 @@ jobs:
 
       - name: Extract tag name
         id: get_tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: echo "TAG_NAME=" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -109,8 +109,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_tag.outputs.TAG_NAME }}
-          release_name: Preview ${{ steps.get_tag.outputs.TAG_NAME }}
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Preview ${{ env.TAG_NAME }}
           prerelease: true
           draft: false
 
