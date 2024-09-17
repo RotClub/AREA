@@ -28,4 +28,4 @@ jobs:
             source_branch: ${{ env.BRANCH_NAME }}
             destination_repo: ${{ env.DEST_REPO }}
             destination_branch: ${{ env.BRANCH_NAME }}
-            ssh_private_key: ${{ secrets.EPITECH_SSH_KEY }}
+            ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
