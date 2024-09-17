@@ -119,7 +119,6 @@ jobs:
       - name: Rename packages
         run: |
           mv apkPackage/composeApp-debug.apk area-preview.apk
-          mv ipaPackage/ios-app.ipa area-preview.ipa
 
       - name: Upload APK to Pre Release
         uses: actions/upload-release-asset@v1
