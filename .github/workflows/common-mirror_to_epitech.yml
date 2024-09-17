@@ -7,6 +7,10 @@ on:
       - web/dev
       - mobile/dev
 
+env:
+  DEST_REPO: git@github.com:EpitechPromo2027/B-DEV-500-TLS-5-1-area-theo.bary.git
+  SRC_REPO: git@github.com:RotClub/AREA.git
+
 jobs:
     mirror-push:
       runs-on: ubuntu-latest
@@ -20,8 +24,8 @@ jobs:
         - name: Mirror to Epitech Repository
           uses: wei/git-sync@v3
           with:
-            source_repo: ${{ github.repositoryUrl }}
+            source_repo: ${{ env.SRC_REPO }}
             source_branch: ${{ env.BRANCH_NAME }}
-            destination_repo: ${{ secrets.EPITECH_REPO }}
+            destination_repo: ${{ env.DEST_REPO }}
             destination_branch: ${{ env.BRANCH_NAME }}
             ssh_private_key: ${{ secrets.EPITECH_SSH_KEY }}
