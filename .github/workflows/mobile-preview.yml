@@ -152,6 +152,7 @@ jobs:
 
       - name: Delete tag
         run: |
+          echo "Deleting tag ${{ job.publish.outputs.tag_name }}"
           git fetch --tags
           git tag -d ${{ job.publish.outputs.tag_name }}
           git push origin --delete ${{ job.publish.outputs.tag_name }}
