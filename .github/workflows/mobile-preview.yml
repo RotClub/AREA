@@ -109,8 +109,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${TAG_NAME}
-          release_name: Preview ${TAG_NAME}
+          tag_name: ${{ steps.get_tag.outputs.TAG_NAME }}
+          release_name: Preview ${{ steps.get_tag.outputs.TAG_NAME }}
           prerelease: true
           draft: false
 
@@ -124,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .
+          asset_path: "./area-preview.apk"
           asset_name: "area-preview.apk"
           asset_content_type: application/vnd.android.package-archive
 
@@ -134,7 +134,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .
+          asset_path: "./area-preview.ipa"
           asset_name: "area-preview.ipa"
           asset_content_type: application/octet-stream
         continue-on-error: true
