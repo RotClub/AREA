@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS builder
+FROM ubuntu:latest AS kotlin
 
 WORKDIR /build
 
@@ -25,7 +25,7 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
 
 # Install SDK packages
 RUN yes | sdkmanager --licenses \
-    && sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+    && sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 # Copy the project files into the container
 COPY . .
@@ -35,16 +35,10 @@ RUN echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
 
 # Build the project with gradle wrapper
 RUN chmod +x ./gradlew
-
-RUN ./gradlew :composeApp:assemble
-
-
-FROM alpine:latest AS runner
+RUN ./gradlew :composeApp:assembleRelease
 
 WORKDIR /app
 
-COPY --from=builder /build/composeApp/build/outputs/apk/release/composeApp-release.apk ./app.apk
+COPY ./composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk /app/app.apk
 
-RUN echo "APK built successfully"
-
-CMD ls -lR /build/composeApp/build/outputs/
+CMD ls -lR /build/composeApp/build/outputs/apk/release
