@@ -22,8 +22,6 @@ services:
     build:
       context: "./mobile"
       dockerfile: "Dockerfile"
-    depends_on:
-      - client_web
     volumes:
       - shared_data:/app
 
