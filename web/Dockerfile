@@ -35,8 +35,8 @@ COPY --from=builder /build/build ./build
 COPY --from=builder /build/node_modules ./node_modules
 COPY --from=builder /build/package*.json .
 
-# Expose 24678 for Vite's HMR and 8081 for the server
+# Expose 24678 for Vite's HMR and 3000 for the server
 EXPOSE 24678
-EXPOSE 8081
+EXPOSE 3000
 
-CMD npm run preview -- --port 8081 --host
+CMD node build
