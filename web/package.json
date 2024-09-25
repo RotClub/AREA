@@ -48,12 +48,14 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "1.6.10",
+		"@prisma/client": "^5.20.0",
 		"@sveltejs/adapter-node": "^5.2.4",
 		"@sveltejs/adapter-static": "^3.0.5",
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"clsx": "^2.1.1",
 		"highlight.js": "11.10.0",
 		"lucide-svelte": "^0.441.0",
+		"prisma": "^5.20.0",
 		"svelte-motion": "^0.12.2",
 		"tailwind-merge": "^2.5.2"
 	}
