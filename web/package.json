@@ -19,6 +19,7 @@
 		"@skeletonlabs/skeleton": "2.10.2",
 		"@skeletonlabs/tw-plugin": "0.4.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-vercel": "^5.4.4",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/forms": "0.5.9",
@@ -47,6 +48,8 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "1.6.10",
+		"@sveltejs/adapter-node": "^5.2.4",
+		"@sveltejs/adapter-static": "^3.0.5",
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"clsx": "^2.1.1",
 		"highlight.js": "11.10.0",

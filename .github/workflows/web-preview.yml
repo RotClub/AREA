@@ -3,18 +3,22 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
   push:
     branches:
-      - web/dev
       - dev
   workflow_dispatch:
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'web/dev'
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           apk update
