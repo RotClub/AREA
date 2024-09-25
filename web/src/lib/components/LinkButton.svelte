@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from "$app/stores";
 
-	export let href: string = '';
+	export let href: string = "";
 </script>
 
-{#if ($page.url.pathname === '/dashboard' && href === '/dashboard') || (href !== '/dashboard' && $page.url.pathname.includes(href))}
+{#if ($page.url.pathname === "/dashboard" && href === "/dashboard") || (href !== "/dashboard" && $page.url.pathname.includes(href))}
 	<div class="h-full flex items-center">
-		<a href="{href}" class="text-primary-500 h-full flex flex-col items-center justify-center">
+		<a {href} class="text-primary-500 h-full flex flex-col items-center justify-center">
 			<span>
 				<slot />
 			</span>
@@ -15,7 +15,7 @@
 	</div>
 {:else}
 	<div class="h-full flex items-center">
-		<a href="{href}" class="h-full flex flex-col items-center justify-center">
+		<a {href} class="h-full flex flex-col items-center justify-center">
 			<span>
 				<slot />
 			</span>

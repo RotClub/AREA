@@ -1,3 +1,3 @@
-import BackgroundBeams from './BackgroundBeams.svelte';
+import BackgroundBeams from "./BackgroundBeams.svelte";
 
 export { BackgroundBeams };
