@@ -9,6 +9,22 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+tasks.register("buildIosDebugIPA") {
+    group = "build"
+    description = "Custom builder for all supported Ios arch in a IPA file"
+
+    dependsOn("compileKotlinIosArm64",
+        "linkDebugFrameworkIosArm64",
+        "compileKotlinIosSimulatorArm64",
+        "linkDebugFrameworkIosSimulatorArm64",
+        "compileKotlinIosX64",
+        "linkDebugFrameworkIosX64",
+        "embedAndSignAppleFrameworkForXcode")
+    doLast {
+        println("Everything is in order...")
+    }
+}
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
