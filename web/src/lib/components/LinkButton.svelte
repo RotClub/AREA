@@ -5,20 +5,20 @@
 </script>
 
 {#if ($page.url.pathname === '/dashboard' && href === '/dashboard') || (href !== '/dashboard' && $page.url.pathname.includes(href))}
-	<div class="relative h-full flex items-center">
-		<a {href} class="text-primary-500 h-full flex items-center justify-center">
-			<slot />
+	<div class="h-full flex items-center">
+		<a href="{href}" class="text-primary-500 h-full flex flex-col items-center justify-center">
+			<span>
+				<slot />
+			</span>
+			<span class="h-1 w-full bottom-4 bg-primary-500 vt-name-[active] rounded-sm"></span>
 		</a>
-		<span class="absolute h-1 w-full bottom-0 left-0 bg-primary-500 active rounded-t-sm"></span>
 	</div>
 {:else}
-	<div class="relative h-full flex items-center">
-		<a {href} class="h-full flex items-center justify-center"><slot /></a>
+	<div class="h-full flex items-center">
+		<a href="{href}" class="h-full flex flex-col items-center justify-center">
+			<span>
+				<slot />
+			</span>
+		</a>
 	</div>
 {/if}
-
-<style>
-	.active {
-		view-transition-name: active-page;
-	}
-</style>
