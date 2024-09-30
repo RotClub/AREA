@@ -12,3 +12,9 @@
 README.md
 
 Dockerfile
+
+build
+.svelte-kit
+.vercel
+node_modules
+package-lock.json
