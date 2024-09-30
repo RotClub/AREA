@@ -1,5 +1,8 @@
 ﻿@import '@nativescript/theme/css/core.css';
 @import '@nativescript/theme/css/default.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .fab {
   font-family: 'Font Awesome 5 Brands', 'fa-brands-400';

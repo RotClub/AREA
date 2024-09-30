@@ -4,7 +4,7 @@
         <label class="info">
             <formattedString>
                 <span class="fas" text="&#xf135;" />
-                <span text=" {message}" />
+                <span text=" {message}" class="bg-warning-500"/>
             </formattedString>
         </label>
     </gridLayout>
