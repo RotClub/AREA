@@ -13,7 +13,6 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'web/dev'
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
