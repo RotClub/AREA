@@ -33,6 +33,9 @@ jobs:
           apk add bash curl nodejs npm
           npm install
         working-directory: "./web"
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps chromium
+        working-directory: "./web"
       - name: Run tests
         run: npm run test
         working-directory: "./web"
