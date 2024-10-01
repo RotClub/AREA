@@ -8,8 +8,6 @@ on:
 jobs:
   syntax-check:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
