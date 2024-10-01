@@ -22,6 +22,9 @@ jobs:
         run: |
           apk update
           apk add bash curl nodejs npm
+      - name: Using Svelte config for Vercel
+        run: mv svelte.config.deploy.js svelte.config.js
+        working-directory: "./web"
       - name: Install Vercel CLI
         run: |
           rm -rf node_modules package-lock.json
