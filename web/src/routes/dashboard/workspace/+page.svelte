@@ -10,15 +10,14 @@
 		<WorkspaceProgramCard title="test" nodes={3} />
 	</div>
 	<div class="flex flex-col h-full w-full">
-		<div class="flex flex-row items-center justify-between h-12 w-full bg-surface-700 px-2 border-b-2 border-surface-500">
+		<div
+			class="flex flex-row items-center justify-between h-12 w-full bg-surface-700 px-2 border-b-2 border-surface-500">
 			<div class="flex flex-row gap-2 text-secondary-300">
 				<Info />
 				<span class="text-secondary-300">Nodes: 3</span>
 			</div>
 			<button class="btn text-error-500 font-semibold !p-2">
-				<span>
-					Delete program
-				</span>
+				<span> Delete program </span>
 				<span>
 					<X />
 				</span>
