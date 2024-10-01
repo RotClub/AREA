@@ -27,8 +27,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install bash curl nodejs npm
+          sudo apt-get update && apt-get upgrade
+          sudo apt-get install bash curl nodejs npm
           npm install
         working-directory: "./web"
       - name: Install Playwright dependencies
