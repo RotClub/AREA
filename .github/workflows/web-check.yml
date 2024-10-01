@@ -23,14 +23,12 @@ jobs:
         working-directory: "./web"
   testing:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          apk update
-          apk add bash curl nodejs npm
+          apt-get update
+          apt-get install bash curl nodejs npm
           npm install
         working-directory: "./web"
       - name: Install Playwright dependencies
