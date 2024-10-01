@@ -1,0 +1,42 @@
+---
+services:
+
+  client_web:
+    platform: linux/amd64
+    build:
+      context: "./web"
+      dockerfile: "Dockerfile"
+      target: "node_runner"
+    ports:
+      - "8081:3000"
+      - "24678:24678"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - shared_data:/app/build/client/mobile
+    networks:
+        - shared_network
+
+  client_mobile:
+    platform: linux/amd64
+    build:
+      context: "./mobile"
+      dockerfile: "Dockerfile"
+    volumes:
+      - shared_data:/app
+
+  server:
+    platform: linux/amd64
+    image: nginx:alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./web/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - shared_network
+
+volumes:
+  shared_data:
+
+networks:
+  shared_network:
