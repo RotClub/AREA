@@ -12,6 +12,8 @@
   },
   "devDependencies": {
     "@nativescript/android": "8.8.4",
+    "@nativescript/ios": "8.8.2",
+    "@nativescript/preview-cli": "1.0.13",
     "@nativescript/types": "~8.8.0",
     "@nativescript/webpack": "~5.0.0",
     "svelte": "~4.2.2",
