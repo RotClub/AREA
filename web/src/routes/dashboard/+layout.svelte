@@ -37,6 +37,7 @@
 			<LinkButton href="/dashboard">Home</LinkButton>
 			<LinkButton href="/dashboard/workspace">Workspace</LinkButton>
 			<LinkButton href="/dashboard/explore">Explore</LinkButton>
+			<LinkButton href="/dashboard/services">Services</LinkButton>
 		</div>
 		<div class="hidden md:flex flex-row items-center h-full space-x-8 aspect-1">
 			<a href="/dashboard/profile" class="flex justify-center items-center w-full h-full p-2">
