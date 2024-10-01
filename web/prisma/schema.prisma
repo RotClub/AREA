@@ -12,3 +12,31 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             Int      @id @unique @default(autoincrement())
+  email          String   @unique
+  hashedPassword String
+  createdAt      DateTime @default(now())
+}
+
+model Program {
+  id      Int      @id @unique @default(autoincrement())
+  name    String
+  actions Action[]
+}
+
+model Action {
+  id        Int        @id @unique @default(autoincrement())
+  Program   Program?   @relation(fields: [programId], references: [id])
+  programId Int?
+  reactions Reaction[]
+  metadata  Json?
+}
+
+model Reaction {
+  id       Int     @id @unique @default(autoincrement())
+  Action   Action? @relation(fields: [actionId], references: [id])
+  actionId Int?
+  metadata Json?
+}
