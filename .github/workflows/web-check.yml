@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          sudo apt-get update && apt-get upgrade
+          sudo apt-get update && sudo apt-get upgrade
           sudo apt-get install bash curl nodejs npm
           npm install
         working-directory: "./web"
