@@ -8,14 +8,13 @@ on:
 jobs:
   syntax-check:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          apk update
-          apk add bash curl nodejs npm
+          sudo apt-get update
+          sudo apt-get install bash curl nodejs npm
+          rm -rf node_modules package-lock.json
           npm install
         working-directory: "./web"
       - name: Run ESLint
@@ -23,16 +22,17 @@ jobs:
         working-directory: "./web"
   testing:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:latest
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          apk update
-          apk add bash curl nodejs npm
+          sudo apt-get update
+          sudo apt-get install bash curl nodejs npm
+          rm -rf node_modules package-lock.json
           npm install
         working-directory: "./web"
       - name: Run tests
-        run: npm run test
+        run: |
+          npx playwright install
+          npm run test
         working-directory: "./web"

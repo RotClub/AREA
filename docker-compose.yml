@@ -13,7 +13,7 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - shared_data:/app/build/client/
+      - shared_data:/app/build/client/mobile
     networks:
         - shared_network
 
