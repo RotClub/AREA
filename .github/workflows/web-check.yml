@@ -32,9 +32,8 @@ jobs:
           sudo apt-get install bash curl nodejs npm
           npm install
         working-directory: "./web"
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps chromium
-        working-directory: "./web"
       - name: Run tests
-        run: npm run test
+        run: |
+          npx playwright install
+          npm run test
         working-directory: "./web"
