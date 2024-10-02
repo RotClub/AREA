@@ -54,6 +54,7 @@
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"clsx": "^2.1.1",
 		"highlight.js": "11.10.0",
+		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.441.0",
 		"prisma": "^5.20.0",
 		"svelte-motion": "^0.12.2",
