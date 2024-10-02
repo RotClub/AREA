@@ -12,17 +12,17 @@ sealed class BottomBarScreen(
     val title: String,
     val icon: ImageVector
 ) {
-    object Home : BottomBarScreen(
+    data object Home : BottomBarScreen(
         route = "home",
         title = "Home",
         icon = Icons.Default.Home
     )
-    object Workspace : BottomBarScreen(
+    data object Workspace : BottomBarScreen(
         route = "workspace",
         title = "Workspace",
         icon = Icons.Default.Build
     )
-    object Explore : BottomBarScreen(
+    data object Explore : BottomBarScreen(
         route = "explore",
         title = "Explore",
         icon = Icons.Default.Search

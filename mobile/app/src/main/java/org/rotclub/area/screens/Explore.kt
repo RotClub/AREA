@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ExploreScreen() {
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.Red),
+        modifier = Modifier.fillMaxSize().background(Color.Yellow),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

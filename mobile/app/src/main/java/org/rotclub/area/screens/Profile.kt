@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ProfileScreen() {
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.Yellow),
+        modifier = Modifier.fillMaxSize().background(Color.Red),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
