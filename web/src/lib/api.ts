@@ -1,13 +1,19 @@
 import { verifyJWTAuth } from "$lib/auth";
 import { UserRole, PrismaClient } from "@prisma/client";
 
-export const checkAPIAccess = (async (client: PrismaClient, request, url, level: UserRole) => {
-	// Get the Bearer token from the request
-	const bearer = request.headers.get("Authorization");
-	const token = bearer ? bearer.replace("Bearer ", "") : "";
+export const checkAccess = (async (client: PrismaClient, request, level: UserRole, apiMode = true) => {
+	let token: string;
 
+	if (apiMode) {
+		// Get the Bearer token from the request
+		const bearer = request.headers.get("Authorization");
+		token = bearer ? bearer.replace("Bearer ", "") : "";
+	} else {
+		// Get the token from the onLoad
+		token = request.token;
+	}
 	// Verify the token
-	const valid_token = await verifyJWTAuth(token, url.pathname);
+	const valid_token = await verifyJWTAuth(token);
 	if (valid_token) {
 		try {
 			const user = await client.user.findUnique({
