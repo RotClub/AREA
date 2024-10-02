@@ -1,7 +1,12 @@
 import { verifyJWTAuth } from "$lib/auth";
 import { UserRole, PrismaClient } from "@prisma/client";
 
-export const checkAccess = (async (client: PrismaClient, request, level: UserRole, apiMode = true) => {
+export const checkAccess = async (
+	client: PrismaClient,
+	request,
+	level: UserRole,
+	apiMode = true
+) => {
 	let token: string;
 
 	if (apiMode) {
@@ -29,12 +34,15 @@ export const checkAccess = (async (client: PrismaClient, request, level: UserRol
 			const accessLevel = Object.fromEntries(
 				Object.entries(UserRole).map(([key], index) => [key, index])
 			);
-			return (user && accessLevel[user.role] >= accessLevel[level]) ?
-				{valid: true, err: null} :
-				{valid: false, err: "You don't have access to this route, you need to be a " + level};
+			return user && accessLevel[user.role] >= accessLevel[level]
+				? { valid: true, err: null }
+				: {
+						valid: false,
+						err: "You don't have access to this route, you need to be a " + level
+					};
 		} catch (e) {
-			return {valid: false, err: String(e)};
+			return { valid: false, err: String(e) };
 		}
 	}
-	return {valid: false, err: "Invalid token"};
-})
+	return { valid: false, err: "Invalid token" };
+};

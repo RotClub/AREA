@@ -11,7 +11,7 @@ export const POST = async ({ request }) => {
 		if (!body.email || !body.password) {
 			return new Response(JSON.stringify({ error: "Email and password are required" }), {
 				status: 400,
-				headers: { "Content-Type": "application/json" },
+				headers: { "Content-Type": "application/json" }
 			});
 		}
 		const password = encryptPWD(body.password);
@@ -29,27 +29,30 @@ export const POST = async ({ request }) => {
 		if (!user) {
 			return new Response(JSON.stringify({ error: "User not found" }), {
 				status: 404,
-				headers: { "Content-Type": "application/json" },
+				headers: { "Content-Type": "application/json" }
 			});
 		}
 		if (user.hashedPassword != password) {
 			return new Response(JSON.stringify({ error: "Password is invalid" }), {
 				status: 404,
-				headers: { "Content-Type": "application/json" },
+				headers: { "Content-Type": "application/json" }
 			});
 		}
-		return new Response(JSON.stringify({
-			token: user.token,
-			role: user.role
-		}), {
-			status: 200,
-			headers: { "Content-Type": "application/json" },
-		});
+		return new Response(
+			JSON.stringify({
+				token: user.token,
+				role: user.role
+			}),
+			{
+				status: 200,
+				headers: { "Content-Type": "application/json" }
+			}
+		);
 	} catch (err) {
 		client.$disconnect();
 		return new Response(JSON.stringify({ error: "Failed to find user: " + err }), {
 			status: 500,
-			headers: { "Content-Type": "application/json" },
+			headers: { "Content-Type": "application/json" }
 		});
 	}
-}
+};

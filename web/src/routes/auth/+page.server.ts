@@ -1,6 +1,6 @@
-import {type Actions, fail, redirect} from "@sveltejs/kit";
-import {encryptPWD} from "$lib/auth";
-import {PrismaClient} from "@prisma/client";
+import { type Actions, fail, redirect } from "@sveltejs/kit";
+import { encryptPWD } from "$lib/auth";
+import { PrismaClient } from "@prisma/client";
 
 export const actions = {
 	default: async (event) => {
@@ -14,7 +14,7 @@ export const actions = {
 				return fail(400, { error: "Email is required" });
 			}
 			const user = await client.user.findUnique({
-				where: { email: String(email), hashedPassword: password },
+				where: { email: String(email), hashedPassword: password }
 			});
 			client.$disconnect();
 			if (!user) {
