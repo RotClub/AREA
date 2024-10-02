@@ -15,30 +15,21 @@ export const encryptPWD = (password: string | null) => {
 	return hash.digest("hex");
 }
 
-export const verifyJWTAuth = async (token: string, url: string) => {
-	if (!url.startsWith("/api/login")) {
-		if (!token) {
-			console.log("Not logged in");
-			error(401, "Not logged in");
-		}
-		try {
-			// @ts-expect-error The parameter 'err' is a complex data type and linter doesn't go well with any.
-			await jwt.verify(token, process.env.JWT_SECRET, (err) => {
-				if (err) {
-					console.log("Invalid token:", err);
-					error(401, "Invalid token: " + err);
-				}
-			});
-		} catch (e) {
-			console.log("Error during token validation:", e);
-			error(401, "Error during token validation: " + e);
-		}
+export const verifyJWTAuth = async (token: string) => {
+	if (!token) {
+		error(401, "Not logged in");
 	}
+	// @ts-expect-error The parameter 'err' is a complex data type and linter doesn't go well with any.
+	await jwt.verify(token, process.env.JWT_SECRET, (err) => {
+		if (err) {
+			error(401, "Error during token validation: " + err);
+		}
+	});
 	return true;
 }
 
 export const createJWTToken = async (payload: {email: string, password: string, role: UserRole}) => {
-	const new_token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "2m"});
+	const new_token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1y"});
 	// @ts-expect-error The parameter 'err' is a complex data type and linter doesn't go well with any.
 	return await jwt.verify(new_token, process.env.JWT_SECRET, (err) => {
 		return err ? () => {
