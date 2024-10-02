@@ -3,6 +3,8 @@ package org.rotclub.area
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBarScreen(
@@ -18,12 +20,12 @@ sealed class BottomBarScreen(
     object Workspace : BottomBarScreen(
         route = "workspace",
         title = "Workspace",
-        icon = Icons.Default.Home
+        icon = Icons.Default.Build
     )
     object Explore : BottomBarScreen(
         route = "explore",
         title = "Explore",
-        icon = Icons.Default.Home
+        icon = Icons.Default.Search
     )
     data object Profile : BottomBarScreen(
         route = "profile",
