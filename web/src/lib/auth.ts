@@ -38,7 +38,7 @@ export const verifyJWTAuth = async (token: string, url: string) => {
 }
 
 export const createJWTToken = async (payload: {email: string, password: string, role: UserRole}) => {
-	const new_token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "2w"});
+	const new_token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "2m"});
 	// @ts-expect-error The parameter 'err' is a complex data type and linter doesn't go well with any.
 	return await jwt.verify(new_token, process.env.JWT_SECRET, (err) => {
 		return err ? () => {
