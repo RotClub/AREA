@@ -20,6 +20,12 @@ enum UserRole {
   ADMIN
 }
 
+enum Provider {
+  GOOGLE
+  DISCORD
+  STEAM
+}
+
 model User {
   id             Int      @id @unique @default(autoincrement())
   email          String   @unique
@@ -27,6 +33,26 @@ model User {
   token          String   @unique
   hashedPassword String
   createdAt      DateTime @default(now())
+  authMethods    Oauth[]
+}
+
+model Oauth {
+  id             Int           @id @unique @default(autoincrement())
+  providerType   Provider?
+  providerInfo   ProviderInfo? @relation(fields: [providerInfoId], references: [id])
+  providerInfoId Int?
+  user           User?         @relation(fields: [userId], references: [id])
+  userId         Int?
+}
+
+model ProviderInfo {
+  id             Int      @id @unique @default(autoincrement())
+  userId         String   @unique
+  userEmail      String
+  accessToken    String   @unique
+  refreshToken   String?  @unique
+  tokenExpiresAt DateTime @default(now())
+  oauth          Oauth[]
 }
 
 model Program {
