@@ -13,9 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id             Int      @id @unique @default(autoincrement())
   email          String   @unique
+  role           UserRole @default(USER)
+  token          String   @unique
   hashedPassword String
   createdAt      DateTime @default(now())
 }
@@ -28,7 +35,7 @@ model Program {
 
 model Action {
   id        Int        @id @unique @default(autoincrement())
-  Program   Program?   @relation(fields: [programId], references: [id])
+  program   Program?   @relation(fields: [programId], references: [id])
   programId Int?
   reactions Reaction[]
   metadata  Json?
@@ -36,7 +43,7 @@ model Action {
 
 model Reaction {
   id       Int     @id @unique @default(autoincrement())
-  Action   Action? @relation(fields: [actionId], references: [id])
+  action   Action? @relation(fields: [actionId], references: [id])
   actionId Int?
   metadata Json?
 }
