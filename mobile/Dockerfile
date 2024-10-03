@@ -37,8 +37,10 @@ RUN echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
 RUN chmod +x ./gradlew
 RUN ./gradlew :app:assembleRelease
 
+FROM alpine:latest
+
 WORKDIR /app
 
-COPY ./app/build/outputs/apk/release/app-release-unsigned.apk /app/app.apk
+COPY --from=kotlin /build/app/build/outputs/apk/release/app-release-unsigned.apk /app/app.apk
 
 CMD ls -lR /app
