@@ -4,7 +4,7 @@ import { UserRole, PrismaClient } from "@prisma/client";
 export const checkAccess = async (
 	client: PrismaClient,
 	request,
-	level: UserRole,
+	level: UserRole = UserRole.API_USER,
 	apiMode = true
 ) => {
 	let token: string;
@@ -38,7 +38,7 @@ export const checkAccess = async (
 				? { valid: true, err: null }
 				: {
 						valid: false,
-						err: "You don't have access to this route, you need to be a " + level
+						err: "You don't have access to the API, reach out to an Administrator"
 					};
 		} catch (e) {
 			return { valid: false, err: String(e) };

@@ -16,6 +16,7 @@ datasource db {
 
 enum UserRole {
   USER
+  API_USER
   ADMIN
 }
 
