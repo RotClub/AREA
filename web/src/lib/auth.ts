@@ -31,6 +31,7 @@ export const verifyJWTAuth = async (token: string) => {
 export const createJWTToken = async (payload: {
 	email: string;
 	password: string;
+	username: string;
 	role: UserRole;
 }) => {
 	const new_token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1y" });
