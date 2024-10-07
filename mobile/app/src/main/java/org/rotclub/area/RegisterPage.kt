@@ -25,14 +25,14 @@ import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
 
-private val headerSpacing = 10.dp
+private var headerSpacing = 0.dp
 
 @Composable
-fun LoginCard(modifier: Modifier = Modifier) {
+fun RegisterCard(modifier: Modifier = Modifier) {
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
-            text = "Sign In",
+            text = "Register",
             fontSize = 40.sp,
             color = FrispyTheme.Primary50,
             fontFamily = fontFamily,
@@ -41,6 +41,11 @@ fun LoginCard(modifier: Modifier = Modifier) {
         LoginInput(
             value = "",
             label = "Username",
+            modifier = Modifier
+        )
+        LoginInput(
+            value = "",
+            label = "Email",
             modifier = Modifier
         )
         LoginInput(
@@ -60,7 +65,7 @@ fun LoginCard(modifier: Modifier = Modifier) {
             )
         ) {
             Text(
-                text = "Login",
+                text = "Sign Up",
                 color = FrispyTheme.Primary50,
                 fontSize = 20.sp,
                 fontFamily = fontFamily,
@@ -69,11 +74,11 @@ fun LoginCard(modifier: Modifier = Modifier) {
         }
         val annotatedString = buildAnnotatedString {
             withStyle(style = TextStyle(color = FrispyTheme.Surface300).toSpanStyle()) {
-                append("Don't have an account? ")
+                append("Already have an account? ")
             }
             pushStringAnnotation(tag = "none", annotation = "")
             withStyle(style = TextStyle(color = FrispyTheme.Primary500).toSpanStyle()) {
-                append("Make one here")
+                append("Login here")
             }
             pop()
         }
@@ -81,7 +86,7 @@ fun LoginCard(modifier: Modifier = Modifier) {
             text = annotatedString,
             onClick = { offset ->
                 if (offset >= 22) {
-                    println("Register button clicked")
+                    println("Login button clicked")
                 }
             },
             modifier = Modifier.padding(10.dp)
@@ -90,21 +95,25 @@ fun LoginCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun RegisterPage(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxSize().background(FrispyTheme.Surface700),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TitleHeader(modifier = Modifier.padding(headerSpacing))
-        LoginCard(modifier = Modifier)
+        TitleHeader(
+            modifier = Modifier,
+            iconSize = 80.dp,
+            titleSize = 50.sp
+        )
+        RegisterCard(modifier = Modifier)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPagePreview() {
+fun RegisterPagePreview() {
     AreaTheme {
-        LoginPage()
+        RegisterPage()
     }
 }
