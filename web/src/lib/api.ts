@@ -46,3 +46,11 @@ export const checkAccess = async (
 	}
 	return { valid: false, err: "Invalid token" };
 };
+
+export const adaptUrl = () => {
+	if (process.env.NODE_ENV === "production") {
+		return "https://area-app.vercel.app/";
+	} else {
+		return "http://localhost:8081";
+	}
+}
