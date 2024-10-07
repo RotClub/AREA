@@ -6,6 +6,8 @@
 
 	let authToggle: boolean = false;
 
+	let email: string = "";
+
 	onMount(() => {
 		loaded = true;
 	});
@@ -27,7 +29,7 @@
 					</div>
 					<div>
 						<label for="email">Email</label>
-						<input type="email" id="email" name="email" class="input" placeholder="gougougaga@example.com" />
+						<input type="email" id="email" name="email" class="input" placeholder="gougougaga@example.com" bind:value={email} />
 					</div>
 					<div class="flex flex-row gap-2">
 						<div class="w-1/2">
@@ -42,7 +44,7 @@
 				{:else}
 					<div>
 						<label for="email">Email</label>
-						<input type="email" id="email" name="email" class="input" placeholder="gougougaga@example.com" />
+						<input type="email" id="email" name="email" class="input" placeholder="gougougaga@example.com" bind:value={email} />
 					</div>
 					<div>
 						<label for="password">Password</label>
