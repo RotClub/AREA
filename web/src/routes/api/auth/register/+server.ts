@@ -17,9 +17,9 @@ export const POST = async ({ request }) => {
 		}
 		const body = await request.json();
 
-		if (!body.email || !body.password || !body.role) {
+		if (!body.email || !body.password || !body.role || !body.username) {
 			return new Response(
-				JSON.stringify({ error: "Email, password and role are required" }),
+				JSON.stringify({ error: "Email, password, username and role are required" }),
 				{
 					status: 400,
 					headers: { "Content-Type": "application/json" }
@@ -36,6 +36,7 @@ export const POST = async ({ request }) => {
 		const token = await createJWTToken({
 			email: body.email,
 			password: password,
+			username: body.username,
 			role: body.role
 		}).then((token: string) => token);
 
@@ -44,6 +45,7 @@ export const POST = async ({ request }) => {
 				email: body.email,
 				hashedPassword: password,
 				role: body.role,
+				username: body.username,
 				token: token
 			}
 		});
