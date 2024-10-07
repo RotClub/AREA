@@ -22,6 +22,7 @@ enum UserRole {
 model User {
   id             Int      @id @unique @default(autoincrement())
   email          String   @unique
+  username       String   @default("")
   role           UserRole @default(USER)
   token          String   @unique
   hashedPassword String
