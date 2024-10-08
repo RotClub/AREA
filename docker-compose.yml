@@ -17,13 +17,13 @@ services:
     networks:
         - shared_network
 
-  client_mobile:
-    platform: linux/amd64
-    build:
-      context: "./mobile"
-      dockerfile: "Dockerfile"
-    volumes:
-      - shared_data:/app
+  # client_mobile:
+  #   platform: linux/amd64
+  #   build:
+  #     context: "./mobile"
+  #     dockerfile: "Dockerfile"
+  #   volumes:
+  #     - shared_data:/app
 
   server:
     platform: linux/amd64
