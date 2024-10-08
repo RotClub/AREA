@@ -53,4 +53,4 @@ export const adaptUrl = () => {
 	} else {
 		return "http://localhost:8081";
 	}
-}
+};

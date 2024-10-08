@@ -6,7 +6,8 @@
 <div class="w-full h-full flex flex-col items-center">
 	<div class="container w-full h-full flex flex-col items-center py-6 overflow-y-scroll gap-6">
 		<ServiceCard provider="SPOTIFY">
-			<svelte:fragment slot="icon"><img src="/spotify-icon.svg" alt="Spotify"></svelte:fragment>
+			<svelte:fragment slot="icon"
+				><img src="/spotify-icon.svg" alt="Spotify" /></svelte:fragment>
 			<svelte:fragment slot="title">Spotify</svelte:fragment>
 		</ServiceCard>
 		<ServiceCard>

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Provider } from "@prisma/client"
+	import { Provider } from "@prisma/client";
 	import queryString from "query-string";
 	import { onMount } from "svelte";
-	import { parse as cookie_parser } from "cookie"
+	import { parse as cookie_parser } from "cookie";
 	import { goto } from "$app/navigation";
 
 	export let linked: boolean = false;
@@ -18,17 +18,13 @@
 	function redirectToService(cookies): string {
 		if (provider === Provider.SPOTIFY) {
 			if (!linked) {
-				return `/api/auth/spotify?` + queryString.stringify(
-					{ token: cookies.token });
-			}
-			else {
-				return "/api/unlink/spotify?" + queryString.stringify(
-					{ token: cookies.token });
+				return `/api/auth/spotify?` + queryString.stringify({ token: cookies.token });
+			} else {
+				return "/api/unlink/spotify?" + queryString.stringify({ token: cookies.token });
 			}
 		}
 		return "#";
 	}
-
 </script>
 
 <div class="card h-[5rem] w-[30rem] flex flex-row gap-2 shrink-0 p-4 items-center">
@@ -40,9 +36,17 @@
 	</span>
 	<div class="flex-grow flex flex-row justify-end">
 		{#if linked}
-			<button on:click={() => { goto(href)}} class="btn variant-ghost-primary uppercase tracking-wider">Linked</button>
+			<button
+				on:click={() => {
+					goto(href);
+				}}
+				class="btn variant-ghost-primary uppercase tracking-wider">Linked</button>
 		{:else}
-			<button on:click={() => { goto(href)}} class="btn variant-filled-primary uppercase tracking-wider">Unlinked</button>
+			<button
+				on:click={() => {
+					goto(href);
+				}}
+				class="btn variant-filled-primary uppercase tracking-wider">Unlinked</button>
 		{/if}
 	</div>
 </div>
