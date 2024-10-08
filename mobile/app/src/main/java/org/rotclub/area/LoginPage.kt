@@ -1,12 +1,12 @@
 package org.rotclub.area
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,6 +19,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.rotclub.area.composes.CardColumn
 import org.rotclub.area.composes.LoginInput
 import org.rotclub.area.composes.TitleHeader
@@ -28,7 +30,7 @@ import org.rotclub.area.ui.theme.FrispyTheme
 private val headerSpacing = 10.dp
 
 @Composable
-fun LoginCard(modifier: Modifier = Modifier) {
+fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
@@ -51,6 +53,7 @@ fun LoginCard(modifier: Modifier = Modifier) {
         TextButton(
             onClick = {
                 println("Login button clicked")
+                navController.navigate(GlobalRoutes.MainApp.route)
             },
             shape = RoundedCornerShape(roundedValue),
             modifier = Modifier
@@ -77,27 +80,27 @@ fun LoginCard(modifier: Modifier = Modifier) {
             }
             pop()
         }
-        ClickableText(
+        Text(
             text = annotatedString,
-            onClick = { offset ->
-                if (offset >= 22) {
+            modifier = Modifier
+                .padding(10.dp)
+                .clickable {
                     println("Register button clicked")
+                    navController.navigate(GlobalRoutes.Register.route)
                 }
-            },
-            modifier = Modifier.padding(10.dp)
         )
     }
 }
 
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun LoginPage(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize().background(FrispyTheme.Surface700),
+        modifier = modifier.fillMaxSize().background(FrispyTheme.Surface700),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TitleHeader(modifier = Modifier.padding(headerSpacing))
-        LoginCard(modifier = Modifier)
+        TitleHeader(modifier = modifier.padding(headerSpacing))
+        LoginCard(modifier = modifier, navController = navController)
     }
 }
 
@@ -105,6 +108,6 @@ fun LoginPage(modifier: Modifier = Modifier) {
 @Composable
 fun LoginPagePreview() {
     AreaTheme {
-        LoginPage()
+        LoginPage(navController = rememberNavController())
     }
 }

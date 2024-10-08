@@ -1,12 +1,12 @@
 package org.rotclub.area
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,6 +19,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.rotclub.area.composes.CardColumn
 import org.rotclub.area.composes.LoginInput
 import org.rotclub.area.composes.TitleHeader
@@ -28,7 +30,7 @@ import org.rotclub.area.ui.theme.FrispyTheme
 private var headerSpacing = 0.dp
 
 @Composable
-fun RegisterCard(modifier: Modifier = Modifier) {
+fun RegisterCard(modifier: Modifier = Modifier, navController: NavHostController) {
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
@@ -82,31 +84,31 @@ fun RegisterCard(modifier: Modifier = Modifier) {
             }
             pop()
         }
-        ClickableText(
+        Text(
             text = annotatedString,
-            onClick = { offset ->
-                if (offset >= 22) {
+            modifier = Modifier
+                .padding(10.dp)
+                .clickable {
                     println("Login button clicked")
+                    navController.navigate(GlobalRoutes.Login.route)
                 }
-            },
-            modifier = Modifier.padding(10.dp)
         )
     }
 }
 
 @Composable
-fun RegisterPage(modifier: Modifier = Modifier) {
+fun RegisterPage(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize().background(FrispyTheme.Surface700),
+        modifier = modifier.fillMaxSize().background(FrispyTheme.Surface700),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TitleHeader(
-            modifier = Modifier,
+            modifier = modifier,
             iconSize = 80.dp,
             titleSize = 50.sp
         )
-        RegisterCard(modifier = Modifier)
+        RegisterCard(modifier = modifier, navController = navController)
     }
 }
 
@@ -114,6 +116,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
 @Composable
 fun RegisterPagePreview() {
     AreaTheme {
-        RegisterPage()
+        RegisterPage(navController = rememberNavController())
     }
 }
