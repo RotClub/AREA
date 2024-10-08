@@ -31,7 +31,7 @@
 
 </script>
 
-<div class="card h-[5rem] w-[30rem] flex flex-row shrink-0 p-4 items-center">
+<div class="card h-[5rem] w-[30rem] flex flex-row gap-2 shrink-0 p-4 items-center">
 	<div class="w-8">
 		<slot name="icon" />
 	</div>
