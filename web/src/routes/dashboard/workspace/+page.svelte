@@ -4,6 +4,7 @@
 	import SubNode from "$lib/components/Workspace/SubNode.svelte";
 	import { SlideToggle } from "@skeletonlabs/skeleton";
 	import { X, Info, Plus } from "lucide-svelte";
+	import DotBackground from "$lib/components/Aceternity/DotBackground.svelte";
 
 	let editing: boolean = false;
 </script>
@@ -31,41 +32,41 @@
 				</span>
 			</button>
 		</div>
-		<div class="flex flex-col overflow-y-scroll p-8 px-16 gap-8">
-			<Node action="[Brawlhalla] Rank reached" meta={{ Player: "Kapsulon", Rank: "Diamond" }} edit={editing}>
-				<SubNode
-					reaction="[Spotify] Play track"
-					meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-				<SubNode
-					reaction="[Spotify] Play track"
-					meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-				<SubNode
-					reaction="[Spotify] Play track"
-					meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-			</Node>
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-			{#if editing}
-			<div class="w-full flex flex-row justify-center items-center">
-				<button class="btn-icon variant-filled-primary"><Plus /></button>
+			<div class="flex flex-col overflow-y-scroll p-8 px-16 gap-8 dark:bg-dot-white/[0.1]">
+				<Node action="[Brawlhalla] Rank reached" meta={{ Player: "Kapsulon", Rank: "Diamond" }} edit={editing}>
+					<SubNode
+						reaction="[Spotify] Play track"
+						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
+					<SubNode
+						reaction="[Spotify] Play track"
+						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
+					<SubNode
+						reaction="[Spotify] Play track"
+						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
+				</Node>
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+				{#if editing}
+				<div class="w-full flex flex-row justify-center items-center">
+					<button class="btn-icon variant-filled-primary"><Plus /></button>
+				</div>
+				{/if}
 			</div>
-			{/if}
-		</div>
 	</div>
 </div>
