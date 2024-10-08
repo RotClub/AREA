@@ -1,5 +1,15 @@
 <script lang="ts">
 	import { LogIn } from "lucide-svelte";
+	import { onMount } from "svelte";
+	import { parse as cookie_parser } from "cookie";
+	import { goto } from "$app/navigation";
+
+	onMount(() => {
+		const cookies = cookie_parser(document.cookie);
+		if (cookies.token) {
+			goto("/dashboard");
+		}
+	});
 </script>
 
 <div class="h-screen">
