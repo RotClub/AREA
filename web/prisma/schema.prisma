@@ -1,22 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
-
-enum UserRole {
-  USER
-  ADMIN
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -26,6 +15,7 @@ model User {
   token          String   @unique
   hashedPassword String
   createdAt      DateTime @default(now())
+  username       String   @default("")
 }
 
 model Program {
@@ -36,15 +26,20 @@ model Program {
 
 model Action {
   id        Int        @id @unique @default(autoincrement())
-  program   Program?   @relation(fields: [programId], references: [id])
   programId Int?
-  reactions Reaction[]
   metadata  Json?
+  program   Program?   @relation(fields: [programId], references: [id])
+  reactions Reaction[]
 }
 
 model Reaction {
   id       Int     @id @unique @default(autoincrement())
-  action   Action? @relation(fields: [actionId], references: [id])
   actionId Int?
   metadata Json?
+  action   Action? @relation(fields: [actionId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
