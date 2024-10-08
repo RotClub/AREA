@@ -2,6 +2,7 @@ package org.rotclub.area
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -10,12 +11,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.rotclub.area.ui.theme.FrispyTheme
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Modifier
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -40,8 +44,8 @@ fun BottomBar(navController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar (
-        containerColor = Color.Black,
-        contentColor = Color.Magenta,
+        containerColor = FrispyTheme.Surface500,
+        contentColor = FrispyTheme.Primary500,
     ) {
         screens.forEach { screen ->
             AddItems(
@@ -59,18 +63,19 @@ fun RowScope.AddItems(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
+    val icon = painterResource(id = screen.iconResId)
     NavigationBarItem(
         label = { Text(text = screen.title) },
-        icon = { Icon(imageVector = screen.icon, contentDescription = "Navigation Icon") },
+        icon = { Icon(painter = icon, contentDescription = "Navigation Icon", modifier = Modifier.size(30.dp)) },
         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
         colors = NavigationBarItemColors(
-            selectedIconColor = Color.Magenta,
-            selectedTextColor = Color.Magenta,
-            selectedIndicatorColor = Color.Black,
-            unselectedIconColor = Color.White,
-            unselectedTextColor = Color.White,
-            disabledIconColor = Color.Gray,
-            disabledTextColor = Color.Gray
+            selectedIconColor = FrispyTheme.Primary500,
+            selectedTextColor = FrispyTheme.Primary500,
+            selectedIndicatorColor = FrispyTheme.Surface500,
+            unselectedIconColor = FrispyTheme.Primary50,
+            unselectedTextColor = FrispyTheme.Primary50,
+            disabledIconColor = FrispyTheme.Surface100,
+            disabledTextColor = FrispyTheme.Surface100,
         ),
         onClick = {
             navController.navigate(screen.route)
