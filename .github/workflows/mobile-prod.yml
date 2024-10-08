@@ -29,14 +29,14 @@ jobs:
         working-directory: "./mobile"
 
       - name: Build APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew :app:assembleRelease
         working-directory: "./mobile"
 
       - name: Upload APK Package
         uses: actions/upload-artifact@v4
         with:
           name: apkPackage
-          path: "./mobile/composeApp/build/outputs/apk/release/composeApp-release.apk"
+          path: "./mobile/app/build/outputs/apk/release/app-release-unsigned.apk"
           retention-days: 1
           if-no-files-found: 'error'
 
