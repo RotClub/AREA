@@ -1,7 +1,5 @@
 package org.rotclub.area
 
-import androidx.compose.ui.graphics.painter.Painter
-
 sealed class BottomBarScreen(
     val route: String,
     val title: String,
