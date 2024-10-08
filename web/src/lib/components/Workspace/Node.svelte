@@ -36,12 +36,12 @@
 		</div>
 	</div>
 	{#if edit}
-	<button
-		class="bg-primary-500 w-full h-6 flex flex-row justify-center items-center hover:bg-primary-700 transition-colors">
-		<span>
-			<Plus />
-		</span>
-	</button>
+		<button
+			class="bg-primary-500 w-full h-6 flex flex-row justify-center items-center hover:bg-primary-700 transition-colors">
+			<span>
+				<Plus />
+			</span>
+		</button>
 	{/if}
 </div>
 
