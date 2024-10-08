@@ -1,0 +1,38 @@
+name: Web - Deploy Preview
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          apk update
+          apk add bash curl nodejs npm
+      - name: Using Svelte config for Vercel
+        run: mv svelte.config.deploy.js svelte.config.js
+        working-directory: "./web"
+      - name: Install Vercel CLI
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --global vercel@latest
+        working-directory: "./web"
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}

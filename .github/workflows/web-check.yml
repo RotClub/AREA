@@ -1,0 +1,38 @@
+name: Web - Check Syntax and run Tests
+on:
+  push:
+    branches:
+      - dev
+      - web/*
+
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install bash curl nodejs npm
+          rm -rf node_modules package-lock.json
+          npm install
+        working-directory: "./web"
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: "./web"
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install bash curl nodejs npm
+          rm -rf node_modules package-lock.json
+          npm install
+        working-directory: "./web"
+      - name: Run tests
+        run: |
+          npx playwright install
+          npm run test
+        working-directory: "./web"

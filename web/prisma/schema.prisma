@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id             Int       @id @unique @default(autoincrement())
+  email          String    @unique
+  role           UserRole  @default(USER)
+  token          String    @unique
+  hashedPassword String
+  createdAt      DateTime  @default(now())
+  username       String    @default("")
+  Service        Service[]
+}
+
+model Program {
+  id      Int      @id @unique @default(autoincrement())
+  name    String
+  actions Action[]
+}
+
+model Action {
+  id        Int        @id @unique @default(autoincrement())
+  programId Int?
+  metadata  Json?
+  program   Program?   @relation(fields: [programId], references: [id])
+  reactions Reaction[]
+}
+
+model Reaction {
+  id       Int     @id @unique @default(autoincrement())
+  actionId Int?
+  metadata Json?
+  action   Action? @relation(fields: [actionId], references: [id])
+}
+
+model Service {
+  id           Int      @id @unique @default(autoincrement())
+  userId       Int?
+  metadata     Json?
+  providerType Provider
+  User         User?    @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  USER
+  API_USER
+  ADMIN
+}
+
+enum Provider {
+  DISCORD
+  STEAM
+  SPOTIFY
+}
