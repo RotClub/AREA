@@ -50,8 +50,8 @@ model Service {
 
 enum UserRole {
   USER
-  ADMIN
   API_USER
+  ADMIN
 }
 
 enum Provider {

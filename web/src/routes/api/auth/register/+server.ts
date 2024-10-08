@@ -7,7 +7,7 @@ export const POST = async ({ request }) => {
 
 	try {
 		// Validate the token + user role
-		const { valid, err } = await checkAccess(client, request, UserRole.ADMIN);
+		const { valid, err } = await checkAccess(client, request);
 		if (!valid) {
 			client.$disconnect();
 			return new Response(JSON.stringify({ error: err }), {

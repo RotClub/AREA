@@ -54,10 +54,14 @@
 		"@sveltejs/adapter-static": "^3.0.5",
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"clsx": "^2.1.1",
+		"cookie": "^0.7.2",
+		"dotenv": "^16.4.5",
 		"highlight.js": "11.10.0",
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.441.0",
 		"prisma": "^5.20.0",
+		"query-string": "^9.1.0",
+		"svelte-motion": "^0.12.2",
 		"tailwind-merge": "^2.5.2"
 	}
 }

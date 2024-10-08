@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserRole } from "@prisma/client";
 import { encryptPWD } from "$lib/auth";
 
 export const POST = async ({ request }) => {
@@ -37,6 +37,20 @@ export const POST = async ({ request }) => {
 				status: 404,
 				headers: { "Content-Type": "application/json" }
 			});
+		}
+		const accessLevel = Object.fromEntries(
+			Object.entries(UserRole).map(([key], index) => [key, index])
+		);
+		if (accessLevel[user.role] > accessLevel[UserRole.API_USER]) {
+			return new Response(
+				JSON.stringify({
+					error: "You don't have access to the API, reach out to an Administrator"
+				}),
+				{
+					status: 404,
+					headers: { "Content-Type": "application/json" }
+				}
+			);
 		}
 		return new Response(
 			JSON.stringify({
