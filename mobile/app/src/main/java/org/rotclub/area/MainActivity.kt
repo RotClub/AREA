@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AreaTheme {
-                MainScreen()
+                Navigation(GlobalRoutes.Login)
             }
         }
     }
