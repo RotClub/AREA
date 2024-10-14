@@ -10,9 +10,9 @@
 				><img src="/spotify-icon.svg" alt="Spotify" /></svelte:fragment>
 			<svelte:fragment slot="title">Spotify</svelte:fragment>
 		</ServiceCard>
-		<ServiceCard>
+		<ServiceCard provider="BATTLENET">
 			<svelte:fragment slot="icon"><Earth class="text-primary-500" /></svelte:fragment>
-			<svelte:fragment slot="title">Service 2</svelte:fragment>
+			<svelte:fragment slot="title">Battlenet</svelte:fragment>
 		</ServiceCard>
 		<ServiceCard>
 			<svelte:fragment slot="icon"><Earth class="text-primary-500" /></svelte:fragment>
