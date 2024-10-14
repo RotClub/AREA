@@ -9,13 +9,14 @@ datasource db {
 }
 
 model User {
-  id             Int      @id @unique @default(autoincrement())
-  email          String   @unique
-  role           UserRole @default(USER)
-  token          String   @unique
+  id             Int       @id @unique @default(autoincrement())
+  email          String    @unique
+  role           UserRole  @default(USER)
+  token          String    @unique
   hashedPassword String
-  createdAt      DateTime @default(now())
-  username       String   @default("")
+  createdAt      DateTime  @default(now())
+  username       String    @default("")
+  Service        Service[]
 }
 
 model Program {
@@ -39,7 +40,22 @@ model Reaction {
   action   Action? @relation(fields: [actionId], references: [id])
 }
 
+model Service {
+  id           Int      @id @unique @default(autoincrement())
+  userId       Int?
+  metadata     Json?
+  providerType Provider
+  User         User?    @relation(fields: [userId], references: [id])
+}
+
 enum UserRole {
   USER
+  API_USER
   ADMIN
+}
+
+enum Provider {
+  DISCORD
+  STEAM
+  SPOTIFY
 }

@@ -13,7 +13,6 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'web/dev'
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
@@ -23,8 +22,14 @@ jobs:
         run: |
           apk update
           apk add bash curl nodejs npm
+      - name: Using Svelte config for Vercel
+        run: mv svelte.config.deploy.js svelte.config.js
+        working-directory: "./web"
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --global vercel@latest
+        working-directory: "./web"
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
