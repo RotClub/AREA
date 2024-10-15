@@ -9,7 +9,7 @@ import org.rotclub.area.screens.HomeScreen
 import org.rotclub.area.screens.ProfileScreen
 import org.rotclub.area.screens.WorkspaceScreen
 import org.rotclub.area.screens.ActionScreen
-import org.rotclub.area.screens.ServiceScreen
+import org.rotclub.area.screens.NodeScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -29,11 +29,11 @@ fun BottomNavGraph(navController: NavHostController) {
         composable(BottomBarScreen.Profile.route) {
             ProfileScreen()
         }
+        composable("node_screen") {
+            NodeScreen(navController = navController)
+        }
         composable("action_screen") {
             ActionScreen(navController = navController)
-        }
-        composable("service_screen") {
-            ServiceScreen(navController = navController)
         }
     }
 }

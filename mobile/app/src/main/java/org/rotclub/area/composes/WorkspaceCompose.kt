@@ -89,7 +89,7 @@ fun ColumnCard(navController: NavController, title: String, text: String) {
             }
             Column {
                 Button(
-                    onClick = { navController.navigate("action_screen") },
+                    onClick = { navController.navigate("node_screen") },
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White,
@@ -183,7 +183,7 @@ fun ActionCard(navController: NavController) {
                     modifier = Modifier
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
                         .size(25.dp)
-                        .clickable { navController.navigate("service_screen") }
+                        .clickable { /* Do something */ }
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.play),
@@ -197,7 +197,7 @@ fun ActionCard(navController: NavController) {
             }
         }
         Button(
-            onClick = { /* Do something */ },
+            onClick = { navController.navigate("action_screen")  },
             shape = RectangleShape,
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,

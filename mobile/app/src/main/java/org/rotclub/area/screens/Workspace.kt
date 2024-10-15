@@ -46,7 +46,7 @@ fun WorkspaceScreen(navController: NavHostController) {
 data class ActionCardData(val title: String, val text: String)
 
 @Composable
-fun ActionScreen(navController: NavHostController) {
+fun NodeScreen(navController: NavHostController) {
     val actionCards = remember { mutableStateOf(listOf(
         ActionCardData("First Action Card", "This is the first action card"),
     )) }
@@ -75,7 +75,7 @@ fun ActionScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ServiceScreen(navController: NavHostController) {
+fun ActionScreen(navController: NavHostController) {
     Column (
         modifier = Modifier
             .fillMaxSize()
