@@ -43,10 +43,13 @@ fun WorkspaceScreen(navController: NavHostController) {
     }
 }
 
+data class ActionCardData(val title: String, val text: String)
+
 @Composable
 fun ActionScreen(navController: NavHostController) {
-
-    val columnCards = remember { mutableIntStateOf(0) }
+    val actionCards = remember { mutableStateOf(listOf(
+        ActionCardData("First Action Card", "This is the first action card"),
+    )) }
 
     Column (
         modifier = Modifier
@@ -61,11 +64,11 @@ fun ActionScreen(navController: NavHostController) {
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            for (i in 0 until columnCards.intValue) {
+            actionCards.value.forEach {
                 ActionCard(navController = navController)
             }
             PlusButton {
-                columnCards.intValue++
+                actionCards.value += ActionCardData("New Action Card", "This is a new action card")
             }
         }
     }
