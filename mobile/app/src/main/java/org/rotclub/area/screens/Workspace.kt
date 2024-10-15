@@ -17,11 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import org.rotclub.area.R
+import org.rotclub.area.composes.ColumnCard
+import org.rotclub.area.composes.BackButton
+import org.rotclub.area.composes.PlusButton
+import org.rotclub.area.composes.ActionCard
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun WorkspaceScreen() {
+fun WorkspaceScreen(navController: NavHostController) {
 
     val columnCards = remember { mutableIntStateOf(0) }
 
@@ -33,25 +38,46 @@ fun WorkspaceScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         for (i in 0 until columnCards.intValue) {
-            ColumnCard()
+            ColumnCard(navController = navController)
         }
-        Button(
-            onClick = { columnCards.intValue++ },
-            modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp),
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = FrispyTheme.Primary500,
-                disabledContainerColor = FrispyTheme.Primary300.copy(alpha = 0.5f),
-                disabledContentColor = Color.White.copy(alpha = 0.5f)
-            ),
-            enabled = true
+        PlusButton(columnCards)
+    }
+}
+
+@Composable
+fun ActionScreen(navController: NavHostController) {
+
+    val columnCards = remember { mutableIntStateOf(0) }
+
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FrispyTheme.Surface700)
+            .padding(25.dp, 60.dp, 20.dp, 0.dp),
+    ) {
+        BackButton(navController = navController)
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp, 20.dp, 0.dp, 0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.plus),
-                contentDescription = "Button Icon",
-                modifier = Modifier.size(30.dp)
-            )
+            for (i in 0 until columnCards.intValue) {
+                ActionCard(navController = navController)
+            }
+            PlusButton(columnCards)
         }
+    }
+}
+
+@Composable
+fun ServiceScreen(navController: NavHostController) {
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FrispyTheme.Surface700)
+            .padding(25.dp, 60.dp, 20.dp, 0.dp),
+    ) {
+        BackButton(navController = navController)
     }
 }

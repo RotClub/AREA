@@ -1,8 +1,9 @@
-package org.rotclub.area.screens
+package org.rotclub.area.composes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,11 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
+import androidx.navigation.NavController
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
+import org.rotclub.area.fontFamily
 
 @Composable
-fun ColumnCard() {
+fun ColumnCard(navController: NavController) {
     var text by remember { mutableStateOf("Column Card") }
 
     Column(
@@ -80,7 +86,7 @@ fun ColumnCard() {
             }
             Column {
                 Button(
-                    onClick = { /* Do something */ },
+                    onClick = { navController.navigate("action_screen") },
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White,
@@ -101,6 +107,111 @@ fun ColumnCard() {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun PlusButton(columnCards: MutableIntState) {
+    Button(
+        onClick = { columnCards.intValue++ },
+        modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp),
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = FrispyTheme.Primary500,
+            disabledContainerColor = FrispyTheme.Primary300.copy(alpha = 0.5f),
+            disabledContentColor = Color.White.copy(alpha = 0.5f)
+        ),
+        enabled = true
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.plus),
+            contentDescription = "Button Icon",
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+fun BackButton(navController: NavController) {
+    Text(
+        text = "< Go Back",
+        color = FrispyTheme.Primary500,
+        fontFamily = fontFamily,
+        fontSize = 20.sp,
+        modifier = Modifier
+            .clickable { navController.popBackStack() }
+    )
+}
+
+@Composable
+fun ActionCard(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .height(150.dp)
+            .padding(0.dp, 0.dp, 0.dp, 16.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
+            .background(FrispyTheme.Surface900),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row (
+            modifier = Modifier
+                .height(40.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "On: action",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontFamily = fontFamily,
+                modifier = Modifier
+                    .padding(16.dp, 10.dp, 0.dp, 0.dp)
+            )
+            Row (
+            )
+            {
+                Icon(
+                    painter = painterResource(id = R.drawable.cog),
+                    contentDescription = "Delete Action",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(0.dp, 10.dp, 16.dp, 0.dp)
+                        .size(25.dp)
+                        .clickable { navController.navigate("service_screen") }
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.play),
+                    contentDescription = "Add Action",
+                    tint = FrispyTheme.Success500,
+                    modifier = Modifier
+                        .padding(0.dp, 10.dp, 16.dp, 0.dp)
+                        .size(25.dp)
+                        .clickable { /* Do something */ }
+                )
+            }
+        }
+        Button(
+            onClick = { /* Do something */ },
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = FrispyTheme.Primary500,
+                disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                disabledContentColor = Color.White.copy(alpha = 0.5f)
+            ),
+            modifier = Modifier
+                .height(40.dp)
+                .fillMaxWidth(),
+            enabled = true
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.plus),
+                contentDescription = "Button Icon",
+                modifier = Modifier.size(40.dp)
+            )
         }
     }
 }
