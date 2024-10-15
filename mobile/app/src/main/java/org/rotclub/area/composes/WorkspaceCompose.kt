@@ -41,8 +41,9 @@ import org.rotclub.area.R
 import org.rotclub.area.fontFamily
 
 @Composable
-fun ColumnCard(navController: NavController) {
-    var text by remember { mutableStateOf("Column Card") }
+fun ColumnCard(navController: NavController, title: String, text: String) {
+    var titleState by remember { mutableStateOf(title) }
+    var textState by remember { mutableStateOf(text) }
 
     Column(
         modifier = Modifier
@@ -61,27 +62,31 @@ fun ColumnCard(navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(0.dp, 2.dp, 0.dp, 0.dp)
             ) {
                 TextField(
-                    value = text,
-                    onValueChange = { newText: String -> text = newText },
+                    value = title,
+                    onValueChange = { newText: String -> titleState = newText },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
-                    textStyle = TextStyle.Default.copy(fontSize = 18.sp, color = Color.White),
+                    textStyle = TextStyle.Default.copy(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontFamily = fontFamily
+                    ),
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(55.dp)
 
                 )
                 Text(
-                    text = "This is a column card",
-                    fontSize = 14.sp,
+                    text = textState,
+                    fontSize = 15.sp,
                     color = Color.White,
-                    modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp)
+                    modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp),
+                    fontFamily = fontFamily
                 )
             }
             Column {
@@ -112,9 +117,9 @@ fun ColumnCard(navController: NavController) {
 }
 
 @Composable
-fun PlusButton(columnCards: MutableIntState) {
+fun PlusButton(onClick: () -> Unit) {
     Button(
-        onClick = { columnCards.intValue++ },
+        onClick = onClick,
         modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(

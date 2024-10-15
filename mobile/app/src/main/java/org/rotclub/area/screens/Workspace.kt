@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,22 +26,28 @@ import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.ActionCard
 import org.rotclub.area.ui.theme.FrispyTheme
 
+data class ColumnCardData(val title: String, val text: String)
+
 @Composable
 fun WorkspaceScreen(navController: NavHostController) {
+    val columnCards = remember { mutableStateOf(listOf(
+        ColumnCardData("First Column Card", "This is the first column card"),
+        ColumnCardData("Second Column Card", "This is the second column card")
+    )) }
 
-    val columnCards = remember { mutableIntStateOf(0) }
-
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(FrispyTheme.Surface700)
             .padding(20.dp, 80.dp, 20.dp, 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        for (i in 0 until columnCards.intValue) {
-            ColumnCard(navController = navController)
+        columnCards.value.forEach { cardData ->
+            ColumnCard(navController = navController, title = cardData.title, text = cardData.text)
         }
-        PlusButton(columnCards)
+        PlusButton {
+            columnCards.value += ColumnCardData("New Column Card", "This is a new column card")
+        }
     }
 }
 
@@ -65,7 +72,9 @@ fun ActionScreen(navController: NavHostController) {
             for (i in 0 until columnCards.intValue) {
                 ActionCard(navController = navController)
             }
-            PlusButton(columnCards)
+            PlusButton {
+                columnCards.intValue++
+            }
         }
     }
 }
