@@ -22,6 +22,7 @@ import org.rotclub.area.composes.ColumnCard
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.ActionCard
+import org.rotclub.area.composes.ListView
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -121,6 +122,9 @@ fun ActionScreen(navController: NavHostController) {
                 fontFamily = fontFamily,
                 fontSize = 16.sp,
             )
+            for (i in 0..5) {
+                ListView("Action $i")
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 package org.rotclub.area.composes
 
 import android.app.Dialog
+import android.widget.ListView
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -269,6 +272,75 @@ fun ActionDialog(onDismissRequest: () -> Unit) {
                         color = Color.White,
                         fontFamily = fontFamily,
                         fontSize = 20.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ListView(name: String) {
+    var expanded by remember { mutableStateOf(false) }
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .background(FrispyTheme.Surface700)
+            .clip(RoundedCornerShape(8.dp))
+            .animateContentSize()
+    ) {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(FrispyTheme.Surface700)
+                .clip(RoundedCornerShape(8.dp))
+                .animateContentSize()
+        ) {
+            Column (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(FrispyTheme.Surface700)
+            ) {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(FrispyTheme.Surface700)
+                ) {
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                    ) {
+                        Icon(
+                            painter = if (expanded) {
+                                painterResource(id = R.drawable.chevron_down)
+                            } else {
+                                painterResource(id = R.drawable.chevron_up)
+                            },
+                            contentDescription = if (expanded) {
+                                "Collapse"
+                            } else {
+                                "Expand"
+                            },
+                            tint = Color.White,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+                    Text(
+                        text = name,
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                    )
+                }
+                if (expanded) {
+                    Text(
+                        text = "This is a description",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp)
                     )
                 }
             }
