@@ -22,7 +22,7 @@ import org.rotclub.area.ui.theme.FrispyTheme
 @Composable
 fun ProfileScreen() {
     var username by remember { mutableStateOf("Paul_le_BG") }
-    var email by remember { mutableStateOf("paullebg@AREA.fr") }
+    var email by remember { mutableStateOf("paullebg@area.fr") }
     
     Column(
         modifier = Modifier
@@ -35,7 +35,8 @@ fun ProfileScreen() {
                 .fillMaxSize()
                 .clip(RoundedCornerShape(20.dp))
                 .background(FrispyTheme.Surface500)
-                .padding(20.dp),
+                .padding(25.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Pseudo: $username",

@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +33,7 @@ fun WorkspaceScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .background(FrispyTheme.Surface700)
+            .verticalScroll(rememberScrollState())
             .padding(20.dp, 80.dp, 20.dp, 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -61,6 +64,7 @@ fun NodeScreen(navController: NavHostController) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
