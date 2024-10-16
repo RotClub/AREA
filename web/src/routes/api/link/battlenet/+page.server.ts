@@ -1,7 +1,7 @@
 import { adaptUrl } from "$lib/api";
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
-import { config } from "dotenv"
+import { config } from "dotenv";
 
 export const load = async ({ cookies, url }) => {
 	const code = url.searchParams.get("code");
@@ -29,9 +29,11 @@ export const load = async ({ cookies, url }) => {
 					"Content-Type": "application/x-www-form-urlencoded",
 					Authorization:
 						"Basic " +
-						Buffer.from(process.env.BATTLENET_CLIENT_ID + ":" + process.env.BATTLENET_CLIENT_SECRET).toString(
-							"base64"
-						)
+						Buffer.from(
+							process.env.BATTLENET_CLIENT_ID +
+								":" +
+								process.env.BATTLENET_CLIENT_SECRET
+						).toString("base64")
 				}
 			}
 		);
