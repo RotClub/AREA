@@ -11,7 +11,8 @@
 			<svelte:fragment slot="title">Spotify</svelte:fragment>
 		</ServiceCard>
 		<ServiceCard provider="BATTLENET">
-			<svelte:fragment slot="icon"><img src="/bilzzard-icon.png" alt="Battle.net" /></svelte:fragment>
+			<svelte:fragment slot="icon"
+				><img src="/bilzzard-icon.png" alt="Battle.net" /></svelte:fragment>
 			<svelte:fragment slot="title">BattleNet</svelte:fragment>
 		</ServiceCard>
 		<ServiceCard>
