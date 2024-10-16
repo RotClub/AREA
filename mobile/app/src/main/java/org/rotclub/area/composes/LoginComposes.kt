@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.rotclub.area.R
-import org.rotclub.area.fontFamily
-import org.rotclub.area.roundedValue
+import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable

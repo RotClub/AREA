@@ -36,7 +36,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavController
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
-import org.rotclub.area.fontFamily
+import org.rotclub.area.lib.fontFamily
 
 @Composable
 fun ColumnCard(navController: NavController, title: String, text: String) {

@@ -1,9 +1,10 @@
-package org.rotclub.area
+package org.rotclub.area.composes
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.rotclub.area.lib.BottomBarScreen
 import org.rotclub.area.screens.ExploreScreen
 import org.rotclub.area.screens.HomeScreen
 import org.rotclub.area.screens.ProfileScreen
