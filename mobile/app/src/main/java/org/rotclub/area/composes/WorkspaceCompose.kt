@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -280,8 +281,32 @@ fun ActionDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
+fun Checkbox(i: Int) {
+    var checked by remember { mutableStateOf(false) }
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(FrispyTheme.Surface700),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it },
+        )
+        Text(
+            text = "This is a description $i",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 15.sp,
+        )
+    }
+}
+
+@Composable
 fun ListView(name: String) {
     var expanded by remember { mutableStateOf(false) }
+
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -335,13 +360,9 @@ fun ListView(name: String) {
                     )
                 }
                 if (expanded) {
-                    Text(
-                        text = "This is a description",
-                        color = Color.White,
-                        fontFamily = fontFamily,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp)
-                    )
+                    for (i in 0..3) {
+                        Checkbox(i)
+                    }
                 }
             }
         }
