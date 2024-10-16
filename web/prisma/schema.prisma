@@ -17,12 +17,15 @@ model User {
   createdAt      DateTime  @default(now())
   username       String    @default("")
   Service        Service[]
+  Program        Program[]
 }
 
 model Program {
   id      Int      @id @unique @default(autoincrement())
   name    String
   actions Action[]
+  User    User?    @relation(fields: [userId], references: [id])
+  userId  Int?
 }
 
 model Action {
