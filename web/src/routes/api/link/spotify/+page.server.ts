@@ -38,28 +38,14 @@ export const load = async ({ cookies, url }) => {
 		if (!token) {
 			error(400, "No token provided");
 		}
-		const client = new PrismaClient();
-		const user_services = await client.user.findUnique({
-			where: {
-				token: token
-			},
-			select: {
-				services: true
-			}
-		});
-		if (!user_services) {
-			client.$disconnect();
-			error(404, "User not found");
-		}
 		state = true;
 		console.log(data);
-		client.$disconnect();
 	} catch (e) {
 		error(500, "Could not link user to Spotify service: " + e);
 	}
 	return redirect(
 		301,
-		`${adaptUrl()}/dashboard/services` +
+		`${adaptUrl()}/dashboard/services?` +
 			queryString.stringify({
 				provider: "spotify",
 				success: state
