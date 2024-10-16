@@ -3,9 +3,12 @@ package org.rotclub.area.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -13,11 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import org.rotclub.area.composes.ColumnCard
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.ActionCard
+import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 
 data class ColumnCardData(val title: String, val text: String)
@@ -31,10 +36,11 @@ fun WorkspaceScreen(navController: NavHostController) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(893.dp)
             .background(FrispyTheme.Surface700)
             .verticalScroll(rememberScrollState())
-            .padding(20.dp, 80.dp, 20.dp, 0.dp),
+            .padding(20.dp, 80.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         columnCards.value.forEach { cardData ->
@@ -56,9 +62,10 @@ fun NodeScreen(navController: NavHostController) {
 
     Column (
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(893.dp)
             .background(FrispyTheme.Surface700)
-            .padding(25.dp, 60.dp, 20.dp, 0.dp),
+            .padding(25.dp, 60.dp, 20.dp, 20.dp),
     ) {
         BackButton(navController = navController)
         Column (
@@ -82,10 +89,38 @@ fun NodeScreen(navController: NavHostController) {
 fun ActionScreen(navController: NavHostController) {
     Column (
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(893.dp)
             .background(FrispyTheme.Surface700)
-            .padding(25.dp, 60.dp, 20.dp, 0.dp),
+            .padding(25.dp, 60.dp, 20.dp, 20.dp),
     ) {
         BackButton(navController = navController)
+        Text(
+            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp),
+            text = "Action",
+            color = FrispyTheme.Primary50,
+            fontFamily = fontFamily,
+            fontSize = 24.sp,
+        )
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
+                text = "Select here an action to be used to trigger events, can be configured later.",
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = 16.sp,
+            )
+            Text(
+                text = "If you don't see anything here, that means you have no linked services.",
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = 16.sp,
+            )
+        }
     }
 }
