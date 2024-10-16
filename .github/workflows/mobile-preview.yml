@@ -24,24 +24,19 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Set Gradle properties
-        run: |
-          echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
-        working-directory: "./mobile"
-
       - name: Run Android Unit Tests
         run: ./gradlew testDebugUnitTest
         working-directory: "./mobile"
 
       - name: Build APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew :app:assembleDebug
         working-directory: "./mobile"
 
       - name: Upload APK Package
         uses: actions/upload-artifact@v4
         with:
           name: apkPackage
-          path: "./mobile/composeApp/build/outputs/apk/debug/composeApp-debug.apk"
+          path: "./mobile/app/build/outputs/apk/debug/app-debug.apk"
           retention-days: 1
           if-no-files-found: 'error'
 

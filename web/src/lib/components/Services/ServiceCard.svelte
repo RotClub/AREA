@@ -18,9 +18,15 @@
 	function redirectToService(cookies): string {
 		if (provider === Provider.SPOTIFY) {
 			if (!linked) {
-				return `/api/auth/spotify?` + queryString.stringify({ token: cookies.token });
+				return `/api/auth/spotify`;
 			} else {
 				return "/api/unlink/spotify?" + queryString.stringify({ token: cookies.token });
+			}
+		} else if (provider === Provider.BATTLENET) {
+			if (!linked) {
+				return `/api/auth/battlenet`;
+			} else {
+				return "/api/unlink/battlenet?" + queryString.stringify({ token: cookies.token });
 			}
 		}
 		return "#";

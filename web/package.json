@@ -26,6 +26,7 @@
 		"@tailwindcss/typography": "0.5.15",
 		"@types/eslint": "8.56.0",
 		"@types/node": "^22.5.4",
+		"@types/simple-oauth2": "^5.0.7",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "10.4.20",
@@ -59,8 +60,10 @@
 		"highlight.js": "11.10.0",
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.441.0",
+		"openid-client": "^5.7.0",
 		"prisma": "^5.20.0",
 		"query-string": "^9.1.0",
+		"simple-oauth2": "^5.1.0",
 		"svelte-motion": "^0.12.2",
 		"tailwind-merge": "^2.5.2"
 	}
