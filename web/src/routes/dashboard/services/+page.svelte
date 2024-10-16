@@ -15,9 +15,10 @@
 				><img src="/bilzzard-icon.png" alt="Battle.net" /></svelte:fragment>
 			<svelte:fragment slot="title">BattleNet</svelte:fragment>
 		</ServiceCard>
-		<ServiceCard>
-			<svelte:fragment slot="icon"><Earth class="text-primary-500" /></svelte:fragment>
-			<svelte:fragment slot="title">Service 2</svelte:fragment>
+		<ServiceCard provider="STEAM">
+			<svelte:fragment slot="icon"
+				><img src="/steam-icon.png" alt="steam" /></svelte:fragment>
+			<svelte:fragment slot="title">Steam</svelte:fragment>
 		</ServiceCard>
 		<ServiceCard>
 			<svelte:fragment slot="icon"><Earth class="text-primary-500" /></svelte:fragment>

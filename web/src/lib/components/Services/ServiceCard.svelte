@@ -28,6 +28,12 @@
 			} else {
 				return "/api/unlink/battlenet?" + queryString.stringify({ token: cookies.token });
 			}
+		} else if (provider === Provider.STEAM) {
+			if (!linked) {
+				return `/api/auth/steam`;
+			} else {
+				return "/api/unlink/steam?" + queryString.stringify({ token: cookies.token });
+			}
 		}
 		return "#";
 	}
