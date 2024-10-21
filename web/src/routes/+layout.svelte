@@ -42,7 +42,7 @@
 		addActionModalComponent: { ref: AddActionModalComponent },
 		addReactionModalComponent: { ref: null },
 		editNodeModalComponent: { ref: null }
-	}
+	};
 </script>
 
 <Modal components={modalRegistry} />

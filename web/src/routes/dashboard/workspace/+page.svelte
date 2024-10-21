@@ -20,7 +20,7 @@
 		const modal: ModalSettings = {
 			type: "component",
 			component: "addActionModalComponent"
-		}
+		};
 
 		modalStore.trigger(modal);
 	}
@@ -69,11 +69,17 @@
 </script>
 
 <div class="w-full h-full flex flex-row">
-	<div class="h-full w-1/4 bg-surface-700 overflow-y-scroll p-4 space-y-4 border-r-2 border-surface-500 flex flex-col items-center">
+	<div
+		class="h-full w-1/4 bg-surface-700 overflow-y-scroll p-4 space-y-4 border-r-2 border-surface-500 flex flex-col items-center">
 		{#each programs as program}
-			<WorkspaceProgramCard title={program.name} nodes={program.id} bind:group={inspecting_node} id={program.id} />
+			<WorkspaceProgramCard
+				title={program.name}
+				nodes={program.id}
+				bind:group={inspecting_node}
+				id={program.id} />
 		{/each}
-		<button class="btn variant-filled-primary" disabled={!loaded} on:click={createProgram}><Plus /> Create program</button>
+		<button class="btn variant-filled-primary" disabled={!loaded} on:click={createProgram}
+			><Plus /> Create program</button>
 	</div>
 	<div class="relative flex flex-col h-full w-3/4">
 		{#if !loaded}
@@ -93,7 +99,10 @@
 					active="bg-primary-500"
 					background="bg-surface-800" />
 			</div>
-			<button class="btn text-error-500 font-semibold !p-2" on:click={deleteProgram} disabled={!loaded || (inspecting_node === -1)}>
+			<button
+				class="btn text-error-500 font-semibold !p-2"
+				on:click={deleteProgram}
+				disabled={!loaded || inspecting_node === -1}>
 				<span> Delete program </span>
 				<span>
 					<X />
@@ -101,40 +110,51 @@
 			</button>
 		</div>
 		<div class="flex flex-col overflow-y-scroll p-8 px-16 gap-8 dark:bg-dot-white/[0.1] h-full">
-			{#if inspecting_node !== -1} {#if getProgramContent(inspecting_node).actions}
-				{#each getProgramContent(inspecting_node).actions as action}
+			{#if inspecting_node !== -1}
+				{#if getProgramContent(inspecting_node).actions}
+					{#each getProgramContent(inspecting_node).actions as action}
+						<Node action={action.actionId} meta={action.metadata} edit={editing}>
+							{#each action.reactions as reaction}
+								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
+							{/each}
+						</Node>
+					{/each}
 					<Node
-						action={action.actionId}
-						meta={action.metadata}
+						action="[Brawlhalla] Rank reached"
+						meta={{ Player: "Kapsulon", Rank: "Diamond" }}
 						edit={editing}>
-						{#each action.reactions as reaction}
-							<SubNode
-								reaction={reaction.reactionId}
-								meta={reaction.metadata} />
-						{/each}
+						<SubNode
+							reaction="[Spotify] Play track"
+							meta={{
+								Device: "KapPhone",
+								Track: "Celebration song",
+								Volume: "200%"
+							}} />
+						<SubNode
+							reaction="[Spotify] Play track"
+							meta={{
+								Device: "KapPhone",
+								Track: "Celebration song",
+								Volume: "200%"
+							}} />
+						<SubNode
+							reaction="[Spotify] Play track"
+							meta={{
+								Device: "KapPhone",
+								Track: "Celebration song",
+								Volume: "200%"
+							}} />
 					</Node>
-				{/each}
-				<Node
-					action="[Brawlhalla] Rank reached"
-					meta={{ Player: "Kapsulon", Rank: "Diamond" }}
-					edit={editing}>
-					<SubNode
-						reaction="[Spotify] Play track"
-						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-					<SubNode
-						reaction="[Spotify] Play track"
-						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-					<SubNode
-						reaction="[Spotify] Play track"
-						meta={{ Device: "KapPhone", Track: "Celebration song", Volume: "200%" }} />
-				</Node>
-				<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-				{#if editing}
-					<div class="w-full flex flex-row justify-center items-center">
-						<button class="btn variant-filled-primary" on:click={openAddReactionModal}><Plus /> Add action</button>
-					</div>
+					<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
+					{#if editing}
+						<div class="w-full flex flex-row justify-center items-center">
+							<button
+								class="btn variant-filled-primary"
+								on:click={openAddReactionModal}><Plus /> Add action</button>
+						</div>
+					{/if}
 				{/if}
-			{/if} {/if}
+			{/if}
 		</div>
 	</div>
 </div>
