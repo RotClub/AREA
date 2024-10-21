@@ -57,6 +57,12 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
+    if (sharedPreferences.contains("token")) {
+        if (sharedPreferences.getString("token", "")!!.isNotEmpty()) {
+            navController.navigate(GlobalRoutes.MainApp.route)
+        }
+    }
+
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(

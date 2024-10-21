@@ -1,7 +1,6 @@
 package org.rotclub.area.lib.httpapi
 
 import androidx.compose.runtime.MutableState
-import kotlinx.coroutines.CoroutineScope
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -44,19 +43,29 @@ suspend fun authLogin(
             val response = RetrofitClient.authApi.login(
                 LoginRequest(email, password)
             )
-            println("Response: $response")
-            println("Response body: ${response.body()}")
+            when (response.code()) {
+                404 -> {
+                    loginResult.value = null
+                    loginErrorStatus.value = "No account found, please sign up"
+                    return
+                }
+                200 -> {
+                    loginResult.value = response.body()
+                    loginErrorStatus.value = ""
+                    return
+                }
+                else -> {
+                    loginResult.value = null
+                    loginErrorStatus.value = "An error occurred"
+                    return
+                }
+            }
             loginResult.value = response.body()
             loginErrorStatus.value = ""
-            println("Login result: ${loginResult.value}")
         } catch (e: Exception) {
             println("Error occurred: $e")
             loginResult.value = null
-            if (e is retrofit2.HttpException) {
-                loginErrorStatus.value = "Invalid username or password"
-            } else {
-                loginErrorStatus.value = "An error occurred"
-            }
+            loginErrorStatus.value = "An error occurred"
         } finally {
             loadingState.value = false
         }
