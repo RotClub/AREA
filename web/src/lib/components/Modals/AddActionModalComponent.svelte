@@ -38,7 +38,7 @@
 			<TreeView>
                 <TreeViewItem>
                     <svelte:fragment slot="lead">
-                        <img src="/spotify-icon.svg" alt="spotify" width="32px" />
+                        <img src="/provider/spotify-icon.svg" alt="spotify" width="32px" />
                     </svelte:fragment>
                     <span>Spotify</span>
                     <svelte:fragment slot="children">
