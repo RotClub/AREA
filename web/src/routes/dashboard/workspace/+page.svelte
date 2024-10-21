@@ -6,7 +6,6 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
-	import type { Program } from "@prisma/client";
 
 	let modalStore: ModalStore = getModalStore();
 
