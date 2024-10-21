@@ -23,11 +23,11 @@
 			window.fetch(`/api/programs/${id}`, {
 				method: "PATCH",
 				headers: {
-					"Content-Type": "application/json",
+					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					name: title,
-				}),
+					name: title
+				})
 			});
 		}
 	}
