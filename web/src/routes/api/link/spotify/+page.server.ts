@@ -1,12 +1,12 @@
 import { adaptUrl } from "$lib/api";
-import { PrismaClient } from "@prisma/client";
+import { Provider } from "@prisma/client";
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
+import { linkUserService } from "$lib/services";
 
 export const load = async ({ cookies, url }) => {
 	const code = url.searchParams.get("code");
 	const err = url.searchParams.get("error");
-	let state = false;
 
 	if (err) {
 		error(400, "Could get Spotify authorization: " + err);
@@ -38,17 +38,12 @@ export const load = async ({ cookies, url }) => {
 		if (!token) {
 			error(400, "No token provided");
 		}
-		state = true;
-		console.log(data);
+		const update_service = await linkUserService(token, Provider.SPOTIFY, data);
+		if (!update_service) {
+			error(500, "Could not link user to Spotify service");
+		}
 	} catch (e) {
 		error(500, "Could not link user to Spotify service: " + e);
 	}
-	return redirect(
-		301,
-		`${adaptUrl()}/dashboard/services?` +
-			queryString.stringify({
-				provider: "spotify",
-				success: state
-			})
-	);
+	return redirect(301, `${adaptUrl()}/dashboard/services`);
 };
