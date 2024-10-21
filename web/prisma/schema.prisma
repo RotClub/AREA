@@ -31,16 +31,18 @@ model Program {
 model Action {
   id        Int        @id @unique @default(autoincrement())
   programId Int?
+  actionId  String
   metadata  Json?
   program   Program?   @relation(fields: [programId], references: [id])
   reactions Reaction[]
 }
 
 model Reaction {
-  id       Int     @id @unique @default(autoincrement())
-  actionId Int?
-  metadata Json?
-  action   Action? @relation(fields: [actionId], references: [id])
+  id         Int     @id @unique @default(autoincrement())
+  reactionId String
+  actionId   Int?
+  metadata   Json?
+  action     Action? @relation(fields: [actionId], references: [id])
 }
 
 model Service {
