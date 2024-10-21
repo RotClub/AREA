@@ -57,13 +57,17 @@ export const GET = async ({ request, cookies }) => {
 			accessibleProviders.push({
 				service: provider,
 				link: true,
-				title: getProviderTitle(provider)
+				title: getProviderTitle(provider),
+				link_href: `/api/auth/${provider.toLowerCase()}`,
+				unlink_href: `/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
 			});
 		} else {
 			accessibleProviders.push({
 				service: provider,
 				link: false,
-				title: getProviderTitle(provider)
+				title: getProviderTitle(provider),
+				link_href: `/api/auth/${provider.toLowerCase()}`,
+				unlink_href: `/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
 			});
 		}
 	}
