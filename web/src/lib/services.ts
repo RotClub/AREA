@@ -106,3 +106,27 @@ export async function linkUserService(token: string, provider: Provider, data: o
 	client.$disconnect();
 	return update_service
 }
+
+export async function unlinkUserService(token: string, provider: Provider) {
+	const client = new PrismaClient();
+	const user_id = await client.user.findUnique({
+		where: {
+			token: token
+		},
+		select: {
+			id: true
+		}
+	});
+	if (!user_id) {
+		client.$disconnect();
+		return false;
+	}
+	const delete_service = await client.service.deleteMany({
+		where: {
+			userId: user_id.id,
+			providerType: provider
+		}
+	});
+	client.$disconnect();
+	return delete_service;
+}
