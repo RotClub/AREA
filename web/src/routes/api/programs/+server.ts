@@ -1,4 +1,8 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, type Program } from '@prisma/client'
+
+function getProgramNodeAmount(program: Program): number {
+    return program.Actions ? program.Actions.length : 0;
+}
 
 export const GET = async ({ cookies }) => {
     const client: PrismaClient = new PrismaClient();
@@ -27,6 +31,12 @@ export const GET = async ({ cookies }) => {
             userId: user.id
         }
     })).sort((a, b) => a.id - b.id);
+
+    for (const program of programs) {
+        program.nodeAmount = getProgramNodeAmount(program);
+    }
+
+    client.$disconnect();
 
     return new Response(
         JSON.stringify(programs),

@@ -4,12 +4,14 @@
 	import { getModalStore, TreeView, TreeViewItem } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 
+
 	export let parent: SvelteComponent;
 
 	const modalStore = getModalStore();
 
     let loaded: boolean = false;
     let actions: any[] = [];
+    let selected: any = null;
 
 	function onFormSubmit(): void {
 		// if ($modalStore[0].response) $modalStore[0].response(formData);
@@ -55,6 +57,10 @@
             <div class="absolute w-full h-full bg-surface-700 animate-pulse top-0 left-0"></div>
             {/if}
 		</div>
+        <div class="flex flex-row gap-2 items-center">
+            <span class="text-lg font-semibold">Currently selected:</span>
+            <span>{selected ? selected : "None"}</span>
+        </div>
         <footer class="flex flex-row items-center justify-end gap-2">
             <button class="btn variant-filled-surface" on:click={() => {modalStore.close()}}>Cancel</button>
             <button class="btn variant-filled-primary">Confirm</button>
