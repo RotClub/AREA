@@ -1,6 +1,7 @@
 import { PrismaClient, UserRole } from "@prisma/client";
 import { Provider } from "@prisma/client";
 import { checkAccess } from "$lib/api";
+import { getProviderTitle } from "$lib/services";
 
 export const GET = async ({ request, cookies }) => {
 	let token: string | undefined;
@@ -60,12 +61,14 @@ export const GET = async ({ request, cookies }) => {
 		if (provider in userProviderList) {
 			accessibleProviders.push({
 				"service": provider,
-				"link": true
+				"link": true,
+				"title": getProviderTitle(provider)
 			})
 		} else {
 			accessibleProviders.push({
 				"service": provider,
-				"link": false
+				"link": false,
+				"title": getProviderTitle(provider)
 			})
 		}
 	}

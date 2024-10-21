@@ -44,3 +44,24 @@ export async function GetAccessibleActions(jwt: string | undefined) {
     }
     return accessibleActions;
 }
+
+export function getProviderTitle(provider: Provider) {
+    switch (provider) {
+        case Provider.SPOTIFY:
+            return "Spotify";
+        case Provider.DISCORD:
+            return "Discord";
+        case Provider.X:
+            return "X";
+        case Provider.RIOT:
+            return "Riot Games";
+        case Provider.EPICGAMES:
+            return "Epic Games";
+        case Provider.BATTLENET:
+            return "Battle.net";
+        case Provider.STEAM:
+            return "Steam";
+        default:
+            return "Unknown";
+    }
+}
