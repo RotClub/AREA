@@ -3,6 +3,8 @@
 
 	export let title: string;
 	export let nodes: number;
+	export let group: number;
+	export let id: number;
 
 	let editing: boolean = false;
 	let input: HTMLInputElement;
@@ -17,14 +19,29 @@
 			title = "Untitled";
 		}
 		editing = toggle;
+		if (editing == false) {
+			window.fetch(`/api/programs/${id}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					name: title
+				})
+			});
+		}
+	}
+
+	function selectProgram() {
+		group = id;
 	}
 </script>
 
 <div class="card border-2 border-secondary-400 w-full h-[6rem] flex flex-row overflow-hidden">
-	<div class="w-4/5 p-4 flex flex-col space-y-3">
+	<div class="w-[75%] p-4 flex flex-col space-y-3">
 		<div class="flex flex-row h-min items-center space-x-2">
 			{#if !editing}
-				<span class="text-2xl font-semibold text-secondary-300 overflow-x-scroll"
+				<span class="text-lg font-semibold text-secondary-300 overflow-x-scroll text-nowrap"
 					>{title}</span>
 				<button
 					class="btn p-0"
@@ -36,7 +53,7 @@
 			{:else}
 				<input
 					type="text"
-					class="input"
+					class="input w-full"
 					bind:value={title}
 					on:focusout={() => {
 						toggleEditing(false);
@@ -54,9 +71,9 @@
 		<span class="font-regular text-sm text-surface-200"
 			>Nodes: <span class="text-white">{nodes}</span></span>
 	</div>
-	<div class="flex-grow border-l-2 border-secondary-400 flex flex-col">
+	<div class="w-[25%] shrink-0 border-l-2 border-secondary-400 flex flex-col">
 		<div class="h-full w-full bg-surface-500 hover:brightness-125 transition-all">
-			<button class="btn h-full w-full"><Code /></button>
+			<button class="btn h-full w-full" on:click={selectProgram}><Code /></button>
 		</div>
 	</div>
 </div>
