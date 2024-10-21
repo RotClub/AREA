@@ -59,7 +59,7 @@ data class ActionCardData(val title: String, val text: String)
 @Composable
 fun NodeScreen(navController: NavHostController) {
     val actionCards = remember { mutableStateOf(listOf(
-        ActionCardData("First Action Card", "This is the first action card"),
+        null
     )) }
 
     Column (
@@ -81,7 +81,7 @@ fun NodeScreen(navController: NavHostController) {
                 ActionCard(navController = navController)
             }
             PlusButton {
-                actionCards.value += ActionCardData("New Action Card", "This is a new action card")
+                navController.navigate("action_screen")
             }
         }
     }
@@ -133,7 +133,9 @@ fun ActionScreen(navController: NavHostController) {
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TerminateButton(onClick = { navController.navigate("node_screen") })
+            TerminateButton(onClick = {
+                navController.navigate("node_screen")
+            })
         }
     }
 }
