@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -158,6 +159,7 @@ fun BackButton(navController: NavController) {
 @Composable
 fun ActionCard(navController: NavController) {
     var showDialogSet by remember { mutableStateOf(false) }
+    var started by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -196,13 +198,21 @@ fun ActionCard(navController: NavController) {
                         .clickable { showDialogSet = true }
                 )
                 Icon(
-                    painter = painterResource(id = R.drawable.play),
+                    painter = if (!started) {
+                        painterResource(id = R.drawable.play)
+                    } else {
+                        painterResource(id = R.drawable.square)
+                    },
                     contentDescription = "Add Action",
-                    tint = FrispyTheme.Success500,
+                    tint = if (!started) {
+                        FrispyTheme.Success500
+                    } else {
+                        FrispyTheme.Error500
+                    },
                     modifier = Modifier
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
                         .size(25.dp)
-                        .clickable { /* do something */ }
+                        .clickable { started = !started }
                 )
             }
         }
@@ -293,6 +303,11 @@ fun Checkbox(i: Int) {
         Checkbox(
             checked = checked,
             onCheckedChange = { checked = it },
+            colors = CheckboxDefaults.colors(
+                checkmarkColor = Color.Black,
+                checkedColor = FrispyTheme.Primary500,
+                uncheckedColor = FrispyTheme.Surface400,
+            ),
         )
         Text(
             text = "This is a description $i",

@@ -20,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.Alignment
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
+import org.rotclub.area.composes.LogoutButton
+import org.rotclub.area.composes.ProfileApiCards
 
 @Composable
 fun ProfileScreen() {
@@ -62,27 +65,16 @@ fun ProfileScreen() {
                     fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                     fontWeight = FontWeight.Bold
                 )
-            }
-            Button(
-                onClick = { /* do something */ },
-                modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = FrispyTheme.Surface500,
-                    containerColor = FrispyTheme.Error500,
-                    disabledContentColor = FrispyTheme.Surface200,
-                    disabledContainerColor = FrispyTheme.Surface400
+                HorizontalDivider(
+                    modifier = Modifier.padding(0.dp, 20.dp),
+                    color = FrispyTheme.Surface700,
+                    thickness = 2.dp
                 )
-            ) {
-                Text(
-                    text = "Logout",
-                    color = FrispyTheme.Surface500,
-                    fontFamily = fontFamily,
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight = FontWeight.Bold,
-                )
+                for (i in 1..3) {
+                    ProfileApiCards(i)
+                }
             }
+            LogoutButton()
         }
     }
 }
