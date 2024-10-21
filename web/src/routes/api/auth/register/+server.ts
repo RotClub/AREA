@@ -1,20 +1,10 @@
 import { PrismaClient, UserRole } from "@prisma/client";
 import { createJWTToken, encryptPWD } from "$lib/auth";
-import { checkAccess } from "$lib/api";
 
 export const POST = async ({ request }) => {
 	const client = new PrismaClient();
 
 	try {
-		// Validate the token + user role
-		const { valid, err } = await checkAccess(client, request);
-		if (!valid) {
-			client.$disconnect();
-			return new Response(JSON.stringify({ error: err }), {
-				status: 400,
-				headers: { "Content-Type": "application/json" }
-			});
-		}
 		const body = await request.json();
 
 		if (!body.email || !body.password || !body.role || !body.username) {
