@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { FilePenLine, FileSliders } from "lucide-svelte";
+	import { FilePenLine, Code } from "lucide-svelte";
 
 	export let title: string;
 	export let nodes: number;
@@ -56,7 +56,7 @@
 	</div>
 	<div class="flex-grow border-l-2 border-secondary-400 flex flex-col">
 		<div class="h-full w-full bg-surface-500 hover:brightness-125 transition-all">
-			<button class="btn h-full w-full"><FileSliders /></button>
+			<button class="btn h-full w-full"><Code /></button>
 		</div>
 	</div>
 </div>
