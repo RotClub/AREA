@@ -48,7 +48,7 @@ model Reaction {
 model Service {
   id           Int      @id @unique @default(autoincrement())
   userId       Int?
-  metadata     Json?
+  metadata     Json
   providerType Provider
   User         User?    @relation(fields: [userId], references: [id])
 }
