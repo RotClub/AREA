@@ -23,6 +23,7 @@ import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.ActionCard
 import org.rotclub.area.composes.ListView
+import org.rotclub.area.composes.TerminateButton
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -92,6 +93,7 @@ fun ActionScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(893.dp)
+            .verticalScroll(rememberScrollState())
             .background(FrispyTheme.Surface700)
             .padding(25.dp, 60.dp, 20.dp, 20.dp),
     ) {
@@ -105,8 +107,7 @@ fun ActionScreen(navController: NavHostController) {
         )
         Column (
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -125,6 +126,14 @@ fun ActionScreen(navController: NavHostController) {
             for (i in 0..5) {
                 ListView("Action $i")
             }
+        }
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 20.dp, 0.dp, 0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TerminateButton(onClick = { navController.navigate("node_screen") })
         }
     }
 }

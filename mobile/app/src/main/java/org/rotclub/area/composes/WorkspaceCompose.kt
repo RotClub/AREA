@@ -383,3 +383,28 @@ fun ListView(name: String) {
         }
     }
 }
+
+@Composable
+fun TerminateButton(onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        modifier = Modifier
+            .padding(0.dp, 16.dp, 0.dp, 0.dp)
+            .fillMaxWidth(),
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = FrispyTheme.Primary500,
+            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+            disabledContentColor = Color.White.copy(alpha = 0.5f)
+        ),
+        enabled = true
+    ) {
+        Text(
+            text = "Terminate",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 20.sp
+        )
+    }
+}
