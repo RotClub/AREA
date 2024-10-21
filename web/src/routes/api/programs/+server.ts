@@ -1,4 +1,4 @@
-import { PrismaClient, type Program} from "@prisma/client";
+import { PrismaClient, type Program } from "@prisma/client";
 
 function getProgramNodeAmount(program: Program): number {
 	return program.Actions ? program.Actions.length : 0;

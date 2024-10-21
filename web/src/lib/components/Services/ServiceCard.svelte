@@ -4,7 +4,6 @@
 	export let link_state: boolean = false;
 	export let link_href: string = "#";
 	export let unlink_href: string = "#";
-
 </script>
 
 <div class="card h-[5rem] w-[30rem] flex flex-row gap-2 shrink-0 p-4 items-center">

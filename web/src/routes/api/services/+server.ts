@@ -59,7 +59,8 @@ export const GET = async ({ request, cookies }) => {
 				link: true,
 				title: getProviderTitle(provider),
 				link_href: `/api/auth/${provider.toLowerCase()}`,
-				unlink_href: `/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
+				unlink_href:
+					`/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
 			});
 		} else {
 			accessibleProviders.push({
@@ -67,7 +68,8 @@ export const GET = async ({ request, cookies }) => {
 				link: false,
 				title: getProviderTitle(provider),
 				link_href: `/api/auth/${provider.toLowerCase()}`,
-				unlink_href: `/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
+				unlink_href:
+					`/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
 			});
 		}
 	}
