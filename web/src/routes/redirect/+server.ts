@@ -6,4 +6,4 @@ export const GET = async ({ url }) => {
 		return redirect(301, "/dashboard");
 	}
 	return redirect(301, redurl);
-}
+};

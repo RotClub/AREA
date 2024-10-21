@@ -99,12 +99,12 @@ export async function linkUserService(token: string, provider: Provider, data: o
 				create: {
 					providerType: Provider.SPOTIFY,
 					metadata: data
-				},
+				}
 			}
 		}
 	});
 	client.$disconnect();
-	return update_service
+	return update_service;
 }
 
 export async function unlinkUserService(token: string, provider: Provider) {
