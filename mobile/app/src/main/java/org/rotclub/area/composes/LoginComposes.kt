@@ -12,10 +12,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,20 +29,16 @@ import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun LoginInput(value: String, onValueChange: ((String) -> Unit) = {},
-               label: String = "", modifier: Modifier = Modifier
+fun LoginInput(value: MutableState<String>, modifier: Modifier = Modifier,
+               onValueChange: ((String) -> Unit) = {}, label: String = ""
 ) {
-    var text by remember { mutableStateOf(value) }
-    var thisOnValueChange = onValueChange
-    if (onValueChange == {}) {
-        thisOnValueChange = { text = it }
-    }
+    val thisOnValueChange: (String) -> Unit = { value.value = it; onValueChange(it) }
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = value.value,
+        onValueChange = { thisOnValueChange(it) },
         label = { Text(text = label) },
         singleLine = true,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(10.dp),
         colors = OutlinedTextFieldDefaults.colors(

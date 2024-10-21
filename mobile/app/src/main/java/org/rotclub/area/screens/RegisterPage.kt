@@ -11,6 +11,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +36,11 @@ private var headerSpacing = 0.dp
 
 @Composable
 fun RegisterCard(modifier: Modifier = Modifier, navController: NavHostController) {
+
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val username = remember { mutableStateOf("") }
+
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
@@ -44,17 +51,17 @@ fun RegisterCard(modifier: Modifier = Modifier, navController: NavHostController
             modifier = Modifier.padding(10.dp),
         )
         LoginInput(
-            value = "",
+            value = username,
             label = "Username",
             modifier = Modifier
         )
         LoginInput(
-            value = "",
+            value = email,
             label = "Email",
             modifier = Modifier
         )
         LoginInput(
-            value = "",
+            value = password,
             label = "Password",
             modifier = Modifier
         )

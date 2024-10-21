@@ -13,6 +13,8 @@ val Pink40 = Color(0xFF7D5260)
 class FrispyTheme {
     companion object {
 
+        val TextColor = Color(0xFFFFFFFF)
+
         // Primary colors
         val Primary50 = Color(0xFFF3E1FC)
         val Primary100 = Color(0xFFEFD8FB)
