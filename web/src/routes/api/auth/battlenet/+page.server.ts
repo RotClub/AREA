@@ -11,8 +11,8 @@ export const load = async () => {
 
 	const client = new AuthorizationCode({
 		client: {
-			id: process.env.BATTLENET_CLIENT_ID,
-			secret: process.env.BATTLENET_CLIENT_SECRET
+			id: process.env.BATTLENET_CLIENT_ID ? process.env.BATTLENET_CLIENT_ID : "",
+			secret: process.env.BATTLENET_CLIENT_SECRET ? process.env.BATTLENET_CLIENT_SECRET : ""
 		},
 		auth: {
 			tokenHost: "https://oauth.battle.net",
