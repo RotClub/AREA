@@ -6,6 +6,7 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
+	import type { Program } from "@prisma/client";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -14,7 +15,11 @@
 
 	let inspecting_node: number = -1;
 
-	let programs: any[] = [];
+	let programs: {
+		name: string;
+		id: number;
+		nodeAmount: number;
+	}[] = [];
 
 	function openAddReactionModal() {
 		const modal: ModalSettings = {
@@ -45,6 +50,7 @@
 
 	async function deleteProgram() {
 		if (inspecting_node === -1) return;
+		editing = false;
 		loaded = false;
 		const response = await window.fetch(`/api/programs/${inspecting_node}`, {
 			method: "DELETE"
@@ -57,7 +63,8 @@
 		loaded = true;
 	}
 
-	function getProgramContent(id: number) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function getProgramContent(id: number): any {
 		return programs.find((program) => program.id === id);
 	}
 
@@ -74,7 +81,7 @@
 		{#each programs as program}
 			<WorkspaceProgramCard
 				title={program.name}
-				nodes={program.id}
+				nodes={program.nodeAmount}
 				bind:group={inspecting_node}
 				id={program.id} />
 		{/each}
@@ -89,13 +96,15 @@
 			class="flex flex-row items-center justify-between h-12 w-full bg-surface-700 px-2 border-b-2 border-surface-500">
 			<div class="flex flex-row gap-2 text-secondary-300 items-center">
 				<Info />
-				<span class="text-secondary-300">Nodes: 3</span>
+				<span class="text-secondary-300"
+					>Nodes: 0<!--{inspecting_node != -1 ? programs[inspecting_node].nodeAmount : 0}--></span>
 			</div>
 			<div class="flex flex-row justify-center items-center gap-2">
 				<span class="font-semibold text-xl">Editing</span>
 				<SlideToggle
 					name="editing"
 					bind:checked={editing}
+					disabled={!loaded || inspecting_node === -1}
 					active="bg-primary-500"
 					background="bg-surface-800" />
 			</div>
@@ -146,13 +155,12 @@
 							}} />
 					</Node>
 					<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
-					{#if editing}
-						<div class="w-full flex flex-row justify-center items-center">
-							<button
-								class="btn variant-filled-primary"
-								on:click={openAddReactionModal}><Plus /> Add action</button>
-						</div>
-					{/if}
+				{/if}
+				{#if editing}
+					<div class="w-full flex flex-row justify-center items-center">
+						<button class="btn variant-filled-primary" on:click={openAddReactionModal}
+							><Plus /> Add action</button>
+					</div>
 				{/if}
 			{/if}
 		</div>

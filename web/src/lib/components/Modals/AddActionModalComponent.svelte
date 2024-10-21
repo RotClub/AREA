@@ -5,11 +5,15 @@
 	import { goto } from "$app/navigation";
 
 	export let parent: SvelteComponent;
+	parent = parent || null;
 
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let actions: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let selected: any = null;
 
 	function onFormSubmit(): void {
 		// if ($modalStore[0].response) $modalStore[0].response(formData);
@@ -47,7 +51,7 @@
 				<TreeView>
 					<TreeViewItem>
 						<svelte:fragment slot="lead">
-							<img src="/provider/spotify-icon.svg" alt="spotify" width="32px" />
+							<img src="/spotify-icon.svg" alt="spotify" width="32px" />
 						</svelte:fragment>
 						<span>Spotify</span>
 						<svelte:fragment slot="children">
@@ -59,6 +63,10 @@
 			{:else}
 				<div class="absolute w-full h-full bg-surface-700 animate-pulse top-0 left-0"></div>
 			{/if}
+		</div>
+		<div class="flex flex-row gap-2 items-center">
+			<span class="text-lg font-semibold">Currently selected:</span>
+			<span>{selected ? selected : "None"}</span>
 		</div>
 		<footer class="flex flex-row items-center justify-end gap-2">
 			<button
