@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { error, redirect } from "@sveltejs/kit";
 import { config } from "dotenv";
 import queryString from "query-string";
+import { getDiablo3Profile } from "../../action/battlenet/diablo3.js";
 
 config();
 
@@ -50,12 +51,20 @@ export async function GET({ url }) {
     }
 
     const userData = await userResponse.json();
+    const battleTag = userData.battletag;
 
-    // await prisma.user.upsert({
-    //     where: { battlenetId: userData.id },
-    //     update: { battlenetData: userData },
-    //     create: { battlenetId: userData.id, battlenetData: userData }
-    // });
+    console.log("userData", userData);
+    console.log("accessToken", accessToken);
+    console.log("scope token", tokenData.scope);
 
-    return redirect(302, `${adaptUrl()}/dashboard/services`); //?provider=battlenet&success=true
+    try {
+        const diablo3Profile = await getDiablo3Profile(battleTag, accessToken);
+        console.log("Diablo 3 Profile:", diablo3Profile);
+
+    } catch (err) {
+        console.error("Error fetching Diablo 3 profile:", err);
+        throw error(500, "Error fetching Diablo 3 profile");
+    }
+
+    return redirect(302, `${adaptUrl()}/dashboard/services`);
 }
