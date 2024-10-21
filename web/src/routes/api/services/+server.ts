@@ -55,7 +55,7 @@ export const GET = async ({ request, cookies }) => {
 	for (const provider of Object.values(Provider)) {
 		accessibleProviders.push({
 			service: provider,
-			link: provider in userProviderList,
+			link: userProviderList.includes(provider),
 			title: getProviderTitle(provider),
 			link_href: `/api/auth/${provider.toLowerCase()}`,
 			unlink_href:
