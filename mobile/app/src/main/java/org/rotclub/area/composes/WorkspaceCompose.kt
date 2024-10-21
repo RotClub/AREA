@@ -1,5 +1,8 @@
 package org.rotclub.area.composes
 
+import android.app.Dialog
+import android.widget.ListView
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,7 +19,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -33,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
@@ -150,6 +158,9 @@ fun BackButton(navController: NavController) {
 
 @Composable
 fun ActionCard(navController: NavController) {
+    var showDialogSet by remember { mutableStateOf(false) }
+    var started by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .height(150.dp)
@@ -183,16 +194,25 @@ fun ActionCard(navController: NavController) {
                     modifier = Modifier
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
                         .size(25.dp)
-                        .clickable { /* Do something */ }
+                        //open dialog
+                        .clickable { showDialogSet = true }
                 )
                 Icon(
-                    painter = painterResource(id = R.drawable.play),
+                    painter = if (!started) {
+                        painterResource(id = R.drawable.play)
+                    } else {
+                        painterResource(id = R.drawable.square)
+                    },
                     contentDescription = "Add Action",
-                    tint = FrispyTheme.Success500,
+                    tint = if (!started) {
+                        FrispyTheme.Success500
+                    } else {
+                        FrispyTheme.Error500
+                    },
                     modifier = Modifier
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
                         .size(25.dp)
-                        .clickable { /* Do something */ }
+                        .clickable { started = !started }
                 )
             }
         }
@@ -216,5 +236,175 @@ fun ActionCard(navController: NavController) {
                 modifier = Modifier.size(40.dp)
             )
         }
+    }
+    if (showDialogSet) {
+        ActionDialog(onDismissRequest = { showDialogSet = false })
+    }
+}
+
+@Composable
+fun ActionDialog(onDismissRequest: () -> Unit) {
+    Dialog(onDismissRequest = {onDismissRequest()}) {
+        Card (
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(FrispyTheme.Surface500)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 0.dp, 16.dp),
+                    text = "Action",
+                    color = FrispyTheme.Primary500,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp
+                )
+                Button(
+                    onClick = { onDismissRequest() },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = FrispyTheme.Primary500,
+                        disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                        disabledContentColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
+                    enabled = true
+                ) {
+                    Text(
+                        text = "Close",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Checkbox(i: Int) {
+    var checked by remember { mutableStateOf(false) }
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(FrispyTheme.Surface700),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it },
+            colors = CheckboxDefaults.colors(
+                checkmarkColor = Color.Black,
+                checkedColor = FrispyTheme.Primary500,
+                uncheckedColor = FrispyTheme.Surface400,
+            ),
+        )
+        Text(
+            text = "This is a description $i",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 15.sp,
+        )
+    }
+}
+
+@Composable
+fun ListView(name: String) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .background(FrispyTheme.Surface700)
+            .clip(RoundedCornerShape(8.dp))
+            .animateContentSize()
+    ) {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(FrispyTheme.Surface700)
+                .clip(RoundedCornerShape(8.dp))
+                .animateContentSize()
+        ) {
+            Column (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(FrispyTheme.Surface700)
+            ) {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(FrispyTheme.Surface700)
+                ) {
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                    ) {
+                        Icon(
+                            painter = if (expanded) {
+                                painterResource(id = R.drawable.chevron_down)
+                            } else {
+                                painterResource(id = R.drawable.chevron_up)
+                            },
+                            contentDescription = if (expanded) {
+                                "Collapse"
+                            } else {
+                                "Expand"
+                            },
+                            tint = Color.White,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+                    Text(
+                        text = name,
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                    )
+                }
+                if (expanded) {
+                    for (i in 0..3) {
+                        Checkbox(i)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TerminateButton(onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        modifier = Modifier
+            .padding(0.dp, 16.dp, 0.dp, 0.dp)
+            .fillMaxWidth(),
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = FrispyTheme.Primary500,
+            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+            disabledContentColor = Color.White.copy(alpha = 0.5f)
+        ),
+        enabled = true
+    ) {
+        Text(
+            text = "Terminate",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 20.sp
+        )
     }
 }
