@@ -12,7 +12,7 @@ export const GET = async ({ request, cookies }) => {
 		token = cookies.get("token");
 
 		// Verify the token
-		access = await checkAccess(client, cookies, UserRole.API_USER, false);
+		access = await checkAccess(client, { token: token ? token : "" }, UserRole.API_USER, false);
 	} else {
 		// Get the Bearer token from the request
 		const bearer = request.headers.get("Authorization");
@@ -59,12 +59,12 @@ export const GET = async ({ request, cookies }) => {
 	for (const provider of Object.values(Provider)) {
 		if (provider in userProviderList) {
 			accessibleProviders.push({
-				"service": provider.toLowerCase(),
+				"service": provider,
 				"link": true
 			})
 		} else {
 			accessibleProviders.push({
-				"service": provider.toLowerCase(),
+				"service": provider,
 				"link": false
 			})
 		}
