@@ -28,6 +28,7 @@
 
 	onMount(async () => {
 		actions = await (await window.fetch("/api/action")).json();
+		console.log(actions);
 		loaded = true;
 	});
 </script>
@@ -49,16 +50,18 @@
 			class="relative border border-surface-500 bg-surface-900 p-4 space-y-4 rounded-container-token overflow-y-scroll h-[32rem]">
 			{#if loaded}
 				<TreeView>
-					<TreeViewItem>
-						<svelte:fragment slot="lead">
-							<img src="/spotify-icon.svg" alt="spotify" width="32px" />
-						</svelte:fragment>
-						<span>Spotify</span>
-						<svelte:fragment slot="children">
-							<TreeViewItem>(Child of Child 1)</TreeViewItem>
-							<TreeViewItem>(Child of Child 2)</TreeViewItem>
-						</svelte:fragment>
-					</TreeViewItem>
+					{#each actions as action}
+						<TreeViewItem>
+							<svelte:fragment slot="lead">
+								<img src="/provider/spotify-icon.svg" alt="spotify" width="32px" />
+							</svelte:fragment>
+							<span>Spotify</span>
+							<svelte:fragment slot="children">
+								<TreeViewItem>(Child of Child 1)</TreeViewItem>
+								<TreeViewItem>(Child of Child 2)</TreeViewItem>
+							</svelte:fragment>
+						</TreeViewItem>
+					{/each}
 				</TreeView>
 			{:else}
 				<div class="absolute w-full h-full bg-surface-700 animate-pulse top-0 left-0"></div>
