@@ -41,7 +41,7 @@ export const POST = async ({ request }) => {
 		const accessLevel = Object.fromEntries(
 			Object.entries(UserRole).map(([key], index) => [key, index])
 		);
-		if (accessLevel[user.role] > accessLevel[UserRole.API_USER]) {
+		if (accessLevel[user.role] < accessLevel[UserRole.API_USER]) {
 			return new Response(
 				JSON.stringify({
 					error: "You don't have access to the API, reach out to an Administrator"
