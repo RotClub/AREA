@@ -1,5 +1,6 @@
 package org.rotclub.area.composes
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,11 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
+import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
@@ -58,13 +62,26 @@ fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-            fontWeight = FontWeight.Bold,
-        )
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (service.icon != 0) {
+                Image(
+                    painter = painterResource(id = service.icon),
+                    contentDescription = "Service Icon",
+                    modifier = Modifier
+                        .width(50.dp)
+                        .padding(end = 15.dp)
+                )
+            }
+            Text(
+                text = title,
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                fontWeight = FontWeight.Bold,
+            )
+        }
         Button(
             onClick = { /* do something */ },
             shape = RoundedCornerShape(roundedValue),
@@ -79,5 +96,13 @@ fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref
         ) {
             Text("Disconnected")
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileApiCardsPreview() {
+    AreaTheme {
+        ProfileApiCards(ServiceType.SPOTIFY, false, "Spotify", "https://spotify.com", "https://spotify.com")
     }
 }
