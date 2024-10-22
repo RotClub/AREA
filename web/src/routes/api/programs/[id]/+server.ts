@@ -117,8 +117,6 @@ export const PUT = async ({ request, params }) => {
 		});
 	}
 
-	console.log("hi");
-
 	const user = await client.user.findUnique({
 		where: {
 			token: request.headers.get("Authorization")?.split(" ")[1]
