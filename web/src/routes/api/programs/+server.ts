@@ -1,6 +1,7 @@
 import { PrismaClient, type Program } from "@prisma/client";
 
 function getProgramNodeAmount(program: Program): number {
+	//@ts-expect-error - This is a hack to get around the fact that linter doesn't know that Actions is a property of Program
 	return program.Actions ? program.Actions.length : 0;
 }
 
@@ -44,6 +45,7 @@ export const GET = async ({ cookies }) => {
 	).sort((a, b) => a.id - b.id);
 
 	for (const program of programs) {
+		//@ts-expect-error - This is a hack to get around the fact that we add a value to the object that isn't in the schema
 		program.nodeAmount = getProgramNodeAmount(program);
 	}
 
