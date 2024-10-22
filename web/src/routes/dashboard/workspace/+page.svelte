@@ -147,7 +147,14 @@
 			{#if inspecting_node !== -1}
 				{#if programs && getProgramContent(inspecting_node).actions}
 					{#each getProgramContent(inspecting_node).actions as action}
-						<Node action={action.actionId} meta={action.metadata} actionId={action.id} bind:edit={editing} programId={inspecting_node} bind:programs={programs} bind:loaded={loaded}>
+						<Node
+							action={action.actionId}
+							meta={action.metadata}
+							actionId={action.id}
+							bind:edit={editing}
+							programId={inspecting_node}
+							bind:programs
+							bind:loaded>
 							{#each action.reactions as reaction}
 								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
 							{/each}

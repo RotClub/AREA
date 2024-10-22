@@ -121,103 +121,103 @@ export const PUT = async ({ request, params }) => {
 };
 
 export const DELETE = async ({ request, params }) => {
-    const client = new PrismaClient();
-    const body = await request.json();
-    const programId = Number(params.id);
+	const client = new PrismaClient();
+	const body = await request.json();
+	const programId = Number(params.id);
 
-    const { valid, err } = await checkAccess(client, request, UserRole.USER);
-    if (!valid) {
-        client.$disconnect();
-        return new Response(JSON.stringify({ error: err }), {
-            status: 403,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
+	const { valid, err } = await checkAccess(client, request, UserRole.USER);
+	if (!valid) {
+		client.$disconnect();
+		return new Response(JSON.stringify({ error: err }), {
+			status: 403,
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+	}
 
-    const user = await client.user.findUnique({
-        where: {
-            token: request.headers.get("Authorization")?.split(" ")[1]
-        },
-        select: {
-            id: true
-        }
-    });
+	const user = await client.user.findUnique({
+		where: {
+			token: request.headers.get("Authorization")?.split(" ")[1]
+		},
+		select: {
+			id: true
+		}
+	});
 
-    if (!user) {
-        client.$disconnect();
-        return new Response(JSON.stringify({ error: "User not found" }), {
-            status: 404,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
+	if (!user) {
+		client.$disconnect();
+		return new Response(JSON.stringify({ error: "User not found" }), {
+			status: 404,
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+	}
 
-    const program = await client.program.findUnique({
-        where: {
-            id: programId,
-            userId: user.id
-        }
-    });
+	const program = await client.program.findUnique({
+		where: {
+			id: programId,
+			userId: user.id
+		}
+	});
 
-    if (!program) {
-        client.$disconnect();
-        return new Response(JSON.stringify({ error: "Program not found" }), {
-            status: 404,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
+	if (!program) {
+		client.$disconnect();
+		return new Response(JSON.stringify({ error: "Program not found" }), {
+			status: 404,
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+	}
 
-    if (!body.isAction && !body.isReaction) {
-        client.$disconnect();
-        return new Response(JSON.stringify({ error: "Action or Reaction is required" }), {
-            status: 400,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
+	if (!body.isAction && !body.isReaction) {
+		client.$disconnect();
+		return new Response(JSON.stringify({ error: "Action or Reaction is required" }), {
+			status: 400,
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+	}
 
-    if (body.isAction) {
-        await client.program.update({
-            where: {
-                id: programId
-            },
-            data: {
-                actions: {
-                    delete: {
-                        id: body.id
-                    }
-                }
-            }
-        });
-    }
+	if (body.isAction) {
+		await client.program.update({
+			where: {
+				id: programId
+			},
+			data: {
+				actions: {
+					delete: {
+						id: body.id
+					}
+				}
+			}
+		});
+	}
 
-    if (body.isReaction) {
-        await client.action.update({
-            where: {
-                id: body.id
-            },
-            data: {
-                reactions: {
-                    delete: {
-                        id: body.reactionId
-                    }
-                }
-            }
-        });
-    }
+	if (body.isReaction) {
+		await client.action.update({
+			where: {
+				id: body.id
+			},
+			data: {
+				reactions: {
+					delete: {
+						id: body.reactionId
+					}
+				}
+			}
+		});
+	}
 
-    client.$disconnect();
+	client.$disconnect();
 
-    return new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+	return new Response(JSON.stringify({ success: true }), {
+		status: 200,
+		headers: {
+			"Content-Type": "application/json"
+		}
+	});
 };

@@ -1,13 +1,11 @@
 import { PrismaClient, Provider } from "@prisma/client";
 
-export const Actions: Array<
-	{
-		service: Provider;
-		displayName: string;
-		iconPath: string;
-		actions: [{ id: string; displayName: string; meta: object }?];
-	}
-> = [
+export const Actions: Array<{
+	service: Provider;
+	displayName: string;
+	iconPath: string;
+	actions: [{ id: string; displayName: string; meta: object }?];
+}> = [
 	{
 		service: Provider.SPOTIFY,
 		displayName: "Spotify",
@@ -27,15 +25,15 @@ export const Actions: Array<
 export function getIconPathFromId(id: string): string {
 	const [service] = id.split(":");
 	const action = Actions.find((s) => s.service === service);
-	return action ? action.iconPath : '';
+	return action ? action.iconPath : "";
 }
 
 export function getDisplayNameFromId(id: string): string {
 	const [service, action] = id.split(":");
 	const foundService = Actions.find((s) => s.service === service);
-	if (!foundService) return '';
+	if (!foundService) return "";
 	const foundAction = foundService.actions?.find((a) => a?.id === action);
-	return foundAction ? foundAction.displayName : '';
+	return foundAction ? foundAction.displayName : "";
 }
 
 export async function GetAccessibleActions(jwt: string | undefined) {
