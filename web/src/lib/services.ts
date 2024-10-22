@@ -58,8 +58,8 @@ export function getProviderTitle(provider: Provider) {
 			return "Discord";
 		case Provider.X:
 			return "X";
-		case Provider.RIOT:
-			return "Riot Games";
+		case Provider.TWITCH:
+			return "Twitch";
 		case Provider.EPICGAMES:
 			return "Epic Games";
 		case Provider.BATTLENET:
