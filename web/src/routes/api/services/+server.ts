@@ -57,8 +57,9 @@ export const GET = async ({ request, cookies }) => {
 			service: provider,
 			link: userProviderList.includes(provider),
 			title: getProviderTitle(provider),
-			link_href: `/api/auth/${provider.toLowerCase()}`,
-			unlink_href: `/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
+			link_href: `/oauth/${provider.toLowerCase()}/link`,
+			unlink_href:
+				`/oauth/${provider.toLowerCase()}/unlink` + (token ? `?token=${token}` : "")
 		});
 	}
 	return new Response(JSON.stringify(accessibleProviders), {

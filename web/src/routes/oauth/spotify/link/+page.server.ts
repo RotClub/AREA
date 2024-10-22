@@ -23,7 +23,7 @@ export const load = async () => {
 				response_type: "code",
 				client_id: process.env.SPOTIFY_CLIENT_ID,
 				scope: scope,
-				redirect_uri: `${adaptUrl()}/api/link/spotify`,
+				redirect_uri: `${adaptUrl()}/oauth/spotify/callback`,
 				state: state,
 				show_dialog: true
 			})
