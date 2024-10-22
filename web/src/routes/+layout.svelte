@@ -25,6 +25,7 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from "@floating-ui/dom";
 	import { storePopup } from "@skeletonlabs/skeleton";
 	import AddActionModalComponent from "$lib/components/Modals/AddActionModalComponent.svelte";
+	import AddReactionModalComponent from "$lib/components/Modals/AddReactionModalComponent.svelte";
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onNavigate((navigation) => {
@@ -40,7 +41,7 @@
 
 	const modalRegistry: Record<string, ModalComponent> = {
 		addActionModalComponent: { ref: AddActionModalComponent },
-		addReactionModalComponent: { ref: null },
+		addReactionModalComponent: { ref: AddReactionModalComponent },
 		editNodeModalComponent: { ref: null }
 	};
 </script>
