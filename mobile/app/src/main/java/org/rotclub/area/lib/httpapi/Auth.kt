@@ -60,8 +60,6 @@ suspend fun authLogin(
                     return
                 }
             }
-            loginResult.value = response.body()
-            loginErrorStatus.value = ""
         } catch (e: Exception) {
             println("Error occurred: $e")
             loginResult.value = null
