@@ -1,21 +1,11 @@
 package org.rotclub.area.lib.httpapi
 
 import androidx.compose.runtime.MutableState
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
 
 enum class Role {
     ADMIN,
     API_USER,
     USER,
-}
-
-interface AuthApi {
-    @POST("api/auth/login")
-    suspend fun login(
-        @Body loginRequest: LoginRequest
-    ): Response<LoginResponse>
 }
 
 data class LoginRequest(
@@ -35,7 +25,6 @@ suspend fun authLogin(
     loginResult: MutableState<LoginResponse?>,
     loginErrorStatus: MutableState<String>
 ) {
-    println("Logging in with $email and $password")
         loadingState.value = true
         try {
             println("Trying to login")
