@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,18 +18,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.composes.LogoutButton
 import org.rotclub.area.composes.ProfileApiCards
+import org.rotclub.area.lib.SharedStorageUtils
+import org.rotclub.area.lib.httpapi.Service
+import org.rotclub.area.lib.httpapi.getServices
 
 @Composable
 fun ProfileScreen() {
-    var username by remember { mutableStateOf("Paul_le_BG") }
-    var email by remember { mutableStateOf("paullebg@area.fr") }
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
+
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+
+    val services = remember { mutableStateOf(emptyList<Service>()) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val token = sharedStorage.getToken()
+            if (token == null) {
+                // TODO: redirect to login
+                return@launch
+            }
+            getServices(services, token)
+        }
+    }
     
     Column(
         modifier = Modifier
@@ -70,8 +91,8 @@ fun ProfileScreen() {
                     color = FrispyTheme.Surface700,
                     thickness = 2.dp
                 )
-                for (i in 1..3) {
-                    ProfileApiCards(i)
+                for (service in services.value) {
+                    ProfileApiCards(service.service, service.link, service.title, service.link_href, service.unlink_href)
                 }
             }
             LogoutButton()

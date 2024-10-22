@@ -1,8 +1,6 @@
 package org.rotclub.area.composes
 
-import android.graphics.drawable.shapes.Shape
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,17 +9,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.lib.httpapi.ServiceType
+import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
@@ -49,7 +47,7 @@ fun LogoutButton() {
 }
 
 @Composable
-fun ProfileApiCards(i: Int) {
+fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
     Row (
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
@@ -61,7 +59,7 @@ fun ProfileApiCards(i: Int) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "API $i",
+            text = title,
             color = FrispyTheme.Primary50,
             fontFamily = fontFamily,
             fontSize = MaterialTheme.typography.headlineSmall.fontSize,
@@ -69,7 +67,7 @@ fun ProfileApiCards(i: Int) {
         )
         Button(
             onClick = { /* do something */ },
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(roundedValue),
             colors = ButtonDefaults.buttonColors(
                 contentColor = FrispyTheme.Surface500,
                 containerColor = FrispyTheme.Error500,
@@ -77,7 +75,7 @@ fun ProfileApiCards(i: Int) {
                 disabledContainerColor = FrispyTheme.Surface400
             ),
             modifier = Modifier
-                .width(170.dp)
+                .width(140.dp)
         ) {
             Text("Disconnected")
         }
