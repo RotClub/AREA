@@ -1,16 +1,19 @@
 import { PrismaClient, Provider } from "@prisma/client";
 
-export const Actions: [
-	{
-		service: Provider;
-		actions: [{ id: string; meta: object }?];
-	}?
-] = [
+export const Actions: Array<{
+	service: Provider;
+	displayName: string;
+	iconPath: string;
+	actions: [{ id: string; displayName: string; meta: object }?];
+}> = [
 	{
 		service: Provider.SPOTIFY,
+		displayName: "Spotify",
+		iconPath: "/provider/spotify-icon.svg",
 		actions: [
 			{
 				id: "listening-track",
+				displayName: "Listening to track",
 				meta: {
 					track_id: "string"
 				}
@@ -18,6 +21,20 @@ export const Actions: [
 		]
 	}
 ];
+
+export function getIconPathFromId(id: string): string {
+	const [service] = id.split(":");
+	const action = Actions.find((s) => s.service === service);
+	return action ? action.iconPath : "";
+}
+
+export function getDisplayNameFromId(id: string): string {
+	const [service, action] = id.split(":");
+	const foundService = Actions.find((s) => s.service === service);
+	if (!foundService) return "";
+	const foundAction = foundService.actions?.find((a) => a?.id === action);
+	return foundAction ? foundAction.displayName : "";
+}
 
 export async function GetAccessibleActions(jwt: string | undefined) {
 	if (!jwt) return [];
@@ -38,7 +55,6 @@ export async function GetAccessibleActions(jwt: string | undefined) {
 
 	const accessibleActions = [];
 	for (const service of user.Service) {
-		// @ts-expect-error 'action' is possibly 'undefined'. ts(18048)
 		const actions = Actions.find((action) => action.service === service.providerType);
 		if (actions) accessibleActions.push(actions);
 	}

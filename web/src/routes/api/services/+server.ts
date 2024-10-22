@@ -53,25 +53,14 @@ export const GET = async ({ request, cookies }) => {
 	const accessibleProviders = [];
 	const userProviderList = user.Service.map((service) => service.providerType);
 	for (const provider of Object.values(Provider)) {
-		if (provider in userProviderList) {
-			accessibleProviders.push({
-				service: provider,
-				link: true,
-				title: getProviderTitle(provider),
-				link_href: `/api/auth/${provider.toLowerCase()}`,
-				unlink_href:
-					`/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
-			});
-		} else {
-			accessibleProviders.push({
-				service: provider,
-				link: false,
-				title: getProviderTitle(provider),
-				link_href: `/api/auth/${provider.toLowerCase()}`,
-				unlink_href:
-					`/api/unlink/${provider.toLowerCase()}` + (token ? `?token=${token}` : "")
-			});
-		}
+		accessibleProviders.push({
+			service: provider,
+			link: userProviderList.includes(provider),
+			title: getProviderTitle(provider),
+			link_href: `/oauth/${provider.toLowerCase()}/link`,
+			unlink_href:
+				`/oauth/${provider.toLowerCase()}/unlink` + (token ? `?token=${token}` : "")
+		});
 	}
 	return new Response(JSON.stringify(accessibleProviders), {
 		headers: {

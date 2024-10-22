@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { checkAccess } from "$lib/api.js";
+import { PrismaClient, UserRole } from "@prisma/client";
 
 export const DELETE = async ({ cookies, params }) => {
 	const client = new PrismaClient();

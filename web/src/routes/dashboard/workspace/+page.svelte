@@ -6,6 +6,8 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
+	import { parse as cookieParser } from "cookie";
+	import { Actions } from "$lib/services";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -14,19 +16,43 @@
 
 	let inspecting_node: number = -1;
 
-	let programs: {
+	let programs: Array<{
 		name: string;
 		id: number;
 		nodeAmount: number;
-	}[] = [];
+	}> = [];
 
-	function openAddReactionModal() {
-		const modal: ModalSettings = {
-			type: "component",
-			component: "addActionModalComponent"
-		};
+	async function openAddActionModal() {
+		new Promise<boolean>((resolve) => {
+			const modal: ModalSettings = {
+				type: "component",
+				component: "addActionModalComponent",
+				response: (r: boolean) => {
+					resolve(r);
+				}
+			};
 
-		modalStore.trigger(modal);
+			modalStore.trigger(modal);
+		}).then(async (r) => {
+			if (r) {
+				loaded = false;
+				await window.fetch(`/api/programs/${inspecting_node}/node`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+					},
+					body: JSON.stringify({
+						isAction: true,
+						id: r,
+						metadata: {}
+					})
+				});
+				programs = await (await window.fetch("/api/programs")).json();
+				console.log(programs);
+				loaded = true;
+			}
+		});
 	}
 
 	async function createProgram() {
@@ -119,45 +145,25 @@
 		</div>
 		<div class="flex flex-col overflow-y-scroll p-8 px-16 gap-8 dark:bg-dot-white/[0.1] h-full">
 			{#if inspecting_node !== -1}
-				{#if getProgramContent(inspecting_node).actions}
+				{#if programs && getProgramContent(inspecting_node).actions}
 					{#each getProgramContent(inspecting_node).actions as action}
-						<Node action={action.actionId} meta={action.metadata} edit={editing}>
+						<Node
+							action={action.actionId}
+							meta={action.metadata}
+							actionId={action.id}
+							bind:edit={editing}
+							programId={inspecting_node}
+							bind:programs
+							bind:loaded>
 							{#each action.reactions as reaction}
 								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
 							{/each}
 						</Node>
 					{/each}
-					<Node
-						action="[Brawlhalla] Rank reached"
-						meta={{ Player: "Kapsulon", Rank: "Diamond" }}
-						edit={editing}>
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-					</Node>
-					<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
 				{/if}
 				{#if editing}
 					<div class="w-full flex flex-row justify-center items-center">
-						<button class="btn variant-filled-primary" on:click={openAddReactionModal}
+						<button class="btn variant-filled-primary" on:click={openAddActionModal}
 							><Plus /> Add action</button>
 					</div>
 				{/if}

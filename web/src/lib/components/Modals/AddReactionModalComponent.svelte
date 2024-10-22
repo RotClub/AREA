@@ -27,12 +27,12 @@
 		goto("/dashboard/services");
 	}
 
-	function selectAction(service: string, id: string) {
+	function selectReaction(service: string, id: string) {
 		selected = `${service}:${id}`;
 	}
 
 	onMount(async () => {
-		services = await (await window.fetch("/api/action")).json();
+		services = await (await window.fetch("/api/reaction")).json();
 		console.log(services);
 		loaded = true;
 	});
@@ -40,9 +40,9 @@
 
 {#if $modalStore[0]}
 	<div class="card p-4 w-modal shadow-xl space-y-4">
-		<header class="text-2xl font-bold">Action</header>
+		<header class="text-2xl font-bold">Reaction</header>
 		<article>
-			Select here an action to be used to trigger events, can be configured later.
+			Select here a reaction, they represent events to be triggered, can be configured later.
 		</article>
 		<article>
 			If you don't see anything here, that means you have no <a
@@ -65,11 +65,11 @@
 							</svelte:fragment>
 							<span>{service.displayName}</span>
 							<svelte:fragment slot="children">
-								{#each service.actions as action}
+								{#each service.reactions as reaction}
 									<TreeViewItem
 										on:click={() => {
-											selectAction(service.service, action.id);
-										}}>{action.displayName}</TreeViewItem>
+											selectReaction(service.service, reaction.id);
+										}}>{reaction.displayName}</TreeViewItem>
 								{/each}
 							</svelte:fragment>
 						</TreeViewItem>
