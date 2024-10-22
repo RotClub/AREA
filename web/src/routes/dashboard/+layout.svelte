@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MessageSquareMore, Globe, CircleUserRound, Menu, CircleHelp } from "lucide-svelte";
 	import LinkButton from "$lib/components/LinkButton.svelte";
+	import BoringAvatar from "$lib/components/BoringAvatar.svelte";
 	import {
 		getDrawerStore,
 		getModalStore,
@@ -47,7 +48,7 @@
 					src=""
 					width="w-full h-full"
 					border="border-2 border-surface-400">
-					<CircleUserRound class="text-surface-400" />
+					<BoringAvatar size={80}/>
 				</Avatar>
 			</a>
 		</div>
