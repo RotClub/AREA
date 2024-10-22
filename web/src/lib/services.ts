@@ -3,14 +3,19 @@ import { PrismaClient, Provider } from "@prisma/client";
 export const Actions: [
 	{
 		service: Provider;
-		actions: [{ id: string; meta: object }?];
+		displayName: string;
+		iconPath: string;
+		actions: [{ id: string; displayName: string; meta: object; }?];
 	}?
 ] = [
 	{
 		service: Provider.SPOTIFY,
+		displayName: "Spotify",
+		iconPath: "/provider/spotify-icon.svg",
 		actions: [
 			{
 				id: "listening-track",
+				displayName: "Listening to track",
 				meta: {
 					track_id: "string"
 				}

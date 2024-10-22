@@ -6,7 +6,7 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
-
+	import { parse as cookieParser } from "cookie";
 	let modalStore: ModalStore = getModalStore();
 
 	let editing: boolean = false;
@@ -20,13 +20,33 @@
 		nodeAmount: number;
 	}[] = [];
 
-	function openAddReactionModal() {
-		const modal: ModalSettings = {
-			type: "component",
-			component: "addActionModalComponent"
-		};
+	async function openAddActionModal() {
+		new Promise<boolean>((resolve) => {
+			const modal: ModalSettings = {
+				type: "component",
+				component: "addActionModalComponent",
+				response: (r: boolean) => {
+					resolve(r);
+				}
+			};
 
-		modalStore.trigger(modal);
+			modalStore.trigger(modal);
+		}).then((r: any) => {
+			if (r) {
+				window.fetch(`/api/programs/${inspecting_node}/`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${cookieParser(document.cookie)["token"]}`
+					},
+					body: JSON.stringify({
+						isAction: true,
+						id: r,
+						metadata: {}
+					})
+				});
+			}
+		});
 	}
 
 	async function createProgram() {
@@ -127,37 +147,10 @@
 							{/each}
 						</Node>
 					{/each}
-					<Node
-						action="[Brawlhalla] Rank reached"
-						meta={{ Player: "Kapsulon", Rank: "Diamond" }}
-						edit={editing}>
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-						<SubNode
-							reaction="[Spotify] Play track"
-							meta={{
-								Device: "KapPhone",
-								Track: "Celebration song",
-								Volume: "200%"
-							}} />
-					</Node>
-					<Node action="Lorem Ipsum A Dolor Sit Amet" edit={editing} />
 				{/if}
 				{#if editing}
 					<div class="w-full flex flex-row justify-center items-center">
-						<button class="btn variant-filled-primary" on:click={openAddReactionModal}
+						<button class="btn variant-filled-primary" on:click={openAddActionModal}
 							><Plus /> Add action</button>
 					</div>
 				{/if}
