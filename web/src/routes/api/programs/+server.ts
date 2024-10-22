@@ -27,6 +27,18 @@ export const GET = async ({ cookies }) => {
 		await client.program.findMany({
 			where: {
 				userId: user.id
+			},
+			select: {
+				id: true,
+				name: true,
+				actions: {
+					select: {
+						actionId: true,
+						id: true,
+						metadata: true,
+						reactions: true
+					}
+				}
 			}
 		})
 	).sort((a, b) => a.id - b.id);

@@ -21,7 +21,7 @@ export const load = async () => {
 		}
 	});
 	const authorizationUri = client.authorizeURL({
-		redirect_uri: `${adaptUrl()}/api/link/battlenet`,
+		redirect_uri: `${adaptUrl()}/oauth/battlenet/callback`,
 		scope: scope,
 		state: state
 	});
