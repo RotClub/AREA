@@ -106,7 +106,7 @@ export const PUT = async ({ request, params }) => {
 	const body = await request.json();
 	const programId = Number(params.id);
 
-	const { valid, err } = await checkAccess(client, request, UserRole.USER)
+	const { valid, err } = await checkAccess(client, request, UserRole.USER);
 	if (!valid) {
 		client.$disconnect();
 		return new Response(JSON.stringify({ error: err }), {
@@ -219,4 +219,4 @@ export const PUT = async ({ request, params }) => {
 			"Content-Type": "application/json"
 		}
 	});
-}
+};

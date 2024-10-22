@@ -6,6 +6,6 @@
 		<div class="placeholder w-[15rem] animate-pulse"></div>
 	</span>
 	<div class="flex-grow flex flex-row justify-end">
-        <div class="placeholder w-[8rem] h-[2.5rem] animate-pulse"></div>
+		<div class="placeholder w-[8rem] h-[2.5rem] animate-pulse"></div>
 	</div>
 </div>

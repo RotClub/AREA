@@ -31,13 +31,13 @@
 			};
 
 			modalStore.trigger(modal);
-		}).then((r: any) => {
+		}).then((r) => {
 			if (r) {
 				window.fetch(`/api/programs/${inspecting_node}/`, {
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
-						"Authorization": `Bearer ${cookieParser(document.cookie)["token"]}`
+						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
 					},
 					body: JSON.stringify({
 						isAction: true,

@@ -5,7 +5,7 @@ export const Actions: [
 		service: Provider;
 		displayName: string;
 		iconPath: string;
-		actions: [{ id: string; displayName: string; meta: object; }?];
+		actions: [{ id: string; displayName: string; meta: object }?];
 	}?
 ] = [
 	{

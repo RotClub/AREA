@@ -37,7 +37,9 @@
 
 	function getDisplayNameFromId(id: string): string {
 		const [service, action] = id.split(":");
-		return services.find((s) => s.service === service).actions.find((a: any) => a.id === action).displayName;
+		return services
+			.find((s) => s.service === service)
+			.actions.find((a: { id: string }) => a.id === action).displayName;
 	}
 
 	onMount(async () => {
@@ -67,12 +69,18 @@
 					{#each services as service}
 						<TreeViewItem>
 							<svelte:fragment slot="lead">
-								<img src={service.iconPath} alt={service.service.toLowerCase()} width="32px" />
+								<img
+									src={service.iconPath}
+									alt={service.service.toLowerCase()}
+									width="32px" />
 							</svelte:fragment>
 							<span>{service.displayName}</span>
 							<svelte:fragment slot="children">
 								{#each service.actions as action}
-									<TreeViewItem on:click={() => {selectAction(service.service, action.id)}}>{action.displayName}</TreeViewItem>
+									<TreeViewItem
+										on:click={() => {
+											selectAction(service.service, action.id);
+										}}>{action.displayName}</TreeViewItem>
 								{/each}
 							</svelte:fragment>
 						</TreeViewItem>

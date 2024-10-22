@@ -4,9 +4,13 @@
 	import type { Provider } from "@prisma/client";
 	import ServiceCardPlaceholder from "$lib/components/Services/ServiceCardPlaceholder.svelte";
 
-	let data: Array<
-		{ service: Provider; link: boolean; title: string; link_href: string; unlink_href: string }
-	> = [];
+	let data: Array<{
+		service: Provider;
+		link: boolean;
+		title: string;
+		link_href: string;
+		unlink_href: string;
+	}> = [];
 	onMount(async () => {
 		const res = await window.fetch("/api/services");
 		data = await res.json();
