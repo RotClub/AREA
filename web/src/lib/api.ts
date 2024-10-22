@@ -3,7 +3,8 @@ import { UserRole, PrismaClient } from "@prisma/client";
 
 export const checkAccess = async (
 	client: PrismaClient,
-	request,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	request: any,
 	level: UserRole = UserRole.API_USER,
 	apiMode = true
 ) => {

@@ -11,11 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
 fun ExploreScreen() {
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.Yellow),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FrispyTheme.Surface700),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
