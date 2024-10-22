@@ -25,7 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.rotclub.area.lib.GlobalRoutes
 import org.rotclub.area.composes.CardColumn
-import org.rotclub.area.composes.LoginInput
+import org.rotclub.area.composes.FrispyInput
+import org.rotclub.area.composes.InputType
 import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.roundedValue
@@ -50,19 +51,20 @@ fun RegisterCard(modifier: Modifier = Modifier, navController: NavHostController
             fontFamily = fontFamily,
             modifier = Modifier.padding(10.dp),
         )
-        LoginInput(
+        FrispyInput(
             value = username,
             label = "Username",
             modifier = Modifier
         )
-        LoginInput(
+        FrispyInput(
             value = email,
             label = "Email",
             modifier = Modifier
         )
-        LoginInput(
+        FrispyInput(
             value = password,
             label = "Password",
+            inputType = InputType.PASSWORD,
             modifier = Modifier
         )
         TextButton(

@@ -34,7 +34,8 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.rotclub.area.lib.GlobalRoutes
 import org.rotclub.area.composes.CardColumn
-import org.rotclub.area.composes.LoginInput
+import org.rotclub.area.composes.FrispyInput
+import org.rotclub.area.composes.InputType
 import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.LoginResponse
@@ -72,14 +73,15 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
             fontFamily = fontFamily,
             modifier = Modifier.padding(10.dp),
         )
-        LoginInput(
+        FrispyInput(
             value = email,
             label = "Email",
             modifier = Modifier
         )
-        LoginInput(
+        FrispyInput(
             value = password,
             label = "Password",
+            inputType = InputType.PASSWORD,
             modifier = Modifier
         )
         TextButton(
@@ -90,9 +92,10 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                         loadingState, loginResult, loginErrorStatus)
                     println("Login result: ${loginResult.value}")
                     if (loginResult.value != null) {
-                        val token = loginResult.value!!.token
+                        val token = loginResult.value?.token
                         if (token == null) {
                             loginResult.value = null
+                            loginErrorStatus.value = "An error occurred"
                             return@launch
                         }
                         sharedPreferences.edit().putString("token", token).apply()
