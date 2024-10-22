@@ -27,9 +27,7 @@ export const load = async (event) => {
 				Authorization:
 					"Basic " +
 					Buffer.from(
-						process.env.BATTLENET_CLIENT_ID +
-							":" +
-							process.env.BATTLENET_CLIENT_SECRET
+						process.env.BATTLENET_CLIENT_ID + ":" + process.env.BATTLENET_CLIENT_SECRET
 					).toString("base64")
 			}
 		}

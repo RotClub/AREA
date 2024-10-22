@@ -2,7 +2,7 @@ import { PrismaClient, Provider, UserRole } from "@prisma/client";
 import { checkAccess } from "$lib/api";
 
 export const GET = async ({ params, request }) => {
-	const { provider }: {provider: string} = params;
+	const { provider }: { provider: string } = params;
 	const providerList = Object.values(Provider).map((provider) => String(provider).toLowerCase());
 	if (!providerList.includes(provider)) {
 		return new Response(JSON.stringify({ error: "Invalid provider" }), {
@@ -12,7 +12,9 @@ export const GET = async ({ params, request }) => {
 			}
 		});
 	}
-	const correctProvider = Object.values(Provider).find((p) => String(p).toLowerCase() === provider);
+	const correctProvider = Object.values(Provider).find(
+		(p) => String(p).toLowerCase() === provider
+	);
 	const client = new PrismaClient();
 	const access = await checkAccess(client, request, UserRole.USER);
 	if (!access.valid) {
@@ -55,4 +57,4 @@ export const GET = async ({ params, request }) => {
 			"Content-Type": "application/json"
 		}
 	});
-}
+};
