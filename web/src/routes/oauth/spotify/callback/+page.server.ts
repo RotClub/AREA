@@ -1,24 +1,22 @@
 import { adaptUrl } from "$lib/api";
-import { Provider } from "@prisma/client";
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
-import { linkUserService } from "$lib/services";
 
-export const GET = async ({ cookies, url }) => {
-	const code = url.searchParams.get("code");
-	const err = url.searchParams.get("error");
+export const load = async (event) => {
+	const code = event.url.searchParams.get("code");
+	const err = event.url.searchParams.get("error");
 
 	if (err) {
 		error(400, "Could get Spotify authorization: " + err);
 	}
 	const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 	const client_id = process.env.SPOTIFY_CLIENT_ID;
-	const res = await fetch(
+	const res_spotify = await fetch(
 		"https://accounts.spotify.com/api/token?" +
 			queryString.stringify({
 				grant_type: "authorization_code",
 				code: code,
-				redirect_uri: `${adaptUrl()}/api/link/spotify`,
+				redirect_uri: `${adaptUrl()}/oauth/spotify/callback`,
 				client_id: client_id,
 				client_secret: client_secret
 			}),
@@ -32,14 +30,24 @@ export const GET = async ({ cookies, url }) => {
 		}
 	);
 
-	const data = await res.json();
-	const token = cookies.get("token");
+	const data = await res_spotify.json();
+	if (!res_spotify.ok) {
+		error(400, data.error);
+	}
+	const token = event.cookies.get("token");
 	if (!token) {
 		error(400, "No token provided");
 	}
-	const update_service = await linkUserService(token, Provider.SPOTIFY, data);
-	if (!update_service) {
-		error(500, "Could not link user to Spotify service");
+	const res = await event.fetch(`/api/services/spotify/link`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+		body: JSON.stringify(data)
+	});
+	if (!res.ok) {
+		const ans = await res.json();
+		error(400, ans.error);
 	}
 	return redirect(301, `${adaptUrl()}/dashboard/services`);
 };
