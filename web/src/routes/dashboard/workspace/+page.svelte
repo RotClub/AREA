@@ -7,6 +7,8 @@
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
 	import { parse as cookieParser } from "cookie";
+	import { Actions } from "$lib/services";
+
 	let modalStore: ModalStore = getModalStore();
 
 	let editing: boolean = false;
@@ -14,11 +16,11 @@
 
 	let inspecting_node: number = -1;
 
-	let programs: {
+	let programs: Array<{
 		name: string;
 		id: number;
 		nodeAmount: number;
-	}[] = [];
+	}> = [];
 
 	async function openAddActionModal() {
 		new Promise<boolean>((resolve) => {
@@ -31,9 +33,10 @@
 			};
 
 			modalStore.trigger(modal);
-		}).then((r) => {
+		}).then(async (r) => {
 			if (r) {
-				window.fetch(`/api/programs/${inspecting_node}/`, {
+				loaded = false;
+				await window.fetch(`/api/programs/${inspecting_node}/node`, {
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
@@ -45,6 +48,9 @@
 						metadata: {}
 					})
 				});
+				programs = await (await window.fetch("/api/programs")).json();
+				console.log(programs);
+				loaded = true;
 			}
 		});
 	}
@@ -139,9 +145,16 @@
 		</div>
 		<div class="flex flex-col overflow-y-scroll p-8 px-16 gap-8 dark:bg-dot-white/[0.1] h-full">
 			{#if inspecting_node !== -1}
-				{#if getProgramContent(inspecting_node).actions}
+				{#if programs && getProgramContent(inspecting_node).actions}
 					{#each getProgramContent(inspecting_node).actions as action}
-						<Node action={action.actionId} meta={action.metadata} edit={editing}>
+						<Node
+							action={action.actionId}
+							meta={action.metadata}
+							actionId={action.id}
+							bind:edit={editing}
+							programId={inspecting_node}
+							bind:programs
+							bind:loaded>
 							{#each action.reactions as reaction}
 								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
 							{/each}
