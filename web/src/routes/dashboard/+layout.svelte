@@ -48,7 +48,7 @@
 					src=""
 					width="w-full h-full"
 					border="border-2 border-surface-400">
-					<BoringAvatar size={80}/>
+					<BoringAvatar size={80} />
 				</Avatar>
 			</a>
 		</div>

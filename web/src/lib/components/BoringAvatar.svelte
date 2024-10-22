@@ -1,13 +1,19 @@
 <script lang="ts">
-	export let name = 'Clara Barton';
-	export let colors = ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'];
+	export let name = "Clara Barton";
+	export let colors = ["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"];
 	export let title = false;
 	export let square = false;
 	export let size;
 
 	const SIZE = 36;
 
-	import { getBoolean, getContrast, getRandomColor, getUnit, hashCode } from "$lib/utils/boring_avatar";
+	import {
+		getBoolean,
+		getContrast,
+		getRandomColor,
+		getUnit,
+		hashCode
+	} from "$lib/utils/boring_avatar";
 
 	function generateData(name: string, colors: string[]) {
 		const numFromName = hashCode(name);
@@ -34,12 +40,12 @@
 			faceTranslateX:
 				wrapperTranslateX > SIZE / 6 ? wrapperTranslateX / 2 : getUnit(numFromName, 8, 1),
 			faceTranslateY:
-				wrapperTranslateY > SIZE / 6 ? wrapperTranslateY / 2 : getUnit(numFromName, 7, 2),
+				wrapperTranslateY > SIZE / 6 ? wrapperTranslateY / 2 : getUnit(numFromName, 7, 2)
 		};
 	}
 
 	const data = generateData(name, colors);
-	let maskID = 'mask-' + Math.random().toString(36).substr(2, 9); // Unique ID for mask
+	let maskID = "mask-" + Math.random().toString(36).substr(2, 9); // Unique ID for mask
 </script>
 
 <svg
@@ -48,8 +54,7 @@
 	role="img"
 	xmlns="http://www.w3.org/2000/svg"
 	width={size}
-	height={size}
->
+	height={size}>
 	{#if title}
 		<title>{name}</title>
 	{/if}
@@ -65,23 +70,17 @@
 			height={SIZE}
 			transform={`translate(${data.wrapperTranslateX} ${data.wrapperTranslateY}) rotate(${data.wrapperRotate} ${SIZE / 2} ${SIZE / 2}) scale(${data.wrapperScale})`}
 			fill={data.wrapperColor}
-			rx={data.isCircle ? SIZE : SIZE / 6}
-		/>
+			rx={data.isCircle ? SIZE : SIZE / 6} />
 		<g
-			transform={`translate(${data.faceTranslateX} ${data.faceTranslateY}) rotate(${data.faceRotate} ${SIZE / 2} ${SIZE / 2})`}
-		>
+			transform={`translate(${data.faceTranslateX} ${data.faceTranslateY}) rotate(${data.faceRotate} ${SIZE / 2} ${SIZE / 2})`}>
 			{#if data.isMouthOpen}
 				<path
 					d="M15 {19 + data.mouthSpread}c2 1 4 1 6 0"
 					stroke={data.faceColor}
 					fill="none"
-					stroke-linecap="round"
-				/>
+					stroke-linecap="round" />
 			{:else}
-				<path
-					d="M13,{19 + data.mouthSpread} a1,0.75 0 0,0 10,0"
-					fill={data.faceColor}
-				/>
+				<path d="M13,{19 + data.mouthSpread} a1,0.75 0 0,0 10,0" fill={data.faceColor} />
 			{/if}
 			<rect
 				x={14 - data.eyeSpread}
@@ -89,16 +88,14 @@
 				width="1.5"
 				height="2"
 				rx="1"
-				fill={data.faceColor}
-			/>
+				fill={data.faceColor} />
 			<rect
 				x={20 + data.eyeSpread}
 				y="14"
 				width="1.5"
 				height="2"
 				rx="1"
-				fill={data.faceColor}
-			/>
+				fill={data.faceColor} />
 		</g>
 	</g>
 </svg>
