@@ -7,13 +7,7 @@
 
 	const SIZE = 36;
 
-	import {
-		getBoolean,
-		getContrast,
-		getRandomColor,
-		getUnit,
-		hashCode
-	} from "./utils";
+	import { getBoolean, getContrast, getRandomColor, getUnit, hashCode } from "./utils";
 
 	function generateData(name: string, colors: string[]) {
 		const numFromName = hashCode(name);
