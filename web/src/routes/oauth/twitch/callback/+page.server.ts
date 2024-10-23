@@ -1,7 +1,5 @@
 import { adaptUrl } from "$lib/api";
 import { error, redirect } from "@sveltejs/kit";
-import queryString from "query-string";
-import { JWT_SECRET } from "$env/static/private";
 
 export const load = async (event) => {
 	const code = event.url.searchParams.get("code");
@@ -11,24 +9,21 @@ export const load = async (event) => {
 	if (err) {
 		error(400, err + ": " + err_msg);
 	}
-	const client_id = process.env.TWITCH_CLIENT_ID
-	const client_secret = process.env.TWITCH_CLIENT_SECRET
-	const res_twitch = await fetch(
-		"https://id.twitch.tv/oauth2/token",
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: new URLSearchParams({
-				client_id: client_id || "",
-				client_secret: client_secret || "",
-				grant_type: "authorization_code",
-				code: code || "",
-				redirect_uri: `${adaptUrl()}/oauth/twitch/callback`,
-			})
-		}
-	);
+	const client_id = process.env.TWITCH_CLIENT_ID;
+	const client_secret = process.env.TWITCH_CLIENT_SECRET;
+	const res_twitch = await fetch("https://id.twitch.tv/oauth2/token", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body: new URLSearchParams({
+			client_id: client_id || "",
+			client_secret: client_secret || "",
+			grant_type: "authorization_code",
+			code: code || "",
+			redirect_uri: `${adaptUrl()}/oauth/twitch/callback`
+		})
+	});
 	const data = await res_twitch.json();
 	if (!res_twitch.ok) {
 		error(400, data);

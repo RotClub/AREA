@@ -9,25 +9,22 @@ export const load = async (event) => {
 	if (err) {
 		error(400, err + ": " + err_msg);
 	}
-	const client_id = process.env.EPICGAMES_CLIENT_ID
-	const client_secret = process.env.EPICGAMES_CLIENT_SECRET
-	const dep_id = process.env.EPICGAMES_DEPLOYMENT_ID
-	const res_epic = await fetch(
-		"https://api.epicgames.dev/epic/oauth/v2/token",
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-				"Authorization": `Basic ${Buffer.from(`${client_id}:${client_secret}`).toString("base64")}`
-			},
-			body: new URLSearchParams({
-				grant_type: "authorization_code",
-				code: code || "",
-				deployment_id: dep_id || "",
-				scope: "basic_profile friend_list presence",
-			})
-		}
-	);
+	const client_id = process.env.EPICGAMES_CLIENT_ID;
+	const client_secret = process.env.EPICGAMES_CLIENT_SECRET;
+	const dep_id = process.env.EPICGAMES_DEPLOYMENT_ID;
+	const res_epic = await fetch("https://api.epicgames.dev/epic/oauth/v2/token", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			Authorization: `Basic ${Buffer.from(`${client_id}:${client_secret}`).toString("base64")}`
+		},
+		body: new URLSearchParams({
+			grant_type: "authorization_code",
+			code: code || "",
+			deployment_id: dep_id || "",
+			scope: "basic_profile friend_list presence"
+		})
+	});
 	const data = await res_epic.json();
 	if (!res_epic.ok) {
 		error(400, data);
