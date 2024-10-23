@@ -13,7 +13,7 @@
 		getRandomColor,
 		getUnit,
 		hashCode
-	} from "$lib/utils/boring_avatar";
+	} from "./utils";
 
 	function generateData(name: string, colors: string[]) {
 		const numFromName = hashCode(name);

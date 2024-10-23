@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Menu } from "lucide-svelte";
 	import LinkButton from "$lib/components/LinkButton.svelte";
-	import BoringAvatar from "$lib/components/BoringAvatar.svelte";
+	import BoringAvatar from "$lib/components/BoringAvatar/BoringAvatar.svelte";
 	import { getDrawerStore, type DrawerSettings, Avatar } from "@skeletonlabs/skeleton";
 
 	export let data;
