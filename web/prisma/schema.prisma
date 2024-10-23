@@ -65,6 +65,5 @@ enum Provider {
   SPOTIFY
   BATTLENET
   EPICGAMES
-  RIOT
-  X
+  TWITCH
 }
