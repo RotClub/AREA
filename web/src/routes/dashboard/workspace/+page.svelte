@@ -7,7 +7,7 @@
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
 	import { parse as cookieParser } from "cookie";
-	import { Actions, getRequiredMetadataFromId, type ActionMetaDataType } from "$lib/services";
+	import { Nodes, getRequiredMetadataFromId, type ActionMetaDataType } from "$lib/services";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -165,10 +165,10 @@
 							actionId={action.id}
 							bind:edit={editing}
 							programId={inspecting_node}
-							bind:programs
-							bind:loaded>
+							bind:programs={programs}
+							bind:loaded={loaded}>
 							{#each action.reactions as reaction}
-								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
+								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} bind:edit={editing} bind:programs={programs} bind:loaded={loaded} programId={inspecting_node} reactionId={reaction.id} />
 							{/each}
 						</Node>
 					{/each}

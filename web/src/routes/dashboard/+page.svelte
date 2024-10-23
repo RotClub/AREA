@@ -3,7 +3,9 @@
 	import { ProgressRadial } from "@skeletonlabs/skeleton";
 	import { Check, X, CircleUserRound } from "lucide-svelte";
 	import { onMount } from "svelte";
-	import { Avatar } from "@skeletonlabs/skeleton";
+	import { BoringAvatar } from "$lib/components/BoringAvatar";
+
+	export let data;
 
 	let connectedServices: any = [];
 	let connectAmount: number | undefined = undefined;
@@ -83,19 +85,9 @@
 				</div>
 			</div>
 			<div class="flex flex-row space-x-8 h-[30rem]">
-				<div class="card w-[40%] p-4 flex flex-col">
-					<div class="flex flex-row justify-between">
-						<span class="text-2xl font-semibold mb-6">Profile:</span>
-						<Avatar
-							round={true}
-							userFullName="yo"
-							src=""
-							width="w-16 h-16"
-							border="border-2 border-surface-400">
-							<CircleUserRound class="text-surface-400" />
-						</Avatar>
-					</div>
+				<div class="card w-[40%] p-4 flex flex-row justify-between">
 					<div class="flex flex-col gap-2">
+						<span class="text-2xl font-semibold mb-2">Profile:</span>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Username:</span>
 							<span class="text-primary-500 text-lg">{userData.username}</span>
@@ -114,6 +106,9 @@
 							<span class="font-semibold text-xl">Created at:</span>
 							<span class="text-primary-500 text-lg">{userData.createdAt}</span>
 						</div>
+					</div>
+					<div class="w-20 h-20">
+						<BoringAvatar name={data.props.avatar_seed} />
 					</div>
 				</div>
 				<div class="card w-[60%] p-4"></div>

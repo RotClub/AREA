@@ -198,16 +198,9 @@ export const DELETE = async ({ request, params }) => {
 	}
 
 	if (body.isReaction) {
-		await client.action.update({
+		await client.reaction.delete({
 			where: {
 				id: body.id
-			},
-			data: {
-				reactions: {
-					delete: {
-						id: body.reactionId
-					}
-				}
 			}
 		});
 	}

@@ -24,35 +24,49 @@
 	export let loaded: boolean;
 
 	async function openAddReactionModal() {
-		new Promise<boolean>((resolve) => {
+		const newReactionId: string = await new Promise<string>((resolve) => {
 			const modal: ModalSettings = {
 				type: "component",
 				component: "addReactionModalComponent",
-				response: (r: boolean) => {
+				response: (r: string) => {
 					resolve(r);
 				}
 			};
 
 			modalStore.trigger(modal);
-		}).then(async (r) => {
-			if (r) {
-				loaded = false;
-				await window.fetch(`/api/programs/${programId}/node`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-					},
-					body: JSON.stringify({
-						isReaction: true,
-						id: r,
-						metadata: {}
-					})
-				});
-				programs = await (await window.fetch("/api/programs")).json();
-				loaded = true;
-			}
 		});
+		if (!newReactionId) return;
+		const newActionMeta: Record<string, string> = await new Promise<Record<string, string>>(
+			(resolve) => {
+				const modal: ModalSettings = {
+					type: "component",
+					component: "editNodeModalComponent",
+					meta: getRequiredMetadataFromId(newReactionId),
+					response: (r: Record<string, string>) => {
+						resolve(r);
+					}
+				};
+
+				modalStore.trigger(modal);
+			}
+		);
+		if (!newActionMeta) return;
+		loaded = false;
+		await window.fetch(`/api/programs/${programId}/node`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			},
+			body: JSON.stringify({
+				isReaction: true,
+				id: actionId,
+				reactionId: newReactionId,
+				metadata: newActionMeta
+			})
+		});
+		programs = await (await window.fetch("/api/programs")).json();
+		loaded = true;
 	}
 
 	async function deleteNode() {
