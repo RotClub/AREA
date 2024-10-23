@@ -2,11 +2,7 @@
 	import { Menu } from "lucide-svelte";
 	import LinkButton from "$lib/components/LinkButton.svelte";
 	import BoringAvatar from "$lib/components/BoringAvatar.svelte";
-	import {
-		getDrawerStore,
-		type DrawerSettings,
-		Avatar
-	} from "@skeletonlabs/skeleton";
+	import { getDrawerStore, type DrawerSettings, Avatar } from "@skeletonlabs/skeleton";
 
 	export let data;
 
@@ -45,7 +41,7 @@
 					src=""
 					width="w-full h-full"
 					border="border-2 border-surface-400">
-					<BoringAvatar name="{data.props.avatar_seed}" size={80} />
+					<BoringAvatar name={data.props.avatar_seed} size={80} />
 				</Avatar>
 			</a>
 		</div>

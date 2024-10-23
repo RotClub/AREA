@@ -22,11 +22,11 @@ export const load: LayoutServerLoad = async (event) => {
 		console.error("Error during user information fetching");
 		throw redirect(302, "/auth");
 	}
-	const avatar_seed = Buffer.from(Object.values(user).join(""), 'binary').toString('base64');
+	const avatar_seed = Buffer.from(Object.values(user).join(""), "binary").toString("base64");
 	return {
 		props: {
 			...user,
 			avatar_seed: avatar_seed
 		}
-	}
+	};
 };
