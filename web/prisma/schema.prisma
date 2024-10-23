@@ -64,6 +64,6 @@ enum Provider {
   STEAM
   SPOTIFY
   BATTLENET
-  EPICGAMES
+  REDDIT
   TWITCH
 }
