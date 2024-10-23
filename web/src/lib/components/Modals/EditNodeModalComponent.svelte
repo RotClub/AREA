@@ -7,7 +7,8 @@
 	export let parent: SvelteComponent;
 	parent = parent || null;
 
-	let settings: Record<string, string> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let settings: Record<string, any> = {};
 	let mounted: boolean = false;
 
 	const modalStore = getModalStore();
@@ -20,12 +21,16 @@
 	onMount(async () => {
 		console.log($modalStore[0]);
 		if ($modalStore[0].meta["EDITING"]) {
-			for (const [key, data] of Object.entries($modalStore[0].meta["data"]) as any) {
-				settings[key] = data;
+			for (const [key, data] of Object.entries($modalStore[0].meta["data"])) {
+				settings[key] = data as string;
 			}
 		}
 		mounted = true;
 	});
+
+	function getSettings(original: unknown): ActionMetaDataType {
+		return original as ActionMetaDataType;
+	}
 </script>
 
 {#if $modalStore[0]}
@@ -38,30 +43,31 @@
 				{#if $modalStore[0].meta["EDITING"]}
 					{#each Object.entries($modalStore[0].meta["schema"]) as [key, fieldSettings]}
 						<div class="flex flex-col">
-							<label for={fieldSettings.id}>{fieldSettings.displayName}</label>
-							{#if getInputTypeFromMeta(fieldSettings) === "text"}
+							<label for={getSettings(fieldSettings).id}
+								>{getSettings(fieldSettings).displayName}</label>
+							{#if getInputTypeFromMeta(getSettings(fieldSettings)) === "text"}
 								<input
 									type="text"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "number"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "number"}
 								<input
 									type="number"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "checkbox"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "checkbox"}
 								<input
 									type="checkbox"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:checked={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "date"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "date"}
 								<input
 									type="date"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
 							{/if}
 						</div>
@@ -69,30 +75,31 @@
 				{:else}
 					{#each Object.entries($modalStore[0].meta) as [key, fieldSettings]}
 						<div class="flex flex-col">
-							<label for={fieldSettings.id}>{fieldSettings.displayName}</label>
-							{#if getInputTypeFromMeta(fieldSettings) === "text"}
+							<label for={getSettings(fieldSettings).id}
+								>{getSettings(fieldSettings).displayName}</label>
+							{#if getInputTypeFromMeta(getSettings(fieldSettings)) === "text"}
 								<input
 									type="text"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "number"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "number"}
 								<input
 									type="number"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "checkbox"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "checkbox"}
 								<input
 									type="checkbox"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:checked={settings[key]} />
-							{:else if getInputTypeFromMeta(fieldSettings) === "date"}
+							{:else if getInputTypeFromMeta(getSettings(fieldSettings)) === "date"}
 								<input
 									type="date"
 									class="input"
-									name={fieldSettings.id}
+									name={getSettings(fieldSettings).id}
 									bind:value={settings[key]} />
 							{/if}
 						</div>

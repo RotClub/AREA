@@ -11,7 +11,8 @@
 	import {
 		getIconPathFromId,
 		getDisplayNameFromId,
-		getRequiredMetadataFromId
+		getRequiredMetadataFromId,
+		type NodeType
 	} from "$lib/services";
 
 	export let parent: SvelteComponent;
@@ -20,7 +21,7 @@
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
-	let services: Array<any> = [];
+	let services: NodeType = [];
 	let selected: string | null = null;
 
 	async function onFormSubmit(): Promise<void> {
@@ -40,7 +41,6 @@
 
 	onMount(async () => {
 		services = await (await window.fetch("/api/action")).json();
-		console.log(services);
 		loaded = true;
 	});
 </script>

@@ -165,10 +165,17 @@
 							actionId={action.id}
 							bind:edit={editing}
 							programId={inspecting_node}
-							bind:programs={programs}
-							bind:loaded={loaded}>
+							bind:programs
+							bind:loaded>
 							{#each action.reactions as reaction}
-								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} bind:edit={editing} bind:programs={programs} bind:loaded={loaded} programId={inspecting_node} reactionId={reaction.id} />
+								<SubNode
+									reaction={reaction.reactionId}
+									meta={reaction.metadata}
+									bind:edit={editing}
+									bind:programs
+									bind:loaded
+									programId={inspecting_node}
+									reactionId={reaction.id} />
 							{/each}
 						</Node>
 					{/each}

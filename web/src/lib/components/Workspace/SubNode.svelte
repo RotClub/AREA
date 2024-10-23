@@ -2,7 +2,11 @@
 	import { Cog, Trash2, Play } from "lucide-svelte";
 	import { parse as cookieParser } from "cookie";
 	import { getModalStore, type ModalSettings, type ModalStore } from "@skeletonlabs/skeleton";
-	import { getRequiredMetadataFromId, getDisplayNameFromId, getIconPathFromId } from "$lib/services";
+	import {
+		getRequiredMetadataFromId,
+		getDisplayNameFromId,
+		getIconPathFromId
+	} from "$lib/services";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -95,7 +99,8 @@
 	<div class="flex flex-row overflow-x-scroll">
 		{#each Object.entries(meta) as [key, value]}
 			<div class="flex flex-col items-center justify-center px-4 py-2">
-				<span class="text-secondary-300 text-xl shrink-0 text-nowrap">{getRequiredMetadataFromId(reaction)[key].displayName}</span>
+				<span class="text-secondary-300 text-xl shrink-0 text-nowrap"
+					>{getRequiredMetadataFromId(reaction)[key].displayName}</span>
 				<span class=" shrink-0 text-nowrap">{value}</span>
 			</div>
 		{/each}

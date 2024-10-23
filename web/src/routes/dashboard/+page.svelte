@@ -7,14 +7,17 @@
 
 	export let data;
 
-	let connectedServices: any = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let connectedServices: Array<any> = [];
 	let connectAmount: number | undefined = undefined;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let userData: any = {};
 
 	onMount(async () => {
 		connectedServices = await (await window.fetch("/api/services")).json();
 		connectAmount =
 			connectedServices.length -
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			connectedServices.filter((service: any) => !service.link).length;
 
 		userData = await (await window.fetch("/api/user")).json();

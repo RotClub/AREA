@@ -6,13 +6,15 @@ export interface ActionMetaDataType {
 	type: "string" | "number" | "boolean" | "date";
 }
 
-export const Nodes: Array<{
+export type NodeType = Array<{
 	service: Provider;
 	displayName: string;
 	iconPath: string;
 	actions: Array<{ id: string; displayName: string; meta: Record<string, ActionMetaDataType> }>;
-	reactions: Array<{ id: string ; displayName: string, meta: Record<string, ActionMetaDataType> }>;
-}> = [
+	reactions: Array<{ id: string; displayName: string; meta: Record<string, ActionMetaDataType> }>;
+}>;
+
+export const Nodes: NodeType = [
 	{
 		service: Provider.SPOTIFY,
 		displayName: "Spotify",
@@ -77,8 +79,7 @@ export function getDisplayNameFromId(id: string): string {
 	const foundService = Nodes.find((s) => s.service === service);
 	if (!foundService) return "";
 	let foundName = foundService.actions?.find((a) => a?.id === action);
-	if (!foundName)
-		foundName = foundService.reactions?.find((a) => a?.id === action);
+	if (!foundName) foundName = foundService.reactions?.find((a) => a?.id === action);
 	return foundName ? foundName.displayName : "";
 }
 
@@ -87,8 +88,7 @@ export function getRequiredMetadataFromId(id: string): Record<string, ActionMeta
 	const foundService = Nodes.find((s) => s.service === service);
 	if (!foundService) return {};
 	let foundMeta = foundService.actions?.find((a) => a?.id === action);
-	if (!foundMeta)
-		foundMeta = foundService.reactions?.find((a) => a?.id === action);
+	if (!foundMeta) foundMeta = foundService.reactions?.find((a) => a?.id === action);
 	return foundMeta?.meta || {};
 }
 

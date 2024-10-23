@@ -3,7 +3,7 @@
 
 	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
-	import { getIconPathFromId, getDisplayNameFromId } from "$lib/services";
+	import { getIconPathFromId, getDisplayNameFromId, type NodeType } from "$lib/services";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -11,7 +11,7 @@
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
-	let services: Array<any> = [];
+	let services: NodeType = [];
 	let selected: string | null = null;
 
 	function onFormSubmit(): void {
