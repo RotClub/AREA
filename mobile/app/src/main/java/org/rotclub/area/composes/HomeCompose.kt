@@ -183,6 +183,12 @@ fun HomeCircleChart() {
 @Composable
 fun ProgramsStats()
 {
+    val statsData = listOf(
+        "Programs" to "2",
+        "Nodes avg" to "5.7",
+        "Empty programs" to "0"
+    )
+
     Column (
         modifier = Modifier
             .padding(0.dp, 20.dp, 0.dp, 0.dp)
@@ -207,68 +213,33 @@ fun ProgramsStats()
                 .padding(0.dp, 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column (
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    modifier = Modifier,
-                    text = "Programs",
-                    color = Color.White,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                )
-                Text(
-                    modifier = Modifier,
-                    text = "2",
-                    color = FrispyTheme.Primary500,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                )
-            }
-            Column (
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "Nodes avg",
-                    color = Color.White,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                )
-                Text(
-                    modifier = Modifier,
-                    text = "5.7",
-                    color = FrispyTheme.Primary500,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                )
-            }
-            Column (
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "Empty programs",
-                    color = Color.White,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                )
-                Text(
-                    modifier = Modifier,
-                    text = "0",
-                    color = FrispyTheme.Primary500,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                )
+                statsData.forEach { (label, value) ->
+                    Column(
+                        modifier = Modifier,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = label,
+                            color = Color.White,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        )
+                        Text(
+                            modifier = Modifier,
+                            text = value,
+                            color = FrispyTheme.Primary500,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 18.sp,
+                        )
+                    }
+                }
             }
         }
     }
@@ -276,6 +247,13 @@ fun ProgramsStats()
 
 @Composable
 fun ProfileCard () {
+    val profileData = listOf(
+        "Username" to "Paul_le_BG",
+        "Email" to "Paul_le_BG@AREA.fr",
+        "Role" to "ADMIN",
+        "Created at" to "2024-10-03"
+    )
+
     Column (
         modifier = Modifier
             .padding(0.dp, 20.dp, 0.dp, 0.dp)
@@ -307,77 +285,25 @@ fun ProfileCard () {
                 modifier = Modifier.size(25.dp)
             )
         }
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 15.dp),
-            text = buildAnnotatedString {
-                append("Username: ")
-                withStyle(
-                    SpanStyle(
-                        color = FrispyTheme.Primary500
-                    )
-                ) {
-                    append("Paul_le_BG")
-                }
-            },
-            color = Color.White,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-        )
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 15.dp),
-            text = buildAnnotatedString {
-                append("Email: ")
-                withStyle(
-                    SpanStyle(
-                        color = FrispyTheme.Primary500
-                    )
-                ) {
-                    append("Paul_le_BG@AREA.fr")
-                }
-            },
-            color = Color.White,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-        )
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 15.dp),
-            text = buildAnnotatedString {
-                append("Role: ")
-                withStyle(
-                    SpanStyle(
-                        color = FrispyTheme.Primary500
-                    )
-                ) {
-                    append("ADMIN")
-                }
-            },
-            color = Color.White,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-        )
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, 15.dp),
-            text = buildAnnotatedString {
-                append("Created at: ")
-                withStyle(
-                    SpanStyle(
-                        color = FrispyTheme.Primary500
-                    )
-                ) {
-                    append("2024-10-03")
-                }
-            },
-            color = Color.White,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-        )
+        profileData.forEach { (label, value) ->
+            Text(
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 15.dp),
+                text = buildAnnotatedString {
+                    append("$label: ")
+                    withStyle(
+                        SpanStyle(
+                            color = FrispyTheme.Primary500
+                        )
+                    ) {
+                        append(value)
+                    }
+                },
+                color = Color.White,
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+            )
+        }
     }
 }
