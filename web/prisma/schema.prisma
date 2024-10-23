@@ -66,5 +66,4 @@ enum Provider {
   BATTLENET
   EPICGAMES
   TWITCH
-  X
 }
