@@ -24,6 +24,7 @@ import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.composes.HomeCircleChart
 import org.rotclub.area.composes.ProgramsStats
+import org.rotclub.area.composes.ProfileCard
 import org.rotclub.area.lib.BottomBarScreen
 
 @Composable
@@ -33,6 +34,7 @@ fun HomeScreen() {
             .fillMaxWidth()
             .height(893.dp)
             .background(FrispyTheme.Surface700)
+            .verticalScroll(rememberScrollState())
             .padding(20.dp, 60.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -56,11 +58,11 @@ fun HomeScreen() {
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(FrispyTheme.Surface700)
-                .verticalScroll(rememberScrollState()),
+                .background(FrispyTheme.Surface700),
         ) {
             HomeCircleChart()
             ProgramsStats()
+            ProfileCard()
         }
     }
 }

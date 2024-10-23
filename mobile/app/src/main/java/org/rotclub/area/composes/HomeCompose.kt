@@ -27,10 +27,13 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -268,5 +271,113 @@ fun ProgramsStats()
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ProfileCard () {
+    Column (
+        modifier = Modifier
+            .padding(0.dp, 20.dp, 0.dp, 0.dp)
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(10.dp))
+            .background(FrispyTheme.Surface600)
+            .padding(20.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 0.dp, 0.dp, 25.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 0.dp),
+                text = "Profile",
+                color = Color.White,
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.user),
+                tint = Color.White,
+                contentDescription = "Profile",
+                modifier = Modifier.size(25.dp)
+            )
+        }
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            text = buildAnnotatedString {
+                append("Username: ")
+                withStyle(
+                    SpanStyle(
+                        color = FrispyTheme.Primary500
+                    )
+                ) {
+                    append("Paul_le_BG")
+                }
+            },
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+        )
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            text = buildAnnotatedString {
+                append("Email: ")
+                withStyle(
+                    SpanStyle(
+                        color = FrispyTheme.Primary500
+                    )
+                ) {
+                    append("Paul_le_BG@AREA.fr")
+                }
+            },
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+        )
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            text = buildAnnotatedString {
+                append("Role: ")
+                withStyle(
+                    SpanStyle(
+                        color = FrispyTheme.Primary500
+                    )
+                ) {
+                    append("ADMIN")
+                }
+            },
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+        )
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            text = buildAnnotatedString {
+                append("Created at: ")
+                withStyle(
+                    SpanStyle(
+                        color = FrispyTheme.Primary500
+                    )
+                ) {
+                    append("2024-10-03")
+                }
+            },
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+        )
     }
 }
