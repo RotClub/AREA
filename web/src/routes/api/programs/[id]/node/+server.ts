@@ -309,3 +309,12 @@ export const PATCH = async ({ request, params }) => {
 		}
 	});
 };
+
+export const POST = async ({ request, params }) => {
+	return new Response(null, {
+		status: 405,
+		headers: {
+			"Content-Type": "application/json"
+		}
+	});
+};

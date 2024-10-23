@@ -36,7 +36,7 @@
 				to your dashboard.</span>
 			<div class="flex flex-row space-x-8 h-[30rem] !mt-4">
 				<div class="card w-[60%] p-4 flex flex-col">
-					<span class="text-2xl font-semibold">Connected services:</span>
+					<span class="text-2xl font-semibold">Linked services:</span>
 					<div class="w-full h-full flex flex-row">
 						<div
 							class="w-1/2 flex flex-col justify-center items-center text-lg font-medium overflow-y-auto">
