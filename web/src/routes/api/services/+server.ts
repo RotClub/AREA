@@ -4,24 +4,14 @@ import { checkAccess } from "$lib/api";
 import { getProviderTitle } from "$lib/services";
 
 export const GET = async ({ request, cookies }) => {
-	let token: string | undefined;
-	let access: { valid: boolean; err: string | null };
 
 	const client = new PrismaClient();
-	if (cookies.get("token")) {
-		// Get the Bearer token from the cookies
-		token = cookies.get("token");
+	// Get the Bearer token from the request
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 
-		// Verify the token
-		access = await checkAccess(client, { token: token ? token : "" }, UserRole.API_USER, false);
-	} else {
-		// Get the Bearer token from the request
-		const bearer = request.headers.get("Authorization");
-		token = bearer ? bearer.replace("Bearer ", "") : "";
-
-		// Verify the token
-		access = await checkAccess(client, request);
-	}
+	// Verify the token
+	const access = await checkAccess(client, request);
 
 	if (!access.valid) {
 		client.$disconnect();

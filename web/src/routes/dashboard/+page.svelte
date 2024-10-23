@@ -4,6 +4,7 @@
 	import { Check, X, CircleUserRound } from "lucide-svelte";
 	import { onMount } from "svelte";
 	import { BoringAvatar } from "$lib/components/BoringAvatar";
+	import { parse as cookieParser } from "cookie";
 
 	export let data;
 
@@ -14,13 +15,21 @@
 	let userData: any = {};
 
 	onMount(async () => {
-		connectedServices = await (await window.fetch("/api/services")).json();
+		connectedServices = await (await window.fetch("/api/services", {
+			headers: {
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			}
+		})).json();
 		connectAmount =
 			connectedServices.length -
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			connectedServices.filter((service: any) => !service.link).length;
 
-		userData = await (await window.fetch("/api/user")).json();
+		userData = await (await window.fetch("/api/user", {
+			headers: {
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			}
+		})).json();
 	});
 
 	function getProgress(amount: number | undefined) {

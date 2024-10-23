@@ -5,12 +5,14 @@ function getProgramNodeAmount(program: Program): number {
 	return program.Actions ? program.Actions.length : 0;
 }
 
-export const GET = async ({ cookies }) => {
+export const GET = async ({ request }) => {
 	const client: PrismaClient = new PrismaClient();
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token || ""
 		}
 	});
 
@@ -73,9 +75,11 @@ export const POST = async ({ cookies, request }) => {
 		});
 	}
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token
 		},
 		select: {
 			Program: true,
