@@ -64,7 +64,7 @@ private fun ChartCirclePie(
 
     Canvas(modifier = modifier
         .size(size)
-        .background(FrispyTheme.Surface500)
+        .background(FrispyTheme.Surface600)
         .padding(12.dp), onDraw = {
 
         val startAngle = -87f
@@ -72,7 +72,7 @@ private fun ChartCirclePie(
         val remainingSweepAngle = 360 - sweepAngle
 
         drawArc(
-            color = FrispyTheme.Surface600,
+            color = FrispyTheme.Surface500,
             startAngle = startAngle,
             sweepAngle = 360f,
             useCenter = false,
@@ -102,7 +102,12 @@ private fun ChartCirclePie(
                 (this.size.width - textSize.width) / 2f,
                 (this.size.height - textSize.height) / 2f
             ),
-            style = TextStyle(fontSize = 30.sp, color = Color.White, fontWeight = FontWeight.Bold, fontFamily = fontFamily)
+            style = TextStyle(
+                fontSize = 30.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontFamily = fontFamily
+            )
         )
     })
 }
@@ -132,7 +137,7 @@ fun HomeCircleChart() {
             .padding(0.dp, 20.dp, 0.dp, 0.dp)
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(FrispyTheme.Surface500)
+            .background(FrispyTheme.Surface600)
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
