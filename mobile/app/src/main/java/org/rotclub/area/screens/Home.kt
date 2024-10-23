@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,15 +23,16 @@ import androidx.compose.ui.unit.dp
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.composes.HomeCircleChart
+import org.rotclub.area.composes.ProgramsStats
 import org.rotclub.area.lib.BottomBarScreen
 
 @Composable
 fun HomeScreen() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(893.dp)
             .background(FrispyTheme.Surface700)
-            .verticalScroll(rememberScrollState())
             .padding(20.dp, 60.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -50,6 +53,14 @@ fun HomeScreen() {
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
-        HomeCircleChart()
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(FrispyTheme.Surface700)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            HomeCircleChart()
+            ProgramsStats()
+        }
     }
 }

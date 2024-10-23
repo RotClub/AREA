@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -173,5 +174,99 @@ fun HomeCircleChart() {
             strokeWidth = 16.dp,
             "${linkedServicesCount}/7"
         )
+    }
+}
+
+@Composable
+fun ProgramsStats()
+{
+    Column (
+        modifier = Modifier
+            .padding(0.dp, 20.dp, 0.dp, 0.dp)
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(10.dp))
+            .background(FrispyTheme.Surface600)
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 15.dp),
+            text = "Programs statistics:",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp,
+        )
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column (
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "Programs",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                )
+                Text(
+                    modifier = Modifier,
+                    text = "2",
+                    color = FrispyTheme.Primary500,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                )
+            }
+            Column (
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "Nodes avg",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                )
+                Text(
+                    modifier = Modifier,
+                    text = "5.7",
+                    color = FrispyTheme.Primary500,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                )
+            }
+            Column (
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "Empty programs",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                )
+                Text(
+                    modifier = Modifier,
+                    text = "0",
+                    color = FrispyTheme.Primary500,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                )
+            }
+        }
     }
 }
