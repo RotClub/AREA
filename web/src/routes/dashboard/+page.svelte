@@ -21,7 +21,6 @@
 			connectedServices.filter((service: any) => !service.link).length;
 
 		userData = await (await window.fetch("/api/user")).json();
-		console.log(userData);
 	});
 
 	function getProgress(amount: number | undefined) {
