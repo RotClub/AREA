@@ -3,6 +3,7 @@
 
 	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
+	import { getIconPathFromId, getDisplayNameFromId } from "$lib/services";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -11,12 +12,12 @@
 
 	let loaded: boolean = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let reactions: any[] = [];
+	let services: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let selected: any = null;
+	let selected: string | null = null;
 
 	function onFormSubmit(): void {
-		// if ($modalStore[0].response) $modalStore[0].response(formData);
+		if ($modalStore[0].response) $modalStore[0].response(selected);
 		modalStore.close();
 	}
 
@@ -26,18 +27,22 @@
 		goto("/dashboard/services");
 	}
 
+	function selectReaction(service: string, id: string) {
+		selected = `${service}:${id}`;
+	}
+
 	onMount(async () => {
-		reactions = await (await window.fetch("/api/reaction")).json();
-		console.log(reactions);
+		services = await (await window.fetch("/api/reaction")).json();
+		console.log(services);
 		loaded = true;
 	});
 </script>
 
 {#if $modalStore[0]}
 	<div class="card p-4 w-modal shadow-xl space-y-4">
-		<header class="text-2xl font-bold">Action</header>
+		<header class="text-2xl font-bold">Reaction</header>
 		<article>
-			Select here a reaction to be used to trigger events, can be configured later.
+			Select here a reaction, they represent events to be triggered, can be configured later.
 		</article>
 		<article>
 			If you don't see anything here, that means you have no <a
@@ -50,15 +55,22 @@
 			class="relative border border-surface-500 bg-surface-900 p-4 space-y-4 rounded-container-token overflow-y-scroll h-[32rem]">
 			{#if loaded}
 				<TreeView>
-					{#each reactions as reaction}
+					{#each services as service}
 						<TreeViewItem>
 							<svelte:fragment slot="lead">
-								<img src="/provider/spotify-icon.svg" alt="spotify" width="32px" />
+								<img
+									src={service.iconPath}
+									alt={service.service.toLowerCase()}
+									width="32px" />
 							</svelte:fragment>
-							<span>Spotify</span>
+							<span>{service.displayName}</span>
 							<svelte:fragment slot="children">
-								<TreeViewItem>(Child of Child 1)</TreeViewItem>
-								<TreeViewItem>(Child of Child 2)</TreeViewItem>
+								{#each service.reactions as reaction}
+									<TreeViewItem
+										on:click={() => {
+											selectReaction(service.service, reaction.id);
+										}}>{reaction.displayName}</TreeViewItem>
+								{/each}
 							</svelte:fragment>
 						</TreeViewItem>
 					{/each}
@@ -69,7 +81,12 @@
 		</div>
 		<div class="flex flex-row gap-2 items-center">
 			<span class="text-lg font-semibold">Currently selected:</span>
-			<span>{selected ? selected : "None"}</span>
+			{#if selected}
+				<img src={getIconPathFromId(selected)} alt={selected} width="16px" />
+				<span>{getDisplayNameFromId(selected)}</span>
+			{:else}
+				<span>None</span>
+			{/if}
 		</div>
 		<footer class="flex flex-row items-center justify-end gap-2">
 			<button
@@ -77,7 +94,7 @@
 				on:click={() => {
 					modalStore.close();
 				}}>Cancel</button>
-			<button class="btn variant-filled-primary">Confirm</button>
+			<button class="btn variant-filled-primary" on:click={onFormSubmit}>Confirm</button>
 		</footer>
 	</div>
 {/if}

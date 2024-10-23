@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { MessageSquareMore, Globe, CircleUserRound, Menu, CircleHelp } from "lucide-svelte";
+	import { Menu } from "lucide-svelte";
 	import LinkButton from "$lib/components/LinkButton.svelte";
-	import {
-		getDrawerStore,
-		getModalStore,
-		type DrawerSettings,
-		type ModalSettings,
-		Avatar
-	} from "@skeletonlabs/skeleton";
-	import { onMount } from "svelte";
-	import type { PageData } from "./$types";
-	import { page } from "$app/stores";
+	import BoringAvatar from "$lib/components/BoringAvatar/BoringAvatar.svelte";
+	import { getDrawerStore, type DrawerSettings, Avatar } from "@skeletonlabs/skeleton";
+
+	export let data;
 
 	let userPictureBlobUrl: string | undefined = undefined;
 
@@ -47,7 +41,7 @@
 					src=""
 					width="w-full h-full"
 					border="border-2 border-surface-400">
-					<CircleUserRound class="text-surface-400" />
+					<BoringAvatar name={data.props.avatar_seed} size={80} />
 				</Avatar>
 			</a>
 		</div>

@@ -3,6 +3,7 @@
 
 	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
+	import { getIconPathFromId, getDisplayNameFromId } from "$lib/services";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -28,18 +29,6 @@
 
 	function selectAction(service: string, id: string) {
 		selected = `${service}:${id}`;
-	}
-
-	function getIconPathFromId(id: string): string {
-		const [service] = id.split(":");
-		return services.find((s) => s.service === service).iconPath;
-	}
-
-	function getDisplayNameFromId(id: string): string {
-		const [service, action] = id.split(":");
-		return services
-			.find((s) => s.service === service)
-			.actions.find((a: { id: string }) => a.id === action).displayName;
 	}
 
 	onMount(async () => {
