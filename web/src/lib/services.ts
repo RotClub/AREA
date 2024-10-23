@@ -1,10 +1,16 @@
 import { PrismaClient, Provider } from "@prisma/client";
 
+export interface ActionMetaDataType {
+	id: string;
+	displayName: string;
+	type: "string" | "number" | "boolean" | "date";
+}
+
 export const Actions: Array<{
 	service: Provider;
 	displayName: string;
 	iconPath: string;
-	actions: [{ id: string; displayName: string; meta: object }?];
+	actions: [{ id: string; displayName: string; meta: Record<string, ActionMetaDataType> }?];
 }> = [
 	{
 		service: Provider.SPOTIFY,
@@ -15,12 +21,31 @@ export const Actions: Array<{
 				id: "listening-track",
 				displayName: "Listening to track",
 				meta: {
-					track_id: "string"
+					track_id: {
+						id: "track_id",
+						displayName: "Track",
+						type: "string"
+					}
 				}
 			}
 		]
 	}
 ];
+
+export function getInputTypeFromMeta(meta: ActionMetaDataType): string {
+	switch (meta.type) {
+		case "string":
+			return "text";
+		case "number":
+			return "number";
+		case "boolean":
+			return "checkbox";
+		case "date":
+			return "date";
+		default:
+			return "text";
+	}
+}
 
 export function getIconPathFromId(id: string): string {
 	const [service] = id.split(":");
@@ -34,6 +59,14 @@ export function getDisplayNameFromId(id: string): string {
 	if (!foundService) return "";
 	const foundAction = foundService.actions?.find((a) => a?.id === action);
 	return foundAction ? foundAction.displayName : "";
+}
+
+export function getRequiredMetadataFromId(id: string): Record<string, ActionMetaDataType> {
+	const [service, action] = id.split(":");
+	const foundService = Actions.find((s) => s.service === service);
+	if (!foundService) return {};
+	const foundAction = foundService.actions?.find((a) => a?.id === action);
+	return foundAction?.meta || {};
 }
 
 export async function GetAccessibleActions(jwt: string | undefined) {

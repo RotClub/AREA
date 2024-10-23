@@ -11,9 +11,7 @@
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let services: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let services: Array<any> = [];
 	let selected: string | null = null;
 
 	function onFormSubmit(): void {

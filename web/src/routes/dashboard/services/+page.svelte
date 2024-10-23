@@ -18,7 +18,7 @@
 </script>
 
 <div class="w-full h-full flex flex-col items-center">
-	<div class="container w-full h-full flex flex-col items-center py-6 overflow-y-scroll gap-6">
+	<div class="container w-full h-full flex flex-col items-center p-6 overflow-y-scroll gap-6">
 		{#if data.length === 0}
 			<ServiceCardPlaceholder />
 			<ServiceCardPlaceholder />
