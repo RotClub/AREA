@@ -3,7 +3,7 @@
 	export let colors = ["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"];
 	export let title = false;
 	export let square = false;
-	export let size;
+	export let size: string | null = null;
 
 	const SIZE = 36;
 
