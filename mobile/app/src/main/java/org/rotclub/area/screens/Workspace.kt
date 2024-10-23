@@ -10,31 +10,49 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.rotclub.area.composes.ColumnCard
-import org.rotclub.area.composes.BackButton
-import org.rotclub.area.composes.PlusButton
+import kotlinx.coroutines.launch
 import org.rotclub.area.composes.ActionCard
+import org.rotclub.area.composes.BackButton
+import org.rotclub.area.composes.ColumnCard
 import org.rotclub.area.composes.ListView
+import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.TerminateButton
+import org.rotclub.area.lib.SharedStorageUtils
 import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.lib.httpapi.ProgramResponse
+import org.rotclub.area.lib.httpapi.getPrograms
+import org.rotclub.area.lib.httpapi.postProgram
 import org.rotclub.area.ui.theme.FrispyTheme
 
 data class ColumnCardData(val title: String, val text: String)
 
 @Composable
 fun WorkspaceScreen(navController: NavHostController) {
-    val columnCards = remember { mutableStateOf(listOf(
-        ColumnCardData("First Column Card", "This is the first column card"),
-        ColumnCardData("Second Column Card", "This is the second column card")
-    )) }
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
+
+    val programs = remember { mutableStateOf(emptyList<ProgramResponse?>()) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val token = sharedStorage.getToken()
+            if (token == null) {
+                // TODO: redirect to login
+                return@launch
+            }
+            programs.value = getPrograms(token)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -45,11 +63,24 @@ fun WorkspaceScreen(navController: NavHostController) {
             .padding(20.dp, 80.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        columnCards.value.forEach { cardData ->
-            ColumnCard(navController = navController, title = cardData.title, text = cardData.text)
+        for (program in programs.value) {
+            if (program != null) {
+                ColumnCard(
+                    navController = navController,
+                    title = program.name,
+                    text = "This is a program"
+                )
+            }
         }
         PlusButton {
-            columnCards.value += ColumnCardData("New Column Card", "This is a new column card")
+            coroutineScope.launch {
+                val token = sharedStorage.getToken()
+                if (token == null) {
+                    // TODO: redirect to login
+                    return@launch
+                }
+                programs.value += postProgram(token, "New Program", mutableStateOf(""))
+            }
         }
     }
 }
