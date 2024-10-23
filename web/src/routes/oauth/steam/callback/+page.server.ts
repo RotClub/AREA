@@ -2,14 +2,14 @@ import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 
 export const load = async (event) => {
-    const openIdParams = queryString.parse(event.url.search);
+	const openIdParams = queryString.parse(event.url.search);
 
-    if (!openIdParams['openid.claimed_id']) {
-        throw error(400, "Invalid Steam OpenID response");
-    }
+	if (!openIdParams["openid.claimed_id"]) {
+		throw error(400, "Invalid Steam OpenID response");
+	}
 
-    //@ts-expect-error Linter doesn't like this, but it's fine
-    const steam_id = openIdParams['openid.claimed_id'].split('/').pop();
+	//@ts-expect-error Linter doesn't like this, but it's fine
+	const steam_id = openIdParams["openid.claimed_id"].split("/").pop();
 	const token = event.cookies.get("token");
 	if (!token) {
 		error(400, "No token provided");
@@ -27,5 +27,5 @@ export const load = async (event) => {
 		const ans = await res.json();
 		error(400, ans.error);
 	}
-    return redirect(302, `/dashboard/services`);
+	return redirect(302, `/dashboard/services`);
 };
