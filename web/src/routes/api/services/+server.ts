@@ -1,10 +1,9 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Provider } from "@prisma/client";
 import { checkAccess } from "$lib/api";
 import { getProviderTitle } from "$lib/services";
 
-export const GET = async ({ request, cookies }) => {
-
+export const GET = async ({ request }) => {
 	const client = new PrismaClient();
 	// Get the Bearer token from the request
 	const bearer = request.headers.get("Authorization");

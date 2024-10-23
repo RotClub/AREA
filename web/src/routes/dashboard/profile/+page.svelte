@@ -15,11 +15,13 @@
 	let loading = true;
 
 	onMount(async () => {
-		userData = await (await window.fetch("/api/user", {
-			headers: {
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			}
-		})).json();
+		userData = await (
+			await window.fetch("/api/user", {
+				headers: {
+					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				}
+			})
+		).json();
 		console.log(userData);
 		loading = false;
 	});

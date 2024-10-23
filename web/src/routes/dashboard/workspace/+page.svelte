@@ -6,7 +6,7 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
-	import { Nodes, getRequiredMetadataFromId, type ActionMetaDataType } from "$lib/services";
+	import { getRequiredMetadataFromId } from "$lib/services";
 	import { parse as cookieParser } from "cookie";
 
 	let modalStore: ModalStore = getModalStore();
@@ -109,11 +109,13 @@
 	}
 
 	onMount(async () => {
-		programs = await (await window.fetch("/api/programs", {
-			headers: {
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			}
-		})).json();
+		programs = await (
+			await window.fetch("/api/programs", {
+				headers: {
+					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				}
+			})
+		).json();
 		console.log(programs);
 		loaded = true;
 	});

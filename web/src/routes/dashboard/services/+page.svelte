@@ -13,13 +13,11 @@
 		unlink_href: string;
 	}> = [];
 	onMount(async () => {
-		const res = await window.fetch("/api/services",
-			{
-				headers: {
-					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-				}
+		const res = await window.fetch("/api/services", {
+			headers: {
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
 			}
-		);
+		});
 		data = await res.json();
 	});
 </script>
