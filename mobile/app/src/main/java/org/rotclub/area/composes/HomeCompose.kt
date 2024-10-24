@@ -39,10 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
-import org.rotclub.area.lib.SharedStorageUtils
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.Service
 import org.rotclub.area.lib.httpapi.getServices
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
