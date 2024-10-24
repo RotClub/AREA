@@ -6,8 +6,8 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
+	import { getRequiredMetadataFromId } from "$lib/services";
 	import { parse as cookieParser } from "cookie";
-	import { Nodes, getRequiredMetadataFromId, type ActionMetaDataType } from "$lib/services";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -90,7 +90,10 @@
 		editing = false;
 		loaded = false;
 		const response = await window.fetch(`/api/programs/${inspecting_node}`, {
-			method: "DELETE"
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			}
 		});
 
 		if (response.ok) {
@@ -106,7 +109,13 @@
 	}
 
 	onMount(async () => {
-		programs = await (await window.fetch("/api/programs")).json();
+		programs = await (
+			await window.fetch("/api/programs", {
+				headers: {
+					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				}
+			})
+		).json();
 		console.log(programs);
 		loaded = true;
 	});

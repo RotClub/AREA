@@ -6,7 +6,7 @@ export const load = async (event) => {
 	if (!token) {
 		error(400, "No token provided");
 	}
-	const res = await event.fetch(`/api/services/epicgames/unlink`, {
+	const res = await event.fetch(`/api/services/reddit/unlink`, {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`

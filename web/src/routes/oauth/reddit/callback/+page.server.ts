@@ -9,10 +9,9 @@ export const load = async (event) => {
 	if (err) {
 		error(400, err + ": " + err_msg);
 	}
-	const client_id = process.env.EPICGAMES_CLIENT_ID;
-	const client_secret = process.env.EPICGAMES_CLIENT_SECRET;
-	const dep_id = process.env.EPICGAMES_DEPLOYMENT_ID;
-	const res_epic = await fetch("https://api.epicgames.dev/epic/oauth/v2/token", {
+	const client_id = process.env.REDDIT_CLIENT_ID;
+	const client_secret = process.env.REDDIT_CLIENT_SECRET;
+	const res_reddit = await fetch("https://www.reddit.com/api/v1/access_token", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
@@ -21,19 +20,18 @@ export const load = async (event) => {
 		body: new URLSearchParams({
 			grant_type: "authorization_code",
 			code: code || "",
-			deployment_id: dep_id || "",
-			scope: "basic_profile friend_list presence"
+			redirect_uri: `${adaptUrl()}/oauth/reddit/callback`
 		})
 	});
-	const data = await res_epic.json();
-	if (!res_epic.ok) {
+	const data = await res_reddit.text();
+	if (!res_reddit.ok) {
 		error(400, data);
 	}
 	const token = event.cookies.get("token");
 	if (!token) {
 		error(400, "No token provided");
 	}
-	const res = await event.fetch(`/api/services/epicgames/link`, {
+	const res = await event.fetch(`/api/services/reddit/link`, {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${token}`
