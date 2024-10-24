@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { parse as cookieParser } from "cookie";
 
 	let userData: {
 		username: string;
@@ -14,7 +15,13 @@
 	let loading = true;
 
 	onMount(async () => {
-		userData = await (await window.fetch("/api/user")).json();
+		userData = await (
+			await window.fetch("/api/user", {
+				headers: {
+					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				}
+			})
+		).json();
 		console.log(userData);
 		loading = false;
 	});

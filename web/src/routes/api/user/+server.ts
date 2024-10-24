@@ -1,12 +1,14 @@
 import { encryptPWD } from "$lib/auth.js";
 import { PrismaClient } from "@prisma/client";
 
-export const GET = async ({ cookies }) => {
+export const GET = async ({ request }) => {
 	const client: PrismaClient = new PrismaClient();
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token || ""
 		},
 		select: {
 			email: true,
@@ -50,9 +52,11 @@ export const POST = async ({ request, cookies }) => {
 		});
 	}
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token
 		}
 	});
 
@@ -68,7 +72,7 @@ export const POST = async ({ request, cookies }) => {
 	if (!password) {
 		const updatedUser = await client.user.update({
 			where: {
-				token: cookies.get("token")
+				token: token
 			},
 			data: {
 				email,
@@ -80,7 +84,7 @@ export const POST = async ({ request, cookies }) => {
 	if (password) {
 		const updatedUser = await client.user.update({
 			where: {
-				token: cookies.get("token")
+				token: token
 			},
 			data: {
 				email,

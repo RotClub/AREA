@@ -3,6 +3,7 @@
 	import { onMount } from "svelte";
 	import type { Provider } from "@prisma/client";
 	import ServiceCardPlaceholder from "$lib/components/Services/ServiceCardPlaceholder.svelte";
+	import { parse as cookieParser } from "cookie";
 
 	let data: Array<{
 		service: Provider;
@@ -12,13 +13,17 @@
 		unlink_href: string;
 	}> = [];
 	onMount(async () => {
-		const res = await window.fetch("/api/services");
+		const res = await window.fetch("/api/services", {
+			headers: {
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			}
+		});
 		data = await res.json();
 	});
 </script>
 
 <div class="w-full h-full flex flex-col items-center">
-	<div class="container w-full h-full flex flex-col items-center py-6 overflow-y-scroll gap-6">
+	<div class="container w-full h-full flex flex-col items-center p-6 overflow-y-scroll gap-6">
 		{#if data.length === 0}
 			<ServiceCardPlaceholder />
 			<ServiceCardPlaceholder />
