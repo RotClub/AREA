@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import org.rotclub.area.composes.GlobalRoutes
 import org.rotclub.area.composes.Navigation
-import org.rotclub.area.lib.GlobalRoutes
 import org.rotclub.area.screens.MainScreen
 import org.rotclub.area.ui.theme.AreaTheme
 
