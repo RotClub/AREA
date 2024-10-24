@@ -5,13 +5,13 @@ import org.rotclub.area.R
 
 enum class ServiceType(val icon: Int)
 {
-    DISCORD(0),
-    STEAM(0),
+    DISCORD(R.drawable.discord_icon),
+    STEAM(R.drawable.steam_icon),
     SPOTIFY(R.drawable.spotify_icon),
-    BATTLENET(0),
-    EPICGAMES(0),
-    RIOT(0),
-    X(0),
+    BATTLENET(R.drawable.battlenet_icon),
+    EPICGAMES(R.drawable.epicgames_icon),
+    RIOT(R.drawable.riot_icon),
+    X(R.drawable.x_icon),
 }
 
 data class Service(

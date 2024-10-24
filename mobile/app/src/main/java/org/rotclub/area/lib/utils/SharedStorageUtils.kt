@@ -1,4 +1,4 @@
-package org.rotclub.area.lib
+package org.rotclub.area.lib.utils
 
 import android.content.Context
 import android.content.SharedPreferences
