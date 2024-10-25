@@ -12,11 +12,11 @@ export const load = async (event) => {
 	}
 	config();
 	const battle_res = await fetch(
-		"https://battle.net/oauth/token?" +
+		"https://eu.battle.net/oauth/token?" +
 			queryString.stringify({
 				grant_type: "authorization_code",
 				code: code,
-				redirect_uri: `${adaptUrl()}/api/link/battlenet`,
+				redirect_uri: `${adaptUrl()}/oauth/battlenet/callback`,
 				client_id: process.env.BATTLENET_CLIENT_ID,
 				client_secret: process.env.BATTLENET_CLIENT_SECRET
 			}),
