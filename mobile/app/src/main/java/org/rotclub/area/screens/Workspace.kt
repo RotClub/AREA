@@ -1,7 +1,10 @@
 package org.rotclub.area.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,11 +30,13 @@ import org.rotclub.area.composes.ColumnCard
 import org.rotclub.area.composes.ListView
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.TerminateButton
-import org.rotclub.area.lib.SharedStorageUtils
+import org.rotclub.area.composes.SkeletonApiColumnCard
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.getPrograms
 import org.rotclub.area.lib.httpapi.postProgram
+import org.rotclub.area.lib.httpapi.deleteProgram
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
 data class ColumnCardData(val title: String, val text: String)
@@ -63,6 +68,11 @@ fun WorkspaceScreen(navController: NavHostController) {
             .padding(20.dp, 80.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (programs.value.isEmpty()) {
+            for (i in 0..3) {
+                SkeletonApiColumnCard()
+            }
+        }
         for (program in programs.value) {
             if (program != null) {
                 ColumnCard(
@@ -100,7 +110,21 @@ fun NodeScreen(navController: NavHostController) {
             .background(FrispyTheme.Surface700)
             .padding(25.dp, 60.dp, 20.dp, 20.dp),
     ) {
-        BackButton(navController = navController)
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            BackButton(navController = navController)
+            Text(
+                text = "Delete Program",
+                color = FrispyTheme.Error500,
+                fontFamily = fontFamily,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .clickable { /* delete program */ }
+            )
+        }
         Column (
             modifier = Modifier
                 .fillMaxSize()

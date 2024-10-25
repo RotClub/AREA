@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -33,9 +34,11 @@ interface Api {
 
     @GET("api/programs")
     suspend fun apiGetPrograms(@Header("Authorization") token: String): Response<List<ProgramResponse>>
-
     @POST("api/programs")
     suspend fun apiPostProgram(@Header("Authorization") token: String, @Body programRequest: ProgramRequest): Response<ProgramResponse>
+    @DELETE("api/programs/{id}")
+    suspend fun apiDeleteProgram(@Header("Authorization") token: String, id: Int): Response<Unit>
+
     @GET("api/user")
     suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>
 }

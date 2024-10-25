@@ -1,18 +1,19 @@
 package org.rotclub.area.lib.httpapi
 
 import androidx.compose.runtime.MutableState
+import com.google.gson.JsonElement
 
 data class Reaction(
     val id: Int,
     val actionId: Int?,
-    val metadata: String?,
+    val metadata: JsonElement?,
     val reactionId: String,
 )
 
 data class Action(
     val id: Int,
     val actionId: String,
-    val metadata: String,
+    val metadata: JsonElement?,
     val reactions: List<Reaction>,
 )
 
@@ -69,5 +70,23 @@ suspend fun postProgram(token: String, name: String, errorMessage: MutableState<
         println("Error occurred: $e")
         errorMessage.value = "An error occurred"
         return null
+    }
+}
+
+suspend fun deleteProgram(token: String, id: Int): Boolean {
+    try {
+        val response = RetrofitClient.authApi.apiDeleteProgram("Bearer $token", id)
+        println(response)
+        when (response.code()) {
+            200 -> {
+                return true
+            }
+            else -> {
+                return false
+            }
+        }
+    } catch (e: Exception) {
+        println("Error occurred: $e")
+        return false
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -45,6 +46,21 @@ import androidx.navigation.NavController
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.composes.skeletonLoading
+
+@Composable
+fun SkeletonApiColumnCard() {
+    Box(
+        modifier = Modifier
+            .padding(0.dp, 0.dp, 0.dp, 16.dp)
+            .fillMaxWidth()
+            .height(90.dp)
+            .clip(RoundedCornerShape(8.dp)) // Apply clip first
+            .border(BorderStroke(2.dp, FrispyTheme.Primary500), shape = RoundedCornerShape(8.dp)) // Then apply border
+            .background(FrispyTheme.Surface500)
+            .skeletonLoading(),
+    )
+}
 
 @Composable
 fun ColumnCard(navController: NavController, title: String, text: String) {
@@ -196,6 +212,16 @@ fun ActionCard(navController: NavController) {
                         .size(25.dp)
                         //open dialog
                         .clickable { showDialogSet = true }
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.trash_2),
+                    contentDescription = "Delete Action",
+                    tint = FrispyTheme.Error500,
+                    modifier = Modifier
+                        .padding(0.dp, 10.dp, 16.dp, 0.dp)
+                        .size(25.dp)
+                        //open dialog
+                        .clickable { /*del action*/ }
                 )
                 Icon(
                     painter = if (!started) {
