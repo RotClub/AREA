@@ -90,9 +90,9 @@ class FrispyTheme {
         // Surface colors
         val Surface50 = Color(0xFFDFDEDF)
         val Surface100 = Color(0xFFD4D4D5)
-        val Surface200 = Color(0xFFC9C9CA)
-        val Surface300 = Color(0xFFA9A8AB)
-        val Surface400 = Color(0xFF68676B)
+        val Surface200 = Color(0xFFBABABB)
+        val Surface300 = Color(0xFF949496)
+        val Surface400 = Color(0xFF3A393F)
         val Surface500 = Color(0xFF27262C)
         val Surface600 = Color(0xFF232228)
         val Surface700 = Color(0xFF1D1D21)

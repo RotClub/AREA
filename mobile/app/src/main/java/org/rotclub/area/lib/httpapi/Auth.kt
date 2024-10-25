@@ -1,12 +1,7 @@
 package org.rotclub.area.lib.httpapi
 
 import androidx.compose.runtime.MutableState
-
-enum class Role {
-    ADMIN,
-    API_USER,
-    USER,
-}
+import org.rotclub.area.lib.user.Role
 
 data class LoginRequest(
     val email: String,

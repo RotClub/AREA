@@ -36,4 +36,6 @@ interface Api {
 
     @POST("api/programs")
     suspend fun apiPostProgram(@Header("Authorization") token: String, @Body programRequest: ProgramRequest): Response<ProgramResponse>
+    @GET("api/user")
+    suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>
 }

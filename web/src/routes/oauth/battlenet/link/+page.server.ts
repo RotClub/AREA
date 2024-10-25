@@ -5,7 +5,7 @@ import { config } from "dotenv";
 
 export const load = async () => {
 	const state = Math.random().toString(36).substring(2, 15);
-	const scope = "openid";
+	const scope = "openid wow.profile d3.profile sc2.profile";
 
 	config();
 

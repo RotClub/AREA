@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { getDisplayNameFromId, getIconPathFromId } from "$lib/services";
+	import {
+		getDisplayNameFromId,
+		getIconPathFromId,
+		getRequiredMetadataFromId,
+		type ActionMetaDataType
+	} from "$lib/services";
 	import { Cog, Play, Plus, Trash2 } from "lucide-svelte";
 	import { type ModalSettings, type ModalStore, getModalStore } from "@skeletonlabs/skeleton";
 	import { parse as cookieParser } from "cookie";
@@ -7,7 +12,7 @@
 	let modalStore: ModalStore = getModalStore();
 
 	export let action: string;
-	export let meta: { [key: string]: string } = {};
+	export let meta: Record<string, string>;
 	export let edit: boolean;
 	export let programId: number;
 	export let actionId: number;
@@ -19,36 +24,49 @@
 	export let loaded: boolean;
 
 	async function openAddReactionModal() {
-		new Promise<boolean>((resolve) => {
+		const newReactionId: string = await new Promise<string>((resolve) => {
 			const modal: ModalSettings = {
 				type: "component",
 				component: "addReactionModalComponent",
-				response: (r: boolean) => {
+				response: (r: string) => {
 					resolve(r);
 				}
 			};
 
 			modalStore.trigger(modal);
-		}).then(async (r) => {
-			if (r) {
-				loaded = false;
-				await window.fetch(`/api/programs/${programId}/node`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-					},
-					body: JSON.stringify({
-						isReaction: true,
-						id: r,
-						metadata: {}
-					})
-				});
-				programs = await (await window.fetch("/api/programs")).json();
-				console.log(programs);
-				loaded = true;
-			}
 		});
+		if (!newReactionId) return;
+		const newActionMeta: Record<string, string> = await new Promise<Record<string, string>>(
+			(resolve) => {
+				const modal: ModalSettings = {
+					type: "component",
+					component: "editNodeModalComponent",
+					meta: getRequiredMetadataFromId(newReactionId),
+					response: (r: Record<string, string>) => {
+						resolve(r);
+					}
+				};
+
+				modalStore.trigger(modal);
+			}
+		);
+		if (!newActionMeta) return;
+		loaded = false;
+		await window.fetch(`/api/programs/${programId}/node`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+			},
+			body: JSON.stringify({
+				isReaction: true,
+				id: actionId,
+				reactionId: newReactionId,
+				metadata: newActionMeta
+			})
+		});
+		programs = await (await window.fetch("/api/programs")).json();
+		loaded = true;
 	}
 
 	async function deleteNode() {
@@ -67,6 +85,43 @@
 		programs = await (await window.fetch("/api/programs")).json();
 		loaded = true;
 	}
+
+	async function editNodeMetaData() {
+		new Promise<Record<string, string>>((resolve) => {
+			const modal: ModalSettings = {
+				type: "component",
+				component: "editNodeModalComponent",
+				meta: {
+					EDITING: true,
+					schema: getRequiredMetadataFromId(action),
+					data: meta
+				},
+				response: (r: Record<string, string>) => {
+					resolve(r);
+				}
+			};
+
+			modalStore.trigger(modal);
+		}).then(async (r) => {
+			if (r) {
+				loaded = false;
+				const res = await window.fetch(`/api/programs/${programId}/node`, {
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+					},
+					body: JSON.stringify({
+						isAction: true,
+						id: actionId,
+						metadata: r
+					})
+				});
+				if (res.ok) meta = r;
+				loaded = true;
+			}
+		});
+	}
 </script>
 
 <div class="card w-full flex-shrink-0 flex flex-col overflow-hidden">
@@ -76,12 +131,14 @@
 			<img src={getIconPathFromId(action)} alt={action} width="24px" />
 			<span class="ml-2">{getDisplayNameFromId(action)}</span>
 			<div class="flex flex-row flex-grow justify-end">
-				<button class="btn-icon text-surface-200">
-					<Cog />
-				</button>
-				<button class="btn-icon text-error-500" on:click={deleteNode}>
-					<Trash2 />
-				</button>
+				{#if edit}
+					<button class="btn-icon text-surface-200" on:click={editNodeMetaData}>
+						<Cog />
+					</button>
+					<button class="btn-icon text-error-500" on:click={deleteNode}>
+						<Trash2 />
+					</button>
+				{/if}
 				<button class="btn-icon text-success-500">
 					<Play fill="#3de184" />
 				</button>
@@ -90,12 +147,13 @@
 		<div class="flex flex-row overflow-x-scroll">
 			{#each Object.entries(meta) as [key, value]}
 				<div class="flex flex-col items-center justify-center px-4 py-2 shrink-0">
-					<span class="text-secondary-300 text-xl shrink-0 text-nowrap">{key}</span>
+					<span class="text-secondary-300 text-xl shrink-0 text-nowrap"
+						>{getRequiredMetadataFromId(action)[key].displayName}</span>
 					<span class="shrink-0 text-nowrap">{value}</span>
 				</div>
 			{/each}
 		</div>
-		<div class="w-full flex flex-col alternate">
+		<div class="w-full flex flex-col">
 			<slot />
 		</div>
 	</div>
@@ -103,17 +161,10 @@
 		<button
 			on:click={openAddReactionModal}
 			class="bg-primary-500 w-full h-6 flex flex-row justify-center items-center hover:bg-primary-700 transition-colors">
-			<span>
+			<span class="flex flex-row">
 				<Plus />
+				Add reaction
 			</span>
 		</button>
 	{/if}
 </div>
-
-<style>
-	.alternate:nth-child(even) {
-		background-color: rgb(var(--color-surface-500));
-		border-left: 1px solid rgb(var(--color-surface-600));
-		border-right: 1px solid rgb(var(--color-surface-600));
-	}
-</style>

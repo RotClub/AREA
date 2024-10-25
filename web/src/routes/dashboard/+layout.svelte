@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { MessageSquareMore, Globe, CircleUserRound, Menu, CircleHelp } from "lucide-svelte";
+	import { Menu } from "lucide-svelte";
 	import LinkButton from "$lib/components/LinkButton.svelte";
-	import {
-		getDrawerStore,
-		getModalStore,
-		type DrawerSettings,
-		type ModalSettings,
-		Avatar
-	} from "@skeletonlabs/skeleton";
-	import { onMount } from "svelte";
-	import type { PageData } from "./$types";
-	import { page } from "$app/stores";
+	import BoringAvatar from "$lib/components/BoringAvatar/BoringAvatar.svelte";
+	import { getDrawerStore, type DrawerSettings, Avatar } from "@skeletonlabs/skeleton";
+
+	export let data;
 
 	let userPictureBlobUrl: string | undefined = undefined;
 
@@ -41,14 +35,7 @@
 		</div>
 		<div class="hidden md:flex flex-row items-center h-full space-x-8 aspect-1">
 			<a href="/dashboard/profile" class="flex justify-center items-center w-full h-full p-2">
-				<Avatar
-					round={true}
-					userFullName="yo"
-					src=""
-					width="w-full h-full"
-					border="border-2 border-surface-400">
-					<CircleUserRound class="text-surface-400" />
-				</Avatar>
+				<BoringAvatar name={data.props.avatar_seed} />
 			</a>
 		</div>
 		<div class="flex absolute right-0 mr-4 md:hidden flex-row items-center h-full space-x-8">
