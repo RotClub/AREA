@@ -33,8 +33,8 @@ fun BottomNavGraph(navController: NavHostController) {
         noAnimationComposable(BottomBarScreen.Profile.route) {
             ProfileScreen()
         }
-        animatedSlideFullTopComposable("node_screen") {
-            NodeScreen(navController = navController)
+        animatedSlideFullTopComposable("node_screen/{program}") { backStackEntry ->
+            NodeScreen(navController = navController, backStackEntry = backStackEntry)
         }
         animatedSlideFullTopComposable("action_screen") {
             ActionScreen(navController = navController)

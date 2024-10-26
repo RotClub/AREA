@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.rotclub.area.composes.ActionCard
@@ -38,6 +39,7 @@ import org.rotclub.area.lib.httpapi.postProgram
 import org.rotclub.area.lib.httpapi.deleteProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
+import com.google.gson.Gson
 
 data class ColumnCardData(val title: String, val text: String)
 
@@ -78,7 +80,8 @@ fun WorkspaceScreen(navController: NavHostController) {
                 ColumnCard(
                     navController = navController,
                     title = program.name,
-                    text = "This is a program"
+                    text = "This is a program",
+                    program = program
                 )
             }
         }
@@ -89,7 +92,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                     // TODO: redirect to login
                     return@launch
                 }
-                programs.value += postProgram(token, "New Program", mutableStateOf(""))
+                programs.value += postProgram(token, "caca", mutableStateOf(""))
             }
         }
     }
@@ -98,21 +101,21 @@ fun WorkspaceScreen(navController: NavHostController) {
 data class ActionCardData(val title: String, val text: String)
 
 @Composable
-fun NodeScreen(navController: NavHostController) {
-    val actionCards = remember { mutableStateOf(listOf(
-        null
-    )) }
+fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
+    val programJson = backStackEntry.arguments?.getString("program")
+    val gson = Gson()
+    val program = gson.fromJson(programJson, ProgramResponse::class.java)
+    val actionCards = remember { mutableStateOf(listOf(null)) }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(893.dp)
             .background(FrispyTheme.Surface700)
             .padding(25.dp, 60.dp, 20.dp, 20.dp),
     ) {
-        Row (
-            modifier = Modifier
-                .fillMaxWidth(),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             BackButton(navController = navController)
@@ -121,11 +124,17 @@ fun NodeScreen(navController: NavHostController) {
                 color = FrispyTheme.Error500,
                 fontFamily = fontFamily,
                 fontSize = 20.sp,
-                modifier = Modifier
-                    .clickable { /* delete program */ }
+                modifier = Modifier.clickable { /* delete program */ }
             )
         }
-        Column (
+        Text(
+            text = program.name,
+            color = FrispyTheme.Primary50,
+            fontFamily = fontFamily,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp)
+        )
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())

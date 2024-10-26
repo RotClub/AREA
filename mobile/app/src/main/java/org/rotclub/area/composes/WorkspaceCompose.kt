@@ -43,10 +43,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.composes.skeletonLoading
+import org.rotclub.area.lib.httpapi.ProgramResponse
 
 @Composable
 fun SkeletonApiColumnCard() {
@@ -63,9 +65,12 @@ fun SkeletonApiColumnCard() {
 }
 
 @Composable
-fun ColumnCard(navController: NavController, title: String, text: String) {
+fun ColumnCard(navController: NavController, title: String, text: String, program: ProgramResponse) {
     var titleState by remember { mutableStateOf(title) }
     val textState by remember { mutableStateOf(text) }
+
+    val gson = Gson()
+    val programJson = gson.toJson(program)
 
     Column(
         modifier = Modifier
@@ -113,7 +118,7 @@ fun ColumnCard(navController: NavController, title: String, text: String) {
             }
             Column {
                 Button(
-                    onClick = { navController.navigate("node_screen") },
+                    onClick = { navController.navigate("node_screen/$programJson")},
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White,
