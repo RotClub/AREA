@@ -102,6 +102,8 @@ data class ActionCardData(val title: String, val text: String)
 
 @Composable
 fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     val programJson = backStackEntry.arguments?.getString("program")
     val gson = Gson()
     val program = gson.fromJson(programJson, ProgramResponse::class.java)
@@ -124,7 +126,16 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                 color = FrispyTheme.Error500,
                 fontFamily = fontFamily,
                 fontSize = 20.sp,
-                modifier = Modifier.clickable { /* delete program */ }
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        val token = sharedStorage.getToken()
+                        if (token == null) {
+                            return@launch
+                        }
+                        deleteProgram(token, program.id)
+                        navController.popBackStack()
+                    }
+                }
             )
         }
         Text(
