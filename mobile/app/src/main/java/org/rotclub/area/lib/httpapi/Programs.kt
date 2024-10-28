@@ -2,6 +2,7 @@ package org.rotclub.area.lib.httpapi
 
 import androidx.compose.runtime.MutableState
 import com.google.gson.JsonElement
+import retrofit2.Response
 
 data class Reaction(
     val id: Int,
@@ -89,4 +90,11 @@ suspend fun deleteProgram(token: String, id: Int): Boolean {
         println("Error occurred: $e")
         return false
     }
+}
+
+suspend fun patchProgramName(token: String, id: Int, newName: String): Response<ProgramResponse> {
+    val programRequest = ProgramRequest(name = newName)
+    val response = RetrofitClient.authApi.apiPatchProgramName(token, id, programRequest)
+    println(response)
+    return response
 }

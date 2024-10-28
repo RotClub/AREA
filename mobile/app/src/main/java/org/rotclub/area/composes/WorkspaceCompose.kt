@@ -39,16 +39,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.composes.skeletonLoading
 import org.rotclub.area.lib.httpapi.ProgramResponse
+import org.rotclub.area.lib.httpapi.patchProgramName
+import org.rotclub.area.lib.utils.SharedStorageUtils
 
 @Composable
 fun SkeletonApiColumnCard() {
@@ -68,7 +73,8 @@ fun SkeletonApiColumnCard() {
 fun ColumnCard(navController: NavController, title: String, text: String, program: ProgramResponse) {
     var titleState by remember { mutableStateOf(title) }
     val textState by remember { mutableStateOf(text) }
-
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     val gson = Gson()
     val programJson = gson.toJson(program)
 
@@ -91,8 +97,16 @@ fun ColumnCard(navController: NavController, title: String, text: String, progra
                     .fillMaxHeight()
             ) {
                 TextField(
-                    value = title,
-                    onValueChange = { newText: String -> titleState = newText },
+                    value = titleState,
+                    onValueChange = { newText: String ->
+                        titleState = newText
+                        coroutineScope.launch {
+                            val token = sharedStorage.getToken()
+                            if (token != null) {
+                                patchProgramName(token, program.id, newText)
+                            }
+                        }
+                    },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
