@@ -1,9 +1,20 @@
 <script lang="ts">
 	import { onMount, type SvelteComponent } from "svelte";
 
-	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
+	import {
+		getModalStore,
+		TreeView,
+		TreeViewItem,
+		type ModalSettings
+	} from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
-	import { getIconPathFromId, getDisplayNameFromId } from "$lib/services";
+	import {
+		getIconPathFromId,
+		getDisplayNameFromId,
+		getRequiredMetadataFromId,
+		type NodeType
+	} from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -11,12 +22,10 @@
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let services: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let services: NodeType = [];
 	let selected: string | null = null;
 
-	function onFormSubmit(): void {
+	async function onFormSubmit(): Promise<void> {
 		if ($modalStore[0].response) $modalStore[0].response(selected);
 		modalStore.close();
 	}
@@ -32,8 +41,7 @@
 	}
 
 	onMount(async () => {
-		services = await (await window.fetch("/api/action")).json();
-		console.log(services);
+		services = await (await apiRequest("GET", "/api/action")).json();
 		loaded = true;
 	});
 </script>
