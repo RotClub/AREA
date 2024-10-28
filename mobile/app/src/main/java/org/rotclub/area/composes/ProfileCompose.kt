@@ -62,7 +62,9 @@ fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostCont
 }
 
 @Composable
-fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
+fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
+    if (service == null)
+        return
     val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
     val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
     val buttonColor = if (!link) FrispyTheme.Error500 else FrispyTheme.Success500
