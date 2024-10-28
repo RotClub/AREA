@@ -19,21 +19,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun LogoutButton(modifier: Modifier = Modifier) {
+fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostController) {
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     Button(
-        onClick = { /* do something */ },
+        onClick = {
+            sharedStorage.clearToken()
+            globalNavController.navigate(GlobalRoutes.Login.route)
+        },
         modifier = modifier
             .padding(10.dp)
             .fillMaxWidth(),
