@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - dev
+      - web/dev
   workflow_dispatch:
 jobs:
   deploy:
