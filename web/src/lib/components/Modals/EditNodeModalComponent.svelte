@@ -19,7 +19,6 @@
 	}
 
 	onMount(async () => {
-		console.log($modalStore[0]);
 		if ($modalStore[0].meta["EDITING"]) {
 			for (const [key, data] of Object.entries($modalStore[0].meta["data"])) {
 				settings[key] = data as string;
