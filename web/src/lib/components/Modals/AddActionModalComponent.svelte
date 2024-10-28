@@ -14,6 +14,7 @@
 		getRequiredMetadataFromId,
 		type NodeType
 	} from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -40,7 +41,7 @@
 	}
 
 	onMount(async () => {
-		services = await (await window.fetch("/api/action")).json();
+		services = await (await apiRequest("GET", "/api/action")).json();
 		loaded = true;
 	});
 </script>

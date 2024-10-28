@@ -4,19 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import org.rotclub.area.lib.BottomBarScreen
-import org.rotclub.area.lib.utils.animatedSlideFullLeftComposable
 import org.rotclub.area.lib.utils.animatedSlideFullTopComposable
 import org.rotclub.area.lib.utils.noAnimationComposable
+import org.rotclub.area.screens.ActionScreen
 import org.rotclub.area.screens.ExploreScreen
 import org.rotclub.area.screens.HomeScreen
+import org.rotclub.area.screens.NodeScreen
 import org.rotclub.area.screens.ProfileScreen
 import org.rotclub.area.screens.WorkspaceScreen
-import org.rotclub.area.screens.ActionScreen
-import org.rotclub.area.screens.NodeScreen
 
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(navController:NavHostController, globalNavController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Home.route
@@ -31,7 +30,7 @@ fun BottomNavGraph(navController: NavHostController) {
             ExploreScreen()
         }
         noAnimationComposable(BottomBarScreen.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(globalNavController = globalNavController)
         }
         animatedSlideFullTopComposable("node_screen/{program}") { backStackEntry ->
             NodeScreen(navController = navController, backStackEntry = backStackEntry)

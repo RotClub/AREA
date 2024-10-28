@@ -4,6 +4,7 @@
 	import type { Provider } from "@prisma/client";
 	import ServiceCardPlaceholder from "$lib/components/Services/ServiceCardPlaceholder.svelte";
 	import { parse as cookieParser } from "cookie";
+	import { apiRequest } from "$lib";
 
 	let data: Array<{
 		service: Provider;
@@ -13,11 +14,7 @@
 		unlink_href: string;
 	}> = [];
 	onMount(async () => {
-		const res = await window.fetch("/api/services", {
-			headers: {
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			}
-		});
+		const res = await apiRequest("GET", "/api/services");
 		data = await res.json();
 	});
 </script>
