@@ -94,21 +94,25 @@
 						<span class="text-2xl font-semibold mb-2">Profile:</span>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Username:</span>
-							<span class="text-primary-500 text-lg">{userData.username || "Loading..."}</span>
+							<span class="text-primary-500 text-lg"
+								>{userData.username || "Loading..."}</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Email:</span>
 							<span class="text-primary-500 text-lg">
-								<a href="mailto:{userData.email}">{userData.email || "Loading..."}</a>
+								<a href="mailto:{userData.email}"
+									>{userData.email || "Loading..."}</a>
 							</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Role:</span>
-							<span class="text-primary-500 text-lg">{userData.role || "Loading..."}</span>
+							<span class="text-primary-500 text-lg"
+								>{userData.role || "Loading..."}</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Created at:</span>
-							<span class="text-primary-500 text-lg">{userData.createdAt || "Loading..."}</span>
+							<span class="text-primary-500 text-lg"
+								>{userData.createdAt || "Loading..."}</span>
 						</div>
 					</div>
 					<div class="w-20 h-20">

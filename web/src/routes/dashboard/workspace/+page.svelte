@@ -64,7 +64,7 @@
 	async function createProgram() {
 		loaded = false;
 		const response = await apiRequest("POST", "/api/programs", {
-				name: "New program"
+			name: "New program"
 		});
 
 		if (response.ok) {
