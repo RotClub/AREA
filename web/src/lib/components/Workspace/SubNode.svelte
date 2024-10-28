@@ -7,6 +7,7 @@
 		getDisplayNameFromId,
 		getIconPathFromId
 	} from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -24,18 +25,11 @@
 
 	async function deleteNode() {
 		loaded = false;
-		await window.fetch(`/api/programs/${programId}/node`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			},
-			body: JSON.stringify({
-				isReaction: true,
-				id: reactionId
-			})
+		await apiRequest("DELETE", `/api/programs/${programId}/node`, {
+			isReaction: true,
+			id: reactionId
 		});
-		programs = await (await window.fetch("/api/programs")).json();
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	}
 
@@ -58,17 +52,10 @@
 		}).then(async (r) => {
 			if (r) {
 				loaded = false;
-				const res = await window.fetch(`/api/programs/${programId}/node`, {
-					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-					},
-					body: JSON.stringify({
-						isReaction: true,
-						id: reactionId,
-						metadata: r
-					})
+				const res = await apiRequest("PATCH", `/api/programs/${programId}/node`, {
+					isReaction: true,
+					id: reactionId,
+					metadata: r
 				});
 				if (res.ok) meta = r;
 				loaded = true;

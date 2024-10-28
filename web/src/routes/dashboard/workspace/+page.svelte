@@ -8,6 +8,7 @@
 	import { onMount } from "svelte";
 	import { getRequiredMetadataFromId } from "$lib/services";
 	import { parse as cookieParser } from "cookie";
+	import { apiRequest } from "$lib";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -51,32 +52,19 @@
 		);
 		if (!newActionMeta) return;
 		loaded = false;
-		await window.fetch(`/api/programs/${inspecting_node}/node`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			},
-			body: JSON.stringify({
-				isAction: true,
-				id: newActionId,
-				metadata: newActionMeta
-			})
+		await apiRequest("PUT", `/api/programs/${inspecting_node}/node`, {
+			isAction: true,
+			id: newActionId,
+			metadata: newActionMeta
 		});
-		programs = await (await window.fetch("/api/programs")).json();
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	}
 
 	async function createProgram() {
 		loaded = false;
-		const response = await window.fetch("/api/programs", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				name: "New program"
-			})
+		const response = await apiRequest("POST", "/api/programs", {
+			name: "New program"
 		});
 
 		if (response.ok) {
@@ -89,12 +77,7 @@
 		if (inspecting_node === -1) return;
 		editing = false;
 		loaded = false;
-		const response = await window.fetch(`/api/programs/${inspecting_node}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			}
-		});
+		const response = await apiRequest("DELETE", `/api/programs/${inspecting_node}`);
 
 		if (response.ok) {
 			programs = programs.filter((program) => program.id !== inspecting_node);
@@ -109,14 +92,7 @@
 	}
 
 	onMount(async () => {
-		programs = await (
-			await window.fetch("/api/programs", {
-				headers: {
-					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-				}
-			})
-		).json();
-		console.log(programs);
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	});
 </script>

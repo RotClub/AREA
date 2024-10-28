@@ -8,6 +8,7 @@
 	import { Cog, Play, Plus, Trash2 } from "lucide-svelte";
 	import { type ModalSettings, type ModalStore, getModalStore } from "@skeletonlabs/skeleton";
 	import { parse as cookieParser } from "cookie";
+	import { apiRequest } from "$lib";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -52,37 +53,23 @@
 		);
 		if (!newActionMeta) return;
 		loaded = false;
-		await window.fetch(`/api/programs/${programId}/node`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			},
-			body: JSON.stringify({
-				isReaction: true,
-				id: actionId,
-				reactionId: newReactionId,
-				metadata: newActionMeta
-			})
+		await apiRequest("PUT", `/api/programs/${programId}/node`, {
+			isReaction: true,
+			id: actionId,
+			reactionId: newReactionId,
+			metadata: newActionMeta
 		});
-		programs = await (await window.fetch("/api/programs")).json();
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	}
 
 	async function deleteNode() {
 		loaded = false;
-		await window.fetch(`/api/programs/${programId}/node`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-			},
-			body: JSON.stringify({
-				isAction: true,
-				id: actionId
-			})
+		await apiRequest("DELETE", `/api/programs/${programId}/node`, {
+			isAction: true,
+			id: actionId
 		});
-		programs = await (await window.fetch("/api/programs")).json();
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	}
 
@@ -105,17 +92,10 @@
 		}).then(async (r) => {
 			if (r) {
 				loaded = false;
-				const res = await window.fetch(`/api/programs/${programId}/node`, {
-					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-					},
-					body: JSON.stringify({
-						isAction: true,
-						id: actionId,
-						metadata: r
-					})
+				const res = await apiRequest("PATCH", `/api/programs/${programId}/node`, {
+					isAction: true,
+					id: actionId,
+					metadata: r
 				});
 				if (res.ok) meta = r;
 				loaded = true;
