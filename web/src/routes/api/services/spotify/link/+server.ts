@@ -3,7 +3,8 @@ import queryString from "query-string";
 
 export const GET = async (event) => {
 	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
-	const scope = "user-read-private user-read-email user-read-currently-playing user-modify-playback-state";
+	const scope =
+		"user-read-private user-read-email user-read-currently-playing user-modify-playback-state";
 
 	if (!process.env.SPOTIFY_CLIENT_ID) {
 		return new Response(JSON.stringify({ error: "No Spotify client ID provided" }), {

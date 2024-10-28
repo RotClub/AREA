@@ -15,13 +15,23 @@ export type NodeType = Array<{
 		id: string;
 		displayName: string;
 		meta: Record<string, ActionMetaDataType>;
-		trigger: (userId: number, service_meta: any, meta: Record<string, string | number | boolean | Date>) => Promise<boolean>;
+		trigger: (
+			userId: number,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			service_meta: any,
+			meta: Record<string, string | number | boolean | Date>
+		) => Promise<boolean>;
 	}>;
 	reactions: Array<{
 		id: string;
 		displayName: string;
 		meta: Record<string, ActionMetaDataType>;
-		trigger: (userId: number, service_meta: any, meta: Record<string, string | number | boolean | Date>) => Promise<boolean>;
+		trigger: (
+			userId: number,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			service_meta: any,
+			meta: Record<string, string | number | boolean | Date>
+		) => Promise<boolean>;
 	}>;
 }>;
 
