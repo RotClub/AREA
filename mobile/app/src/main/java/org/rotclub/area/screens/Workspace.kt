@@ -152,8 +152,8 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            actionCards.value.forEach {
-                ActionCard(navController = navController)
+            program.actions.forEach { action ->
+                ActionCard(navController = navController, action = action)
             }
             PlusButton {
                 navController.navigate("action_screen")

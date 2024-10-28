@@ -128,7 +128,7 @@ fun HomeCircleChart() {
     }
 
     val linkedServicesCount = services.value.count { it.link }
-    val value = 100f / 7
+    val value = 100f / 6
     val multiplier : Int = linkedServicesCount
 
     Column (
@@ -178,7 +178,7 @@ fun HomeCircleChart() {
             value = value * multiplier,
             size = 300.dp,
             strokeWidth = 16.dp,
-            "${linkedServicesCount}/7"
+            "${linkedServicesCount}/6"
         )
     }
 }

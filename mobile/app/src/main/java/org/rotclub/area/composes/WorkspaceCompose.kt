@@ -54,6 +54,7 @@ import org.rotclub.area.composes.skeletonLoading
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.patchProgramName
 import org.rotclub.area.lib.utils.SharedStorageUtils
+import org.rotclub.area.lib.httpapi.Action
 
 @Composable
 fun SkeletonApiColumnCard() {
@@ -192,7 +193,7 @@ fun BackButton(navController: NavController) {
 }
 
 @Composable
-fun ActionCard(navController: NavController) {
+fun ActionCard(navController: NavController, action: Action) {
     var showDialogSet by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
 
@@ -212,7 +213,7 @@ fun ActionCard(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "On: action",
+                text = "On: ${action.actionId}",
                 color = Color.White,
                 fontSize = 20.sp,
                 fontFamily = fontFamily,
@@ -224,7 +225,7 @@ fun ActionCard(navController: NavController) {
             {
                 Icon(
                     painter = painterResource(id = R.drawable.cog),
-                    contentDescription = "Delete Action",
+                    contentDescription = "Settings Action",
                     tint = Color.White,
                     modifier = Modifier
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
