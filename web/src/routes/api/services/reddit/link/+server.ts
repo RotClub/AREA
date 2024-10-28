@@ -1,5 +1,4 @@
 import { adaptUrl } from "$lib/api";
-import { redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 
 export const GET = async (event) => {
@@ -12,17 +11,16 @@ export const GET = async (event) => {
 			status: 400
 		});
 	}
-	const authorizationUrl = (
+	const authorizationUrl =
 		"https://www.reddit.com/api/v1/authorize?" +
-			queryString.stringify({
-				client_id: process.env.REDDIT_CLIENT_ID,
-				response_type: "code",
-				state: token,
-				redirect_uri: `${adaptUrl()}/api/services/reddit/callback`,
-				duration: "permanent",
-				scope: "identity edit history modposts modwiki privatemessages read submit subscribe vote wikiedit wikiread"
-			})
-	);
+		queryString.stringify({
+			client_id: process.env.REDDIT_CLIENT_ID,
+			response_type: "code",
+			state: token,
+			redirect_uri: `${adaptUrl()}/api/services/reddit/callback`,
+			duration: "permanent",
+			scope: "identity edit history modposts modwiki privatemessages read submit subscribe vote wikiedit wikiread"
+		});
 	return new Response(JSON.stringify({ url: authorizationUrl }), {
 		headers: {
 			"Content-Type": "application/json"

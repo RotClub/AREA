@@ -32,7 +32,7 @@ export const GET = async (event) => {
 	if (!res_discord.ok) {
 		error(400, data);
 	}
-	const res = await addProvider("discord", data, token)
+	const res = await addProvider("discord", data, token);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

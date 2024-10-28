@@ -3,7 +3,8 @@ import queryString from "query-string";
 
 export const GET = async (event) => {
 	const steamOpenIdUrl = "https://steamcommunity.com/openid/login";
-	const returnUrl = `${adaptUrl()}/api/services/steam/callback?` +
+	const returnUrl =
+		`${adaptUrl()}/api/services/steam/callback?` +
 		queryString.stringify({
 			token: event.request.headers.get("Authorization")?.replace("Bearer ", "")
 		});

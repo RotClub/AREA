@@ -1,7 +1,6 @@
 import { adaptUrl } from "$lib/api";
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
-import { config } from "dotenv";
 import { addProvider } from "$lib/provider";
 
 export const GET = async (event) => {
@@ -40,7 +39,7 @@ export const GET = async (event) => {
 	if (!battle_res.ok) {
 		error(400, data.error);
 	}
-	const res = await addProvider("battlenet", data, token)
+	const res = await addProvider("battlenet", data, token);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

@@ -1,9 +1,9 @@
 import { adaptUrl } from "$lib/api";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import { removeProvider } from "$lib/provider";
 
 export const GET = async (event) => {
-	const res = await removeProvider("battlenet", event.request)
+	const res = await removeProvider("battlenet", event.request);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

@@ -17,8 +17,8 @@ export const GET = async (event) => {
 	const steam_id = openIdParams["openid.claimed_id"].split("/").pop();
 	const data = {
 		steam_id: steam_id
-	}
-	const res = await addProvider("steam", data, token)
+	};
+	const res = await addProvider("steam", data, token);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

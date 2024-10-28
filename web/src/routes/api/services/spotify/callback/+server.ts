@@ -39,7 +39,7 @@ export const GET = async (event) => {
 	if (!res_spotify.ok) {
 		error(400, data.error);
 	}
-	const res = await addProvider("spotify", data, token)
+	const res = await addProvider("spotify", data, token);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

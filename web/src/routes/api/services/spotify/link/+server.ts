@@ -1,5 +1,4 @@
 import { adaptUrl } from "$lib/api";
-import { redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 
 export const GET = async (event) => {
@@ -14,17 +13,16 @@ export const GET = async (event) => {
 			status: 400
 		});
 	}
-	const authorizationUrl = (
+	const authorizationUrl =
 		`https://accounts.spotify.com/authorize?` +
-			queryString.stringify({
-				response_type: "code",
-				client_id: process.env.SPOTIFY_CLIENT_ID,
-				scope: scope,
-				redirect_uri: `${adaptUrl()}/api/services/spotify/callback`,
-				state: token,
-				show_dialog: true
-			})
-	);
+		queryString.stringify({
+			response_type: "code",
+			client_id: process.env.SPOTIFY_CLIENT_ID,
+			scope: scope,
+			redirect_uri: `${adaptUrl()}/api/services/spotify/callback`,
+			state: token,
+			show_dialog: true
+		});
 	return new Response(JSON.stringify({ url: authorizationUrl }), {
 		headers: {
 			"Content-Type": "application/json"

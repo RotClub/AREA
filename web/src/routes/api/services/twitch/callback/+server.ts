@@ -35,7 +35,7 @@ export const GET = async (event) => {
 	if (!res_twitch.ok) {
 		error(400, data);
 	}
-	const res = await addProvider("twitch", data, token)
+	const res = await addProvider("twitch", data, token);
 	if (!res.ok) {
 		const ans = await res.json();
 		error(400, ans.error);

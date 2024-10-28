@@ -19,7 +19,7 @@ export const verifyJWTAuth = async (token: string) => {
 		error(401, "Not logged in");
 	}
 	try {
-		jwt.verify(token, process.env.JWT_SECRET || "")
+		jwt.verify(token, process.env.JWT_SECRET || "");
 	} catch (err) {
 		console.log("Error during token validation: " + err);
 		return false;

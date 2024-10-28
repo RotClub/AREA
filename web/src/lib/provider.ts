@@ -1,7 +1,11 @@
 import { PrismaClient, Provider, UserRole } from "@prisma/client";
 import { checkAccess } from "$lib/api";
 
-export async function addProvider(provider: string, data: Record<string, unknown>, request: Request | string): Promise<Response> {
+export async function addProvider(
+	provider: string,
+	data: Record<string, unknown>,
+	request: Request | string
+): Promise<Response> {
 	const providerList = Object.values(Provider).map((p) => String(p || "").toLowerCase());
 	if (!providerList.includes(provider || "")) {
 		return new Response(JSON.stringify({ error: "Invalid provider" }), {
@@ -15,11 +19,11 @@ export async function addProvider(provider: string, data: Record<string, unknown
 		(p) => String(p).toLowerCase() === provider || ""
 	);
 	const client = new PrismaClient();
-	let access: { valid: boolean, err: null | string };
+	let access: { valid: boolean; err: null | string };
 	let token: string;
 	if (typeof request === "string") {
 		access = await checkAccess(client, { token: request }, UserRole.USER, false);
-		token = request
+		token = request;
 	} else {
 		access = await checkAccess(client, request, UserRole.USER);
 		token = request.headers.get("Authorization")?.replace("Bearer ", "") || "";
@@ -89,7 +93,10 @@ export async function addProvider(provider: string, data: Record<string, unknown
 	});
 }
 
-export async function removeProvider(provider: string, request: Request | string): Promise<Response> {
+export async function removeProvider(
+	provider: string,
+	request: Request | string
+): Promise<Response> {
 	const providerList = Object.values(Provider).map((p) => String(p).toLowerCase());
 	if (!providerList.includes(provider || "")) {
 		return new Response(JSON.stringify({ error: "Invalid provider" }), {
@@ -103,11 +110,11 @@ export async function removeProvider(provider: string, request: Request | string
 		(p) => String(p).toLowerCase() === provider || ""
 	);
 	const client = new PrismaClient();
-	let access: { valid: boolean, err: null | string };
+	let access: { valid: boolean; err: null | string };
 	let token: string;
 	if (typeof request === "string") {
 		access = await checkAccess(client, { token: request }, UserRole.USER, false);
-		token = request
+		token = request;
 	} else {
 		access = await checkAccess(client, request, UserRole.USER);
 		token = request.headers.get("Authorization")?.replace("Bearer ", "") || "";
