@@ -28,6 +28,11 @@ data class ProgramRequest(
     val name: String
 )
 
+data class ActionIdRequest(
+    val actionId: Int,
+    val isAction: Boolean = true
+)
+
 suspend fun getPrograms(token: String): List<ProgramResponse> {
     try {
         val response = RetrofitClient.authApi.apiGetPrograms("Bearer $token")
@@ -97,4 +102,29 @@ suspend fun patchProgramName(token: String, id: Int, newName: String): Response<
     val response = RetrofitClient.authApi.apiPatchProgramName(token, id, programRequest)
     println(response)
     return response
+}
+
+suspend fun deleteAction(token: String, programId: Int, actionId: Int): Boolean {
+    if (actionId <= 0) {
+        println("Invalid action ID")
+        return false
+    }
+
+    return try {
+        val response = RetrofitClient.authApi.apiDeleteAction(
+            "Bearer $token",
+            programId,
+            ActionIdRequest(isAction = true, actionId = actionId)
+        )
+        println(response)
+        response.code() == 200
+    } catch (e: Exception) {
+        println("Error occurred: $e")
+        false
+    }
+}
+
+fun deleteActionFromProgram(program: ProgramResponse, actionId: String): ProgramResponse {
+    val updatedActions = program.actions.filterNot { it.actionId == actionId }
+    return program.copy(actions = updatedActions)
 }

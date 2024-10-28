@@ -14,9 +14,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +42,8 @@ import org.rotclub.area.lib.httpapi.deleteProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 import com.google.gson.Gson
+import org.rotclub.area.lib.httpapi.deleteAction
+import org.rotclub.area.lib.httpapi.deleteActionFromProgram
 
 data class ColumnCardData(val title: String, val text: String)
 
@@ -106,8 +110,7 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
     val sharedStorage = SharedStorageUtils(LocalContext.current)
     val programJson = backStackEntry.arguments?.getString("program")
     val gson = Gson()
-    val program = gson.fromJson(programJson, ProgramResponse::class.java)
-    val actionCards = remember { mutableStateOf(listOf(null)) }
+    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
 
     Column(
         modifier = Modifier
@@ -153,7 +156,23 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             program.actions.forEach { action ->
-                ActionCard(navController = navController, action = action)
+                Text(
+                    text = action.toString(),
+                    color = FrispyTheme.Primary50,
+                    fontFamily = fontFamily,
+                    fontSize = 16.sp,
+                )
+                ActionCard(navController = navController, action = action, onDelete = {
+                    coroutineScope.launch {
+                        val token = sharedStorage.getToken()
+                        if (token != null) {
+                            val success = deleteAction(token, program.id, action.id)
+                            if (success) {
+                                program = deleteActionFromProgram(program, action.actionId)
+                            }
+                        }
+                    }
+                })
             }
             PlusButton {
                 navController.navigate("action_screen")

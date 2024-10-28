@@ -11,6 +11,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.HTTP
 
 object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2:8081/"
@@ -42,6 +43,9 @@ interface Api {
     suspend fun apiDeleteProgram(@Header("Authorization") token: String, @Path("id") id: Int): Response<Unit>
     @PATCH("api/programs/{id}")
     suspend fun apiPatchProgramName(@Header("Authorization") token: String, @Path("id") id: Int, @Body programRequest: ProgramRequest): Response<ProgramResponse>
+
+    @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
+    suspend fun apiDeleteAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ActionIdRequest): Response<Unit>
 
     @GET("api/user")
     suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>

@@ -193,7 +193,7 @@ fun BackButton(navController: NavController) {
 }
 
 @Composable
-fun ActionCard(navController: NavController, action: Action) {
+fun ActionCard(navController: NavController, action: Action, onDelete: () -> Unit) {
     var showDialogSet by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
 
@@ -241,7 +241,7 @@ fun ActionCard(navController: NavController, action: Action) {
                         .padding(0.dp, 10.dp, 16.dp, 0.dp)
                         .size(25.dp)
                         //open dialog
-                        .clickable { /*del action*/ }
+                        .clickable { onDelete() }
                 )
                 Icon(
                     painter = if (!started) {
