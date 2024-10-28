@@ -26,6 +26,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
@@ -40,7 +42,7 @@ import org.rotclub.area.lib.httpapi.getUser
 import org.rotclub.area.ui.theme.AreaTheme
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(globalNavController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val sharedStorage = SharedStorageUtils(LocalContext.current)
 
@@ -122,7 +124,8 @@ fun ProfileScreen() {
                 }
             }
             LogoutButton(
-                Modifier.padding(top = 20.dp)
+                Modifier.padding(top = 20.dp),
+                globalNavController = globalNavController,
             )
         }
     }
@@ -132,6 +135,7 @@ fun ProfileScreen() {
 @Composable
 fun ProfileScreenPreview() {
     AreaTheme {
-        ProfileScreen()
+        val navController = rememberNavController()
+        ProfileScreen(navController)
     }
 }

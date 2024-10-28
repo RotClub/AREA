@@ -12,4 +12,8 @@ class SharedStorageUtils(localContext: Context) {
         return sharedPreferences.getString("token", "")
     }
 
+    fun clearToken() {
+        sharedPreferences.edit().remove("token").apply()
+    }
+
 }
