@@ -1,7 +1,10 @@
 package org.rotclub.area.composes
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,18 +18,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
+import org.rotclub.area.lib.utils.SharedStorageUtils
+import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun LogoutButton() {
+fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostController) {
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     Button(
-        onClick = { /* do something */ },
-        modifier = Modifier
+        onClick = {
+            sharedStorage.clearToken()
+            globalNavController.navigate(GlobalRoutes.Login.route)
+        },
+        modifier = modifier
             .padding(10.dp)
             .fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
@@ -48,36 +63,82 @@ fun LogoutButton() {
 
 @Composable
 fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
+    val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
+    val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
+    val buttonColor = if (!link) FrispyTheme.Error500 else FrispyTheme.Success500
     Row (
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
+            .border(1.dp, FrispyTheme.Surface400, RoundedCornerShape(10.dp))
             .background(FrispyTheme.Surface700)
             .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-            fontWeight = FontWeight.Bold,
-        )
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (service.icon != 0) {
+                Image(
+                    painter = painterResource(id = service.icon),
+                    contentDescription = "Service Icon",
+                    modifier = Modifier
+                        .width(50.dp)
+                        .padding(end = 15.dp)
+                )
+            }
+            Text(
+                text = title,
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                fontWeight = FontWeight.Bold,
+            )
+        }
         Button(
             onClick = { /* do something */ },
             shape = RoundedCornerShape(roundedValue),
             colors = ButtonDefaults.buttonColors(
                 contentColor = FrispyTheme.Surface500,
-                containerColor = FrispyTheme.Error500,
+                containerColor = buttonColor,
                 disabledContentColor = FrispyTheme.Surface200,
                 disabledContainerColor = FrispyTheme.Surface400
             ),
             modifier = Modifier
-                .width(140.dp)
+                .width(90.dp)
         ) {
-            Text("Disconnected")
+            Image(
+                painter = painterResource(id = linkIcon),
+                contentDescription = "Link Icon",
+                colorFilter = ColorFilter.tint(linkIconColor),
+                modifier = Modifier
+                    .width(30.dp)
+                    .padding(end = 5.dp)
+            )
         }
+    }
+}
+
+@Composable
+fun SkeletonProfileApiCards() {
+    Box (
+        modifier = Modifier
+            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .border(1.dp, FrispyTheme.Surface400, RoundedCornerShape(10.dp))
+            .background(FrispyTheme.Surface700)
+            .skeletonLoading()
+            .padding(35.dp),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileApiCardsPreview() {
+    AreaTheme {
+        ProfileApiCards(ServiceType.SPOTIFY, false, "Spotify", "https://spotify.com", "https://spotify.com")
     }
 }

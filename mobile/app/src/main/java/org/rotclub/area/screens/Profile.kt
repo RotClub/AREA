@@ -18,22 +18,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.composes.LogoutButton
 import org.rotclub.area.composes.ProfileApiCards
-import org.rotclub.area.lib.SharedStorageUtils
+import org.rotclub.area.composes.SkeletonProfileApiCards
+import org.rotclub.area.composes.skeletonLoading
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.lib.httpapi.Service
 import org.rotclub.area.lib.httpapi.getServices
+import org.rotclub.area.lib.httpapi.getUser
+import org.rotclub.area.ui.theme.AreaTheme
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(globalNavController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val sharedStorage = SharedStorageUtils(LocalContext.current)
 
@@ -49,6 +58,11 @@ fun ProfileScreen() {
                 // TODO: redirect to login
                 return@launch
             }
+            val user = getUser(token)
+            if (user != null) {
+                username = user.username
+                email = user.email
+            }
             getServices(services, token)
         }
     }
@@ -56,11 +70,12 @@ fun ProfileScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(FrispyTheme.Surface700),
     ) {
         Column (
             modifier = Modifier
-                .padding(25.dp, 100.dp, 25.dp, 150.dp)
+                .padding(15.dp, 50.dp, 15.dp, 150.dp)
                 .fillMaxSize()
                 .clip(RoundedCornerShape(20.dp))
                 .background(FrispyTheme.Surface500)
@@ -69,33 +84,58 @@ fun ProfileScreen() {
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .clip(RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
+                    .skeletonLoading((username == "" || email == "")),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Pseudo: $username",
+                    text = username,
                     color = FrispyTheme.Primary50,
                     fontFamily = fontFamily,
-                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                    fontWeight = FontWeight.Bold
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = "Email: $email",
+                    text = email,
                     color = FrispyTheme.Primary50,
                     fontFamily = fontFamily,
                     fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                     fontWeight = FontWeight.Bold
                 )
-                HorizontalDivider(
-                    modifier = Modifier.padding(0.dp, 20.dp),
-                    color = FrispyTheme.Surface700,
-                    thickness = 2.dp
-                )
+            }
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(vertical = 15.dp),
+                color = FrispyTheme.Surface700,
+                thickness = 2.dp
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                if (services.value.isEmpty()) {
+                    for (i in 1..7) {
+                        SkeletonProfileApiCards()
+                    }
+                }
                 for (service in services.value) {
                     ProfileApiCards(service.service, service.link, service.title, service.link_href, service.unlink_href)
                 }
             }
-            LogoutButton()
+            LogoutButton(
+                Modifier.padding(top = 20.dp),
+                globalNavController = globalNavController,
+            )
         }
+    }
+}
+
+@Preview()
+@Composable
+fun ProfileScreenPreview() {
+    AreaTheme {
+        val navController = rememberNavController()
+        ProfileScreen(navController)
     }
 }
