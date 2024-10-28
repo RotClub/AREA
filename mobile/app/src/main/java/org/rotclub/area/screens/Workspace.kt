@@ -265,7 +265,7 @@ fun ReactionScreen(navController: NavHostController) {
                 fontSize = 16.sp,
             )
             for (i in 0..5) {
-                ListView("Action $i")
+                ListView("Reaction $i")
             }
         }
         Column (
