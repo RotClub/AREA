@@ -1,12 +1,14 @@
 import { checkAccess } from "$lib/api.js";
 import { PrismaClient, UserRole } from "@prisma/client";
 
-export const DELETE = async ({ cookies, params }) => {
+export const DELETE = async ({ request, params }) => {
 	const client = new PrismaClient();
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token || ""
 		},
 		select: {
 			Program: true
@@ -49,13 +51,15 @@ export const DELETE = async ({ cookies, params }) => {
 	});
 };
 
-export const PATCH = async ({ cookies, request, params }) => {
+export const PATCH = async ({ request, params }) => {
 	const client = new PrismaClient();
 	const body = await request.json();
 
+	const bearer = request.headers.get("Authorization");
+	const token = bearer ? bearer.replace("Bearer ", "") : "";
 	const user = await client.user.findUnique({
 		where: {
-			token: cookies.get("token")
+			token: token || ""
 		},
 		select: {
 			Program: true
