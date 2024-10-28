@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	import { BoringAvatar } from "$lib/components/BoringAvatar";
 	import { parse as cookieParser } from "cookie";
+	import { apiRequest } from "$lib";
 
 	export let data;
 
@@ -15,25 +16,13 @@
 	let userData: any = {};
 
 	onMount(async () => {
-		connectedServices = await (
-			await window.fetch("/api/services", {
-				headers: {
-					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-				}
-			})
-		).json();
+		connectedServices = await (await apiRequest("GET", "/api/services")).json();
 		connectAmount =
 			connectedServices.length -
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			connectedServices.filter((service: any) => !service.link).length;
 
-		userData = await (
-			await window.fetch("/api/user", {
-				headers: {
-					Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-				}
-			})
-		).json();
+		userData = await (await apiRequest("GET", "/api/user")).json();
 	});
 
 	function getProgress(amount: number | undefined) {
@@ -105,21 +94,21 @@
 						<span class="text-2xl font-semibold mb-2">Profile:</span>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Username:</span>
-							<span class="text-primary-500 text-lg">{userData.username}</span>
+							<span class="text-primary-500 text-lg">{userData.username || "Loading..."}</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Email:</span>
 							<span class="text-primary-500 text-lg">
-								<a href="mailto:{userData.email}">{userData.email}</a>
+								<a href="mailto:{userData.email}">{userData.email || "Loading..."}</a>
 							</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Role:</span>
-							<span class="text-primary-500 text-lg">{userData.role}</span>
+							<span class="text-primary-500 text-lg">{userData.role || "Loading..."}</span>
 						</div>
 						<div class="flex flex-row items-end gap-2">
 							<span class="font-semibold text-xl">Created at:</span>
-							<span class="text-primary-500 text-lg">{userData.createdAt}</span>
+							<span class="text-primary-500 text-lg">{userData.createdAt || "Loading..."}</span>
 						</div>
 					</div>
 					<div class="w-20 h-20">

@@ -4,6 +4,7 @@
 	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
 	import { getIconPathFromId, getDisplayNameFromId, type NodeType } from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -30,7 +31,7 @@
 	}
 
 	onMount(async () => {
-		services = await (await window.fetch("/api/reaction")).json();
+		services = await (await apiRequest("GET", "/api/reaction")).json();
 		console.log(services);
 		loaded = true;
 	});
