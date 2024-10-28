@@ -35,12 +35,12 @@ RUN echo "sdk.dir=${ANDROID_SDK_ROOT}" > local.properties
 
 # Build the project with gradle wrapper
 RUN chmod +x ./gradlew
-RUN ./gradlew :app:assembleRelease
+RUN ./gradlew :app:assembleDebug
 
 FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=kotlin /build/app/build/outputs/apk/release/app-release-unsigned.apk /app/app.apk
+COPY --from=kotlin /build/app/build/outputs/apk/debug/app-debug.apk /app/app.apk
 
 CMD ls -lR /app
