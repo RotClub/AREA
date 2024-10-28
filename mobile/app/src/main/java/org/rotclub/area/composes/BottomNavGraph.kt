@@ -11,6 +11,7 @@ import org.rotclub.area.screens.ExploreScreen
 import org.rotclub.area.screens.HomeScreen
 import org.rotclub.area.screens.NodeScreen
 import org.rotclub.area.screens.ProfileScreen
+import org.rotclub.area.screens.ReactionScreen
 import org.rotclub.area.screens.WorkspaceScreen
 
 
@@ -26,9 +27,9 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         noAnimationComposable(BottomBarScreen.Workspace.route) {
             WorkspaceScreen(navController = navController)
         }
-        noAnimationComposable(BottomBarScreen.Explore.route,) {
+        /*noAnimationComposable(BottomBarScreen.Explore.route,) {
             ExploreScreen()
-        }
+        }*/
         noAnimationComposable(BottomBarScreen.Profile.route) {
             ProfileScreen(globalNavController = globalNavController)
         }
@@ -37,6 +38,9 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         }
         animatedSlideFullTopComposable("action_screen") {
             ActionScreen(navController = navController)
+        }
+        animatedSlideFullTopComposable("reaction_screen") {
+            ReactionScreen(navController = navController)
         }
     }
 }

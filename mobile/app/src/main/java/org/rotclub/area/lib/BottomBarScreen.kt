@@ -17,11 +17,11 @@ sealed class BottomBarScreen(
         title = "Workspace",
         iconResId = R.drawable.layers
     )
-    data object Explore : BottomBarScreen(
+    /*data object Explore : BottomBarScreen(
         route = "explore",
         title = "Explore",
         iconResId = R.drawable.telescope
-    )
+    )*/
     data object Profile : BottomBarScreen(
         route = "profile",
         title = "Profile",

@@ -89,7 +89,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                 )
             }
         }
-        PlusButton {
+        PlusButton (onClick = {
             coroutineScope.launch {
                 val token = sharedStorage.getToken()
                 if (token == null) {
@@ -98,7 +98,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                 }
                 programs.value += postProgram(token, "caca", mutableStateOf(""))
             }
-        }
+        }, text = "")
     }
 }
 
@@ -145,8 +145,8 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             text = program.name,
             color = FrispyTheme.Primary50,
             fontFamily = fontFamily,
-            fontSize = 24.sp,
-            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp)
+            fontSize = 26.sp,
+            modifier = Modifier.padding(10.dp, 20.dp, 0.dp, 5.dp)
         )
         Column(
             modifier = Modifier
@@ -156,12 +156,6 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             program.actions.forEach { action ->
-                Text(
-                    text = action.toString(),
-                    color = FrispyTheme.Primary50,
-                    fontFamily = fontFamily,
-                    fontSize = 16.sp,
-                )
                 ActionCard(navController = navController, action = action, onDelete = {
                     coroutineScope.launch {
                         val token = sharedStorage.getToken()
@@ -174,9 +168,9 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                     }
                 })
             }
-            PlusButton {
+            PlusButton (onClick = {
                 navController.navigate("action_screen")
-            }
+            }, text = "Add action")
         }
     }
 }
@@ -207,6 +201,59 @@ fun ActionScreen(navController: NavHostController) {
             Text(
                 modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
                 text = "Select here an action to be used to trigger events, can be configured later.",
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = 16.sp,
+            )
+            Text(
+                text = "If you don't see anything here, that means you have no linked services.",
+                color = FrispyTheme.Primary50,
+                fontFamily = fontFamily,
+                fontSize = 16.sp,
+            )
+            for (i in 0..5) {
+                ListView("Action $i")
+            }
+        }
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 20.dp, 0.dp, 0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TerminateButton(onClick = {
+                navController.navigate("node_screen")
+            })
+        }
+    }
+}
+
+@Composable
+fun ReactionScreen(navController: NavHostController) {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(893.dp)
+            .verticalScroll(rememberScrollState())
+            .background(FrispyTheme.Surface700)
+            .padding(25.dp, 60.dp, 20.dp, 20.dp),
+    ) {
+        BackButton(navController = navController)
+        Text(
+            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp),
+            text = "Reaction",
+            color = FrispyTheme.Primary50,
+            fontFamily = fontFamily,
+            fontSize = 24.sp,
+        )
+        Column (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
+                text = "Select here a reaction, they represent events to be triggered, can be configured later.",
                 color = FrispyTheme.Primary50,
                 fontFamily = fontFamily,
                 fontSize = 16.sp,
