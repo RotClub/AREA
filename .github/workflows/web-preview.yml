@@ -10,8 +10,6 @@ on:
   push:
     branches:
       - dev
-      - web/dev
-      - ci-cd/*
 
 jobs:
   deploy:
