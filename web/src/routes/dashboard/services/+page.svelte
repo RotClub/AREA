@@ -1,24 +1,24 @@
 <script lang="ts">
 	import ServiceCard from "$lib/components/Services/ServiceCard.svelte";
 	import { onMount } from "svelte";
-	import type { Provider } from "@prisma/client";
 	import ServiceCardPlaceholder from "$lib/components/Services/ServiceCardPlaceholder.svelte";
+	import { apiRequest } from "$lib";
 
 	let data: Array<{
-		service: Provider;
+		service: string;
 		link: boolean;
 		title: string;
 		link_href: string;
 		unlink_href: string;
 	}> = [];
 	onMount(async () => {
-		const res = await window.fetch("/api/services");
+		const res = await apiRequest("GET", "/api/services");
 		data = await res.json();
 	});
 </script>
 
 <div class="w-full h-full flex flex-col items-center">
-	<div class="container w-full h-full flex flex-col items-center py-6 overflow-y-scroll gap-6">
+	<div class="container w-full h-full flex flex-col items-center p-6 overflow-y-scroll gap-6">
 		{#if data.length === 0}
 			<ServiceCardPlaceholder />
 			<ServiceCardPlaceholder />

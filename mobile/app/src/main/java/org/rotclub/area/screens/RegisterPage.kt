@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import org.rotclub.area.lib.GlobalRoutes
 import org.rotclub.area.composes.CardColumn
 import org.rotclub.area.composes.FrispyInput
+import org.rotclub.area.composes.GlobalRoutes
 import org.rotclub.area.composes.InputType
 import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.lib.fontFamily

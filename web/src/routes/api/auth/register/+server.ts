@@ -23,12 +23,19 @@ export const POST = async ({ request }) => {
 			});
 		}
 		const password = encryptPWD(body.password);
-		const token = await createJWTToken({
+		const token = createJWTToken({
 			email: body.email,
 			password: password,
 			username: body.username,
 			role: body.role
-		}).then((token: string) => token);
+		});
+
+		if (!token) {
+			return new Response(JSON.stringify({ error: "Failed to create token" }), {
+				status: 500,
+				headers: { "Content-Type": "application/json" }
+			});
+		}
 
 		const user = await client.user.create({
 			data: {
@@ -36,7 +43,7 @@ export const POST = async ({ request }) => {
 				hashedPassword: password,
 				role: body.role,
 				username: body.username,
-				token: token
+				token: token as string
 			}
 		});
 		const res = new Response(JSON.stringify(user), {

@@ -3,7 +3,8 @@
 
 	import { getModalStore, TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
-	import { getIconPathFromId, getDisplayNameFromId } from "$lib/services";
+	import { getIconPathFromId, getDisplayNameFromId, type NodeType } from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	export let parent: SvelteComponent;
 	parent = parent || null;
@@ -11,9 +12,7 @@
 	const modalStore = getModalStore();
 
 	let loaded: boolean = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let services: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let services: NodeType = [];
 	let selected: string | null = null;
 
 	function onFormSubmit(): void {
@@ -32,7 +31,7 @@
 	}
 
 	onMount(async () => {
-		services = await (await window.fetch("/api/reaction")).json();
+		services = await (await apiRequest("GET", "/api/reaction")).json();
 		console.log(services);
 		loaded = true;
 	});

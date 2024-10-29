@@ -29,4 +29,7 @@ interface Api {
 
     @GET("api/services")
     suspend fun getServices(@Header("Authorization") token: String): Response<List<Service>>
+
+    @GET("api/user")
+    suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>
 }

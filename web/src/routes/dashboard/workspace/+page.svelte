@@ -6,8 +6,9 @@
 	import { X, Info, Plus } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
+	import { getRequiredMetadataFromId } from "$lib/services";
 	import { parse as cookieParser } from "cookie";
-	import { Actions } from "$lib/services";
+	import { apiRequest } from "$lib";
 
 	let modalStore: ModalStore = getModalStore();
 
@@ -23,48 +24,47 @@
 	}> = [];
 
 	async function openAddActionModal() {
-		new Promise<boolean>((resolve) => {
+		const newActionId: string = await new Promise<string>((resolve) => {
 			const modal: ModalSettings = {
 				type: "component",
 				component: "addActionModalComponent",
-				response: (r: boolean) => {
+				response: (r: string) => {
 					resolve(r);
 				}
 			};
 
 			modalStore.trigger(modal);
-		}).then(async (r) => {
-			if (r) {
-				loaded = false;
-				await window.fetch(`/api/programs/${inspecting_node}/node`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
-					},
-					body: JSON.stringify({
-						isAction: true,
-						id: r,
-						metadata: {}
-					})
-				});
-				programs = await (await window.fetch("/api/programs")).json();
-				console.log(programs);
-				loaded = true;
-			}
 		});
+		if (!newActionId) return;
+		const newActionMeta: Record<string, string> = await new Promise<Record<string, string>>(
+			(resolve) => {
+				const modal: ModalSettings = {
+					type: "component",
+					component: "editNodeModalComponent",
+					meta: getRequiredMetadataFromId(newActionId),
+					response: (r: Record<string, string>) => {
+						resolve(r);
+					}
+				};
+
+				modalStore.trigger(modal);
+			}
+		);
+		if (!newActionMeta) return;
+		loaded = false;
+		await apiRequest("PUT", `/api/programs/${inspecting_node}/node`, {
+			isAction: true,
+			id: newActionId,
+			metadata: newActionMeta
+		});
+		programs = await (await apiRequest("GET", "/api/programs")).json();
+		loaded = true;
 	}
 
 	async function createProgram() {
 		loaded = false;
-		const response = await window.fetch("/api/programs", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				name: "New program"
-			})
+		const response = await apiRequest("POST", "/api/programs", {
+			name: "New program"
 		});
 
 		if (response.ok) {
@@ -77,9 +77,7 @@
 		if (inspecting_node === -1) return;
 		editing = false;
 		loaded = false;
-		const response = await window.fetch(`/api/programs/${inspecting_node}`, {
-			method: "DELETE"
-		});
+		const response = await apiRequest("DELETE", `/api/programs/${inspecting_node}`);
 
 		if (response.ok) {
 			programs = programs.filter((program) => program.id !== inspecting_node);
@@ -94,8 +92,7 @@
 	}
 
 	onMount(async () => {
-		programs = await (await window.fetch("/api/programs")).json();
-		console.log(programs);
+		programs = await (await apiRequest("GET", "/api/programs")).json();
 		loaded = true;
 	});
 </script>
@@ -156,7 +153,14 @@
 							bind:programs
 							bind:loaded>
 							{#each action.reactions as reaction}
-								<SubNode reaction={reaction.reactionId} meta={reaction.metadata} />
+								<SubNode
+									reaction={reaction.reactionId}
+									meta={reaction.metadata}
+									bind:edit={editing}
+									bind:programs
+									bind:loaded
+									programId={inspecting_node}
+									reactionId={reaction.id} />
 							{/each}
 						</Node>
 					{/each}
