@@ -1,8 +1,13 @@
 package org.rotclub.area.composes
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
+import org.rotclub.area.lib.BASE_URL
 import org.rotclub.area.lib.BottomBarScreen
 import org.rotclub.area.lib.utils.animatedSlideFullTopComposable
 import org.rotclub.area.lib.utils.noAnimationComposable
@@ -29,8 +34,20 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         noAnimationComposable(BottomBarScreen.Explore.route,) {
             ExploreScreen()
         }
-        noAnimationComposable(BottomBarScreen.Profile.route) {
-            ProfileScreen(globalNavController = globalNavController)
+        noAnimationComposable(
+            BottomBarScreen.Profile.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = BASE_URL + "app/oauth/link/spotify/{id}"
+                    action = Intent.ACTION_VIEW
+                }),
+            argument = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                    defaultValue = "none"
+                })
+            ) { entry ->
+            ProfileScreen(globalNavController = globalNavController, dataEntry = entry)
         }
         animatedSlideFullTopComposable("node_screen") {
             NodeScreen(navController = navController)

@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.rotclub.area.R
 
+const val BASE_URL = "http://10.0.2.2:8081/"
 val roundedValue = 20.dp
 val fontFamily: FontFamily = FontFamily(
     Font(R.font.nunito, FontWeight.Normal),

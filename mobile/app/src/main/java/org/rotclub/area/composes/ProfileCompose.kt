@@ -29,6 +29,7 @@ import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
+import org.rotclub.area.lib.utils.BrowserUtils
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
@@ -65,6 +66,7 @@ fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostCont
 fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
     if (service == null)
         return
+    val context = LocalContext.current
     val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
     val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
     val buttonColor = if (!link) FrispyTheme.Error500 else FrispyTheme.Success500
@@ -100,7 +102,15 @@ fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String, linkHre
             )
         }
         Button(
-            onClick = { /* do something */ },
+            onClick = {
+                if (!link) {
+                    if (linkHref == "") {
+                        return@Button
+                    }
+                    BrowserUtils.openUrl(context, BrowserUtils.hrefToLink(linkHref),
+                        SharedStorageUtils(context).getToken())
+                }
+            },
             shape = RoundedCornerShape(roundedValue),
             colors = ButtonDefaults.buttonColors(
                 contentColor = FrispyTheme.Surface500,

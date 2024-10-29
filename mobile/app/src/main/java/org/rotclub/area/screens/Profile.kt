@@ -26,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ import org.rotclub.area.lib.httpapi.getUser
 import org.rotclub.area.ui.theme.AreaTheme
 
 @Composable
-fun ProfileScreen(globalNavController: NavHostController) {
+fun ProfileScreen(globalNavController: NavHostController, dataEntry: NavBackStackEntry) {
     val coroutineScope = rememberCoroutineScope()
     val sharedStorage = SharedStorageUtils(LocalContext.current)
 
@@ -50,6 +51,8 @@ fun ProfileScreen(globalNavController: NavHostController) {
     var email by remember { mutableStateOf("") }
 
     val services = remember { mutableStateOf(emptyList<Service>()) }
+
+    println(dataEntry.arguments?.getString("id"))
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
@@ -136,6 +139,6 @@ fun ProfileScreen(globalNavController: NavHostController) {
 fun ProfileScreenPreview() {
     AreaTheme {
         val navController = rememberNavController()
-        ProfileScreen(navController)
+        ProfileScreen(navController, navController.currentBackStackEntry!!)
     }
 }
