@@ -35,6 +35,7 @@ interface Api {
     @GET("api/services")
     suspend fun getServices(@Header("Authorization") token: String): Response<List<Service>>
 
+    // Programs
     @GET("api/programs")
     suspend fun apiGetPrograms(@Header("Authorization") token: String): Response<List<ProgramResponse>>
     @POST("api/programs")
@@ -44,8 +45,13 @@ interface Api {
     @PATCH("api/programs/{id}")
     suspend fun apiPatchProgramName(@Header("Authorization") token: String, @Path("id") id: Int, @Body programRequest: ProgramRequest): Response<ProgramResponse>
 
+    // Nodes
     @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
     suspend fun apiDeleteAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ActionIdRequest): Response<Unit>
+
+    // Actions
+    @GET("api/action")
+    suspend fun apiGetAccesibleActions(@Header("Authorization") token: String): Response<List<NodeType>>
 
     @GET("api/user")
     suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>
