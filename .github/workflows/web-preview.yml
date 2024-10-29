@@ -37,9 +37,9 @@ jobs:
 
       - name: Link & Configure Vercel Build Environment
         run: |
-          npm run link_vercel
+          vercel link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=area-app
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-          npm run env:preview
+          vercel env pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} .env
         working-directory: "./web"
 
       - name: Build Project Artifacts
