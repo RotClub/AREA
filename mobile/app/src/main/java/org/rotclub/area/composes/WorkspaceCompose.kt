@@ -62,6 +62,7 @@ import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.composes.skeletonLoading
 import org.rotclub.area.lib.httpapi.AccAction
+import org.rotclub.area.lib.httpapi.AccReaction
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.patchProgramName
 import org.rotclub.area.lib.utils.SharedStorageUtils
@@ -225,9 +226,10 @@ fun BackButton(navController: NavController) {
 }
 
 @Composable
-fun ActionCard(navController: NavController, action: Action, onDelete: () -> Unit) {
+fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit) {
     var showDialogSet by remember { mutableStateOf(false) }
     var started by remember { mutableStateOf(false) }
+    val gson = Gson()
 
     Column(
         modifier = Modifier
@@ -382,7 +384,7 @@ fun ActionCard(navController: NavController, action: Action, onDelete: () -> Uni
             }
         }
         Button(
-            onClick = { navController.navigate("reaction_screen")  },
+            onClick = { navController.navigate("reaction_screen/${gson.toJson(program)}")},
             shape = RectangleShape,
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
@@ -463,7 +465,7 @@ fun ActionDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun RadioButtonSelect(accAction: AccAction) {
+fun RadioButtonSelectAction(accAction: AccAction) {
     var selected by remember { mutableStateOf(false) }
 
     Row (
@@ -490,7 +492,34 @@ fun RadioButtonSelect(accAction: AccAction) {
 }
 
 @Composable
-fun ListView(action: NodeType) {
+fun RadioButtonSelectReaction(accReaction: AccReaction) {
+    var selected by remember { mutableStateOf(false) }
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(FrispyTheme.Surface700),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = { selected = !selected },
+            colors = RadioButtonDefaults.colors(
+                selectedColor = FrispyTheme.Primary500,
+                unselectedColor = FrispyTheme.Surface400
+            )
+        )
+        Text(
+            text = accReaction.displayName,
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 15.sp,
+        )
+    }
+}
+
+@Composable
+fun ListView(action: NodeType, check: Boolean) {
     var expanded by remember { mutableStateOf(false) }
 
     Card (
@@ -546,8 +575,14 @@ fun ListView(action: NodeType) {
                     )
                 }
                 if (expanded) {
-                    for (accAction in action.actions) {
-                        RadioButtonSelect(accAction = accAction)
+                    if (check) {
+                        for (accAction in action.actions) {
+                            RadioButtonSelectAction(accAction = accAction)
+                        }
+                    } else {
+                        for (accReaction in action.reactions) {
+                            RadioButtonSelectReaction(accReaction = accReaction)
+                        }
                     }
                 }
             }

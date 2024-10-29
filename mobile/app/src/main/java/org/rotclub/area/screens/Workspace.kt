@@ -158,7 +158,7 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             program.actions.forEach { action ->
-                ActionCard(navController = navController, action = action, onDelete = {
+                ActionCard(navController = navController, action = action, program = program, onDelete = {
                     coroutineScope.launch {
                         val token = sharedStorage.getToken()
                         if (token != null) {
@@ -234,10 +234,10 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
                 fontSize = 16.sp,
             )
             accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
-            actionsList.forEach { action ->
-                ListView(action)
+                actionsList.forEach { action ->
+                    ListView(action, true)
+                }
             }
-        }
         }
         Column (
             modifier = Modifier
@@ -253,7 +253,26 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
 }
 
 @Composable
-fun ReactionScreen(navController: NavHostController) {
+fun ReactionScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
+
+    val programJson = backStackEntry.arguments?.getString("program")
+    val gson = Gson()
+    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
+
+    var accessibleActions by remember { mutableStateOf(emptyList<NodeType>()) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val token = sharedStorage.getToken()
+            if (token == null) {
+                // TODO: redirect to login
+                return@launch
+            }
+            accessibleActions = getAccesibleActions(token)
+        }
+    }
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -288,8 +307,10 @@ fun ReactionScreen(navController: NavHostController) {
                 fontFamily = fontFamily,
                 fontSize = 16.sp,
             )
-            for (i in 0..5) {
-                //ListView("Reaction $i")
+            accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
+                actionsList.forEach { action ->
+                    ListView(action, false)
+                }
             }
         }
         Column (
@@ -299,7 +320,7 @@ fun ReactionScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TerminateButton(onClick = {
-                navController.navigate("node_screen")
+                navController.navigate("node_screen/${gson.toJson(program)}")
             })
         }
     }
