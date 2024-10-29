@@ -7,11 +7,11 @@ services:
       context: "./web"
       dockerfile: "Dockerfile"
       target: "node_runner"
+      args:
+        VERCEL_TOKEN: ${VERCEL_TOKEN}
     ports:
-      - "8081:3000"
+      - "8081:4173"
       - "24678:24678"
-    environment:
-      - NODE_ENV=production
     volumes:
       - shared_data:/app/build/client/mobile
     networks:
