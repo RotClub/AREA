@@ -24,6 +24,9 @@ RUN npm install
 # Remove rootDirectory from project.json to avoid Vercel build error
 RUN sed -i.bak '/rootDirectory/d' .vercel/project.json
 
+# Use Vercel adapter for Vite
+RUN mv svelte.config.deploy.js svelte.config.js
+
 # Build the project
 RUN vercel build --yes --token=${VERCEL_TOKEN}
 
