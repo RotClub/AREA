@@ -34,6 +34,7 @@ import org.rotclub.area.composes.ListView
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.TerminateButton
 import org.rotclub.area.composes.SkeletonApiColumnCard
+import org.rotclub.area.composes.TerminateDialog
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.getPrograms
@@ -46,6 +47,7 @@ import org.rotclub.area.lib.httpapi.NodeType
 import org.rotclub.area.lib.httpapi.deleteAction
 import org.rotclub.area.lib.httpapi.deleteActionFromProgram
 import org.rotclub.area.lib.httpapi.getAccesibleActions
+
 
 data class ColumnCardData(val title: String, val text: String)
 
@@ -245,9 +247,7 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TerminateButton(onClick = {
-                navController.navigate("node_screen/${gson.toJson(program)}")
-            })
+            TerminateButton( program = program, navController = navController)
         }
     }
 }
@@ -319,9 +319,7 @@ fun ReactionScreen(navController: NavHostController, backStackEntry: NavBackStac
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TerminateButton(onClick = {
-                navController.navigate("node_screen/${gson.toJson(program)}")
-            })
+            TerminateButton( program = program, navController = navController)
         }
     }
 }

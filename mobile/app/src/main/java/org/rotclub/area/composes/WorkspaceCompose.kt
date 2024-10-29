@@ -591,9 +591,89 @@ fun ListView(action: NodeType, check: Boolean) {
 }
 
 @Composable
-fun TerminateButton(onClick: () -> Unit) {
+fun TerminateDialog(showDialog: Boolean, onDismiss: () -> Unit, navController: NavController, program: ProgramResponse) {
+    var inputText by remember { mutableStateOf("") }
+    val gson = Gson()
+
+    if (showDialog) {
+        Dialog(onDismissRequest = { onDismiss() }) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(FrispyTheme.Surface500)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
+                        text = "Configuration",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 26.sp
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
+                        text = "Edit here the configuration of the node.",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 18.sp
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
+                        color = FrispyTheme.Surface700,
+                        thickness = 2.dp
+                    )
+                    TextField(
+                        value = inputText,
+                        onValueChange = { inputText = it },
+                        label = { Text("Track") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 0.dp, 0.dp, 16.dp)
+                    )
+                    Button(
+                        onClick = {
+                            onDismiss()
+                            navController.navigate("node_screen/${gson.toJson(program)}")
+                        },
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White,
+                            containerColor = FrispyTheme.Primary500,
+                            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                            disabledContentColor = Color.White.copy(alpha = 0.5f)
+                        ),
+                        modifier = Modifier
+                            .height(40.dp)
+                            .fillMaxWidth(),
+                        enabled = true
+                    ) {
+                        Text(
+                            text = "Confirm",
+                            color = Color.White,
+                            fontFamily = fontFamily,
+                            fontSize = 20.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TerminateButton( program: ProgramResponse, navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Button(
-        onClick = { onClick() },
+        onClick = { showDialog = true  },
         modifier = Modifier
             .padding(0.dp, 16.dp, 0.dp, 0.dp)
             .fillMaxWidth(),
@@ -613,4 +693,5 @@ fun TerminateButton(onClick: () -> Unit) {
             fontSize = 20.sp
         )
     }
+    TerminateDialog(showDialog, onDismiss = { showDialog = false }, navController = navController, program = program)
 }
