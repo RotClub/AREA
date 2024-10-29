@@ -1,13 +1,11 @@
 <script lang="ts">
 	import ServiceCard from "$lib/components/Services/ServiceCard.svelte";
 	import { onMount } from "svelte";
-	import type { Provider } from "@prisma/client";
 	import ServiceCardPlaceholder from "$lib/components/Services/ServiceCardPlaceholder.svelte";
-	import { parse as cookieParser } from "cookie";
 	import { apiRequest } from "$lib";
 
 	let data: Array<{
-		service: Provider;
+		service: string;
 		link: boolean;
 		title: string;
 		link_href: string;
