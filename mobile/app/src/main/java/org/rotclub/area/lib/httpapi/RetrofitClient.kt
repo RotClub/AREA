@@ -44,6 +44,8 @@ interface Api {
     suspend fun apiDeleteProgram(@Header("Authorization") token: String, @Path("id") id: Int): Response<Unit>
     @PATCH("api/programs/{id}")
     suspend fun apiPatchProgramName(@Header("Authorization") token: String, @Path("id") id: Int, @Body programRequest: ProgramRequest): Response<ProgramResponse>
+    @PUT("api/programs/{inspecting_node}/action")
+    suspend fun apiPutAction(@Header("Authorization") token: String, @Path("inspecting_node") inspecting_node: Int, @Body request: NewActionIdRequest): Response<Unit>
 
     // Nodes
     @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
