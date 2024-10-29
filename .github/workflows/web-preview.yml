@@ -35,15 +35,15 @@ jobs:
           npm install --global vercel@latest
         working-directory: "./web"
 
-      - name: Configure Vercel Build Environment
+      - name: Link & Configure Vercel Build Environment
         run: |
+          npm run link_vercel
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-          vercel env pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} .env
+          npm run env:preview
+        working-directory: "./web"
 
       - name: Build Project Artifacts
-        run: |
-          sed -i.bak '/rootDirectory/d' ./web/.vercel/project.json 
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
