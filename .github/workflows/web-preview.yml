@@ -42,7 +42,6 @@ jobs:
 
       - name: Build Project Artifacts
         run: |
-          npm install
           sed -i.bak '/rootDirectory/d' ./web/.vercel/project.json 
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
