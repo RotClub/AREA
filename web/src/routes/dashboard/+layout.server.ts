@@ -2,12 +2,13 @@ import type { LayoutServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { checkAccess } from "$lib/api";
 import { PrismaClient, UserRole } from "@prisma/client";
+import { getToken } from "$lib/web";
 
 export const load: LayoutServerLoad = async (event) => {
 	await event.parent();
 
 	// Get the token from the cookies
-	const token = event.cookies.get("token");
+	const token = event.cookies.get(getToken());
 	const client = new PrismaClient();
 
 	try {
