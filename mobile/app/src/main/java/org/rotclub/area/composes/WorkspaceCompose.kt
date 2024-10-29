@@ -29,6 +29,8 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -59,10 +61,12 @@ import org.rotclub.area.ui.theme.FrispyTheme
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.composes.skeletonLoading
+import org.rotclub.area.lib.httpapi.AccAction
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.patchProgramName
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.lib.httpapi.Action
+import org.rotclub.area.lib.httpapi.NodeType
 
 @Composable
 fun SkeletonApiColumnCard() {
@@ -459,8 +463,8 @@ fun ActionDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun Checkbox(i: Int) {
-    var checked by remember { mutableStateOf(false) }
+fun RadioButtonSelect(accAction: AccAction) {
+    var selected by remember { mutableStateOf(false) }
 
     Row (
         modifier = Modifier
@@ -468,17 +472,16 @@ fun Checkbox(i: Int) {
             .background(FrispyTheme.Surface700),
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
     ) {
-        Checkbox(
-            checked = checked,
-            onCheckedChange = { checked = it },
-            colors = CheckboxDefaults.colors(
-                checkmarkColor = Color.Black,
-                checkedColor = FrispyTheme.Primary500,
-                uncheckedColor = FrispyTheme.Surface400,
-            ),
+        RadioButton(
+            selected = selected,
+            onClick = { selected = !selected },
+            colors = RadioButtonDefaults.colors(
+                selectedColor = FrispyTheme.Primary500,
+                unselectedColor = FrispyTheme.Surface400
+            )
         )
         Text(
-            text = "This is a description $i",
+            text = accAction.displayName,
             color = Color.White,
             fontFamily = fontFamily,
             fontSize = 15.sp,
@@ -487,7 +490,7 @@ fun Checkbox(i: Int) {
 }
 
 @Composable
-fun ListView(name: String) {
+fun ListView(action: NodeType) {
     var expanded by remember { mutableStateOf(false) }
 
     Card (
@@ -535,7 +538,7 @@ fun ListView(name: String) {
                         )
                     }
                     Text(
-                        text = name,
+                        text = action.service.toString(),
                         color = Color.White,
                         fontFamily = fontFamily,
                         fontSize = 20.sp,
@@ -543,8 +546,8 @@ fun ListView(name: String) {
                     )
                 }
                 if (expanded) {
-                    for (i in 0..3) {
-                        Checkbox(i)
+                    for (accAction in action.actions) {
+                        RadioButtonSelect(accAction = accAction)
                     }
                 }
             }
@@ -569,7 +572,7 @@ fun TerminateButton(onClick: () -> Unit) {
         enabled = true
     ) {
         Text(
-            text = "Terminate",
+            text = "Confirm",
             color = Color.White,
             fontFamily = fontFamily,
             fontSize = 20.sp

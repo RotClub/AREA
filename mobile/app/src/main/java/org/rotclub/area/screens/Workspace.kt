@@ -42,8 +42,10 @@ import org.rotclub.area.lib.httpapi.deleteProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 import com.google.gson.Gson
+import org.rotclub.area.lib.httpapi.NodeType
 import org.rotclub.area.lib.httpapi.deleteAction
 import org.rotclub.area.lib.httpapi.deleteActionFromProgram
+import org.rotclub.area.lib.httpapi.getAccesibleActions
 
 data class ColumnCardData(val title: String, val text: String)
 
@@ -169,14 +171,34 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                 })
             }
             PlusButton (onClick = {
-                navController.navigate("action_screen")
+                navController.navigate("action_screen/${gson.toJson(program)}")
             }, text = "Add action")
         }
     }
 }
 
 @Composable
-fun ActionScreen(navController: NavHostController) {
+fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
+
+    val programJson = backStackEntry.arguments?.getString("program")
+    val gson = Gson()
+    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
+
+    var accessibleActions by remember { mutableStateOf(emptyList<NodeType>()) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val token = sharedStorage.getToken()
+            if (token == null) {
+                // TODO: redirect to login
+                return@launch
+            }
+            accessibleActions = getAccesibleActions(token)
+        }
+    }
+
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -211,9 +233,11 @@ fun ActionScreen(navController: NavHostController) {
                 fontFamily = fontFamily,
                 fontSize = 16.sp,
             )
-            for (i in 0..5) {
-                ListView("Action $i")
+            accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
+            actionsList.forEach { action ->
+                ListView(action)
             }
+        }
         }
         Column (
             modifier = Modifier
@@ -222,7 +246,7 @@ fun ActionScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TerminateButton(onClick = {
-                navController.navigate("node_screen")
+                navController.navigate("node_screen/${gson.toJson(program)}")
             })
         }
     }
@@ -265,7 +289,7 @@ fun ReactionScreen(navController: NavHostController) {
                 fontSize = 16.sp,
             )
             for (i in 0..5) {
-                ListView("Reaction $i")
+                //ListView("Reaction $i")
             }
         }
         Column (
