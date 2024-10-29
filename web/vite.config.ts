@@ -7,5 +7,10 @@ export default defineConfig({
 	server: {
 		host: "0.0.0.0",
 		port: 8081
+	},
+	resolve: {
+		alias: {
+			".prisma/client/index-browser": "./node_modules/.prisma/client/index-browser.js"
+		}
 	}
 });
