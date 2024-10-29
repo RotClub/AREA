@@ -1,4 +1,5 @@
 import { PrismaClient, Provider } from "@prisma/client";
+import { actionListeningTrackTrigger, reactionPlayTrackTrigger } from "./triggers/spotify";
 
 export interface ActionMetaDataType {
 	id: string;
@@ -10,8 +11,28 @@ export type NodeType = Array<{
 	service: Provider;
 	displayName: string;
 	iconPath: string;
-	actions: Array<{ id: string; displayName: string; meta: Record<string, ActionMetaDataType> }>;
-	reactions: Array<{ id: string; displayName: string; meta: Record<string, ActionMetaDataType> }>;
+	actions: Array<{
+		id: string;
+		displayName: string;
+		meta: Record<string, ActionMetaDataType>;
+		trigger: (
+			userId: number,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			service_meta: any,
+			meta: Record<string, string | number | boolean | Date>
+		) => Promise<boolean>;
+	}>;
+	reactions: Array<{
+		id: string;
+		displayName: string;
+		meta: Record<string, ActionMetaDataType>;
+		trigger: (
+			userId: number,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			service_meta: any,
+			meta: Record<string, string | number | boolean | Date>
+		) => Promise<boolean>;
+	}>;
 }>;
 
 export const Nodes: NodeType = [
@@ -29,7 +50,8 @@ export const Nodes: NodeType = [
 						displayName: "Track",
 						type: "string"
 					}
-				}
+				},
+				trigger: actionListeningTrackTrigger
 			}
 		],
 		reactions: [
@@ -47,7 +69,8 @@ export const Nodes: NodeType = [
 						displayName: "Position (ms)",
 						type: "number"
 					}
-				}
+				},
+				trigger: reactionPlayTrackTrigger
 			}
 		]
 	}

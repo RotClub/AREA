@@ -1,7 +1,5 @@
 import { adaptUrl } from "$lib/api";
-import { redirect } from "@sveltejs/kit";
 import { AuthorizationCode } from "simple-oauth2";
-import { config } from "dotenv";
 
 export const GET = async (event) => {
 	const scope = "openid wow.profile d3.profile sc2.profile";
