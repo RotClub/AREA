@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,8 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.lib.httpapi.RetrofitClient
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.lib.utils.BrowserUtils
@@ -63,9 +66,11 @@ fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostCont
 }
 
 @Composable
-fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
+fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String,
+    linkHref: String, unlinkHref: String, token: String?) {
     if (service == null)
         return
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
     val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
@@ -107,8 +112,13 @@ fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String, linkHre
                     if (linkHref == "") {
                         return@Button
                     }
-                    BrowserUtils.openUrl(context, BrowserUtils.hrefToLink(linkHref),
-                        SharedStorageUtils(context).getToken())
+                    coroutineScope.launch {
+                        val oauthUrl = RetrofitClient.authApi.apiGetServiceOauth(linkHref, token!!).body()?.url
+                        BrowserUtils.openUrl(
+                            context, oauthUrl,
+                            token
+                        )
+                    }
                 }
             },
             shape = RoundedCornerShape(roundedValue),
@@ -151,6 +161,13 @@ fun SkeletonProfileApiCards() {
 @Composable
 fun ProfileApiCardsPreview() {
     AreaTheme {
-        ProfileApiCards(ServiceType.SPOTIFY, false, "Spotify", "https://spotify.com", "https://spotify.com")
+        ProfileApiCards(
+            ServiceType.SPOTIFY,
+            false,
+            "Spotify",
+            "https://spotify.com",
+            "https://spotify.com",
+            "token"
+        )
     }
 }

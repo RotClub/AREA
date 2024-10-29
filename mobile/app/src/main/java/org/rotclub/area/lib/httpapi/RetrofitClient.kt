@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Url
 
 object RetrofitClient {
     val authApi: Api by lazy {
@@ -31,4 +32,7 @@ interface Api {
 
     @GET("api/user")
     suspend fun apiGetUser(@Header("Authorization") token: String): Response<UserResponse>
+
+    @GET
+    suspend fun apiGetServiceOauth(@Url url: String, @Header("Authorization") token: String): Response<ServiceOauthResponse>
 }

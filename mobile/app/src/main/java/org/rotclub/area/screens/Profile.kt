@@ -123,7 +123,8 @@ fun ProfileScreen(globalNavController: NavHostController, dataEntry: NavBackStac
                     }
                 }
                 for (service in services.value) {
-                    ProfileApiCards(service.service, service.link, service.title, service.link_href, service.unlink_href)
+                    ProfileApiCards(service.service, service.link, service.title,
+                        service.link_href, service.unlink_href, sharedStorage.getToken())
                 }
             }
             LogoutButton(
