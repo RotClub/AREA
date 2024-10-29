@@ -1,4 +1,5 @@
 import { parse as cookieParser } from "cookie";
+import { getToken } from "$lib/web";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function apiRequest(
@@ -12,7 +13,7 @@ export async function apiRequest(
 			method: method,
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				Authorization: `Bearer ${cookieParser(document.cookie)[getToken()]}`
 			}
 		});
 		return response;
@@ -21,7 +22,7 @@ export async function apiRequest(
 			method: method,
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${cookieParser(document.cookie)["token"]}`
+				Authorization: `Bearer ${cookieParser(document.cookie)[getToken()]}`
 			},
 			body: JSON.stringify(body)
 		});

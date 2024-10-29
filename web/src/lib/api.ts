@@ -49,8 +49,8 @@ export const checkAccess = async (
 };
 
 export const adaptUrl = () => {
-	if (process.env.NODE_ENV === "production") {
-		return "https://area-app.vercel.app/";
+	if (process.env.VERCEL_URL) {
+		return "https://area-app.vercel.app";
 	} else {
 		return "http://localhost:8081";
 	}

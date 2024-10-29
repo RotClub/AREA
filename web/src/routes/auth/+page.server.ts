@@ -1,6 +1,7 @@
 import { type Actions, fail, redirect } from "@sveltejs/kit";
 import { encryptPWD } from "$lib/auth";
 import { PrismaClient } from "@prisma/client";
+import { getToken } from "$lib/web";
 
 export const actions = {
 	default: async (event) => {
@@ -41,7 +42,7 @@ export const actions = {
 			if (!user) {
 				return fail(401, { error: "Email or password invalid" });
 			}
-			event.cookies.set("token", user.token || "", { path: "/", httpOnly: false });
+			event.cookies.set(getToken(), user.token || "", { path: "/", httpOnly: false });
 		} catch (error) {
 			client.$disconnect();
 			return fail(500, { error: "Failed to log in" });
