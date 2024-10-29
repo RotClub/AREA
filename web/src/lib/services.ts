@@ -1,5 +1,6 @@
 import { PrismaClient, Provider } from "@prisma/client";
 import { actionListeningTrackTrigger, reactionPlayTrackTrigger } from "./triggers/spotify";
+import { actionIsStreamingTrigger, actionViewcountReachesTrigger } from "./triggers/twitch";
 
 export interface ActionMetaDataType {
 	id: string;
@@ -73,6 +74,38 @@ export const Nodes: NodeType = [
 				trigger: reactionPlayTrackTrigger
 			}
 		]
+	},
+	{
+		service: Provider.TWITCH,
+		displayName: "Twitch",
+		iconPath: "/provider/twitch-icon.svg",
+		actions: [
+			{
+				id: "is-streaming",
+				displayName: "Is Streaming",
+				meta: {
+					channel_id: {
+						id: "channel_id",
+						displayName: "Channel ID",
+						type: "string"
+					}
+				},
+				trigger: actionIsStreamingTrigger
+			},
+			{
+				id: "viewcount-reaches",
+				displayName: "Viewcount reaches",
+				meta: {
+					viewcount: {
+						id: "viewcount",
+						displayName: "Viewcount",
+						type: "number"
+					}
+				},
+				trigger: actionViewcountReachesTrigger
+			}
+		],
+		reactions: []
 	}
 ];
 
