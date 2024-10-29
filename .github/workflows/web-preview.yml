@@ -10,8 +10,7 @@ on:
   push:
     branches:
       - dev
-      - web/dev
-  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,17 +22,23 @@ jobs:
         run: |
           apk update
           apk add bash curl nodejs npm
-      - name: Using Svelte config for Vercel
+
+      - name: Using Vercel adapter i/o Node for SvelteKit app
         run: mv svelte.config.deploy.js svelte.config.js
         working-directory: "./web"
+
       - name: Install Vercel CLI
         run: |
-          rm -rf node_modules package-lock.json
+          rm -rf package-lock.json
           npm install --global vercel@latest
         working-directory: "./web"
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Link, Configure, Build and Deploy the Vercel Preview
+        run: |
+          vercel link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=area-app
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel env pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} .env
+          sed -i.bak '/rootDirectory/d' .vercel/project.json
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: "./web"
