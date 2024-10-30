@@ -1,52 +1,31 @@
 package org.rotclub.area.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import org.rotclub.area.composes.ActionCard
-import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.ColumnCard
-import org.rotclub.area.composes.ListView
 import org.rotclub.area.composes.PlusButton
-import org.rotclub.area.composes.TerminateButton
 import org.rotclub.area.composes.SkeletonApiColumnCard
-import org.rotclub.area.composes.TerminateDialog
-import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.getPrograms
 import org.rotclub.area.lib.httpapi.postProgram
-import org.rotclub.area.lib.httpapi.deleteProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
-import com.google.gson.Gson
-import org.rotclub.area.lib.httpapi.NodeType
-import org.rotclub.area.lib.httpapi.deleteAction
-import org.rotclub.area.lib.httpapi.deleteActionFromProgram
-import org.rotclub.area.lib.httpapi.getAccesibleActions
 
 
 data class ColumnCardData(val title: String, val text: String)
@@ -103,223 +82,5 @@ fun WorkspaceScreen(navController: NavHostController) {
                 programs.value += postProgram(token, "caca", mutableStateOf(""))
             }
         }, text = "")
-    }
-}
-
-data class ActionCardData(val title: String, val text: String)
-
-@Composable
-fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
-    val coroutineScope = rememberCoroutineScope()
-    val sharedStorage = SharedStorageUtils(LocalContext.current)
-    val programJson = backStackEntry.arguments?.getString("program")
-    val gson = Gson()
-    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(893.dp)
-            .background(FrispyTheme.Surface700)
-            .padding(25.dp, 60.dp, 20.dp, 20.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            BackButton(navController = navController)
-            Text(
-                text = "Delete Program",
-                color = FrispyTheme.Error500,
-                fontFamily = fontFamily,
-                fontSize = 20.sp,
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        val token = sharedStorage.getToken()
-                        if (token == null) {
-                            return@launch
-                        }
-                        deleteProgram(token, program.id)
-                        navController.popBackStack()
-                    }
-                }
-            )
-        }
-        Text(
-            text = program.name,
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = 26.sp,
-            modifier = Modifier.padding(10.dp, 20.dp, 0.dp, 5.dp)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(0.dp, 20.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            program.actions.forEach { action ->
-                ActionCard(navController = navController, action = action, program = program, onDelete = {
-                    coroutineScope.launch {
-                        val token = sharedStorage.getToken()
-                        if (token != null) {
-                            val success = deleteAction(token, program.id, action.id)
-                            if (success) {
-                                program = deleteActionFromProgram(program, action.actionId)
-                            }
-                        }
-                    }
-                })
-            }
-            PlusButton (onClick = {
-                navController.navigate("action_screen/${gson.toJson(program)}")
-            }, text = "Add action")
-        }
-    }
-}
-
-@Composable
-fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
-    val coroutineScope = rememberCoroutineScope()
-    val sharedStorage = SharedStorageUtils(LocalContext.current)
-
-    val programJson = backStackEntry.arguments?.getString("program")
-    val gson = Gson()
-    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
-
-    var accessibleActions by remember { mutableStateOf(emptyList<NodeType>()) }
-
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            val token = sharedStorage.getToken()
-            if (token == null) {
-                // TODO: redirect to login
-                return@launch
-            }
-            accessibleActions = getAccesibleActions(token)
-        }
-    }
-
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(893.dp)
-            .verticalScroll(rememberScrollState())
-            .background(FrispyTheme.Surface700)
-            .padding(25.dp, 60.dp, 20.dp, 20.dp),
-    ) {
-        BackButton(navController = navController)
-        Text(
-            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp),
-            text = "Action",
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = 24.sp,
-        )
-        Column (
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
-                text = "Select here an action to be used to trigger events, can be configured later.",
-                color = FrispyTheme.Primary50,
-                fontFamily = fontFamily,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = "If you don't see anything here, that means you have no linked services.",
-                color = FrispyTheme.Primary50,
-                fontFamily = fontFamily,
-                fontSize = 16.sp,
-            )
-            accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
-                actionsList.forEach { action ->
-                    ListView(action, true)
-                }
-            }
-        }
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 20.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TerminateButton( program = program, navController = navController)
-        }
-    }
-}
-
-@Composable
-fun ReactionScreen(navController: NavHostController, backStackEntry: NavBackStackEntry) {
-    val coroutineScope = rememberCoroutineScope()
-    val sharedStorage = SharedStorageUtils(LocalContext.current)
-
-    val programJson = backStackEntry.arguments?.getString("program")
-    val gson = Gson()
-    var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
-
-    var accessibleActions by remember { mutableStateOf(emptyList<NodeType>()) }
-
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            val token = sharedStorage.getToken()
-            if (token == null) {
-                // TODO: redirect to login
-                return@launch
-            }
-            accessibleActions = getAccesibleActions(token)
-        }
-    }
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(893.dp)
-            .verticalScroll(rememberScrollState())
-            .background(FrispyTheme.Surface700)
-            .padding(25.dp, 60.dp, 20.dp, 20.dp),
-    ) {
-        BackButton(navController = navController)
-        Text(
-            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 5.dp),
-            text = "Reaction",
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = 24.sp,
-        )
-        Column (
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
-                text = "Select here a reaction, they represent events to be triggered, can be configured later.",
-                color = FrispyTheme.Primary50,
-                fontFamily = fontFamily,
-                fontSize = 16.sp,
-            )
-            Text(
-                text = "If you don't see anything here, that means you have no linked services.",
-                color = FrispyTheme.Primary50,
-                fontFamily = fontFamily,
-                fontSize = 16.sp,
-            )
-            accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
-                actionsList.forEach { action ->
-                    ListView(action, false)
-                }
-            }
-        }
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 20.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TerminateButton( program = program, navController = navController)
-        }
     }
 }
