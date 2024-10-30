@@ -56,7 +56,7 @@ fun TitleHeader(modifier: Modifier = Modifier, iconSize: Dp = 100.dp, titleSize:
         Text(
             text = "Frispy",
             fontSize = titleSize,
-            color = FrispyTheme.Primary50,
+            color = FrispyTheme.TextColor,
             fontFamily = fontFamily,
             modifier = modifier,
         )

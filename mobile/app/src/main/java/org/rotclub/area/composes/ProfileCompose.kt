@@ -119,6 +119,7 @@ fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String,
                     }
                     coroutineScope.launch {
                         val oauthUrl = RetrofitClient.authApi.apiGetServiceOauth(linkHref, token!!).body()?.url
+                            ?: return@launch
                         BrowserUtils.openUrl(
                             context, oauthUrl,
                             token

@@ -1,6 +1,6 @@
 package org.rotclub.area.lib.httpapi
 
-import org.rotclub.area.lib.BASE_URL
+import org.rotclub.area.lib.baseUrl
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,9 +11,15 @@ import retrofit2.http.POST
 import retrofit2.http.Url
 
 object RetrofitClient {
-    val authApi: Api by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
+    var authApi: Api = Retrofit.Builder()
+        .baseUrl(baseUrl.value)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(Api::class.java)
+
+    fun changeBaseUrl(newBaseUrl: String) {
+        authApi = Retrofit.Builder()
+            .baseUrl(newBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(Api::class.java)
