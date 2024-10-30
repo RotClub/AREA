@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm install --global prisma && npx prisma generate",
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "node --env-file=.env --watch --import tsx src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "env:dev": "vercel env pull --yes --environment=development --token=${VERCEL_TOKEN} .env",
+    "env:preview": "vercel env pull --yes --environment=preview --token=${VERCEL_TOKEN} .env",
+    "env:prod": "vercel env pull --yes --environment=production --token=${VERCEL_TOKEN} .env",
+    "link_vercel": "vercel link --token=${VERCEL_TOKEN} --yes --project=area-app"
   },
   "author": "",
   "license": "ISC",
