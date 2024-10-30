@@ -18,11 +18,15 @@
 			<button
 				on:click={async () => {
 					const res = await apiRequest("GET", unlink_href);
-					const data = await res.json();
-					if (res.status === 200) {
-						window.location.href = data.url;
-					} else {
-						console.log(res.status, data.error);
+					try {
+						const data = await res.json();
+						if (res.status === 200) {
+							window.location.href = data.url;
+						} else {
+							console.log(res.status, data.error);
+						}
+					} catch (e) {
+						console.log(e);
 					}
 				}}
 				class="btn variant-ghost-primary uppercase tracking-wider">Linked</button>
@@ -30,11 +34,15 @@
 			<button
 				on:click={async () => {
 					const res = await apiRequest("GET", link_href);
-					const data = await res.json();
-					if (res.status === 200) {
-						window.location.href = data.url;
-					} else {
-						console.log(res.status, data.error);
+					try {
+						const data = await res.json();
+						if (res.status === 200) {
+							window.location.href = data.url;
+						} else {
+							console.log(res.status, data.error);
+						}
+					} catch (e) {
+						console.log(e);
 					}
 				}}
 				class="btn variant-filled-primary uppercase tracking-wider">Unlinked</button>
