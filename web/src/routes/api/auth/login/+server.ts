@@ -8,17 +8,15 @@ export const POST = async ({ request }) => {
 	try {
 		const body = await request.json();
 
-		if (!body.email || !body.password) {
-			return new Response(JSON.stringify({ error: "Email and password are required" }), {
+		if ((!body.email && !body.username) || !body.password) {
+			return new Response(JSON.stringify({ error: "Email or Username and password are required" }), {
 				status: 400,
 				headers: { "Content-Type": "application/json" }
 			});
 		}
 		const password = encryptPWD(body.password);
 		const user = await client.user.findUnique({
-			where: {
-				email: body.email
-			},
+			where: body.email ? { email: body.email } : { username: body.username },
 			select: {
 				token: true,
 				role: true,
