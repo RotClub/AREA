@@ -22,10 +22,10 @@ export const GET = async (event) => {
 		body: new URLSearchParams({
 			client_id: process.env.DISCORD_CLIENT_ID || "",
 			client_secret: process.env.DISCORD_CLIENT_SECRET || "",
-			grant_type: "client_credentials",
+			grant_type: "authorization_code",
 			code: code || "",
 			redirect_uri: `${adaptUrl()}/api/services/discord/callback`,
-			scope: "identify email openid messages.read connections"
+			scope: "identify email openid messages.read connections guilds"
 		})
 	});
 	const data = await res_discord.json();

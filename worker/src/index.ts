@@ -19,6 +19,28 @@ async function userStillLinked(client: PrismaClient, provider: Provider, program
     }) !== null;
 }
 
+async function refreshToken(client: PrismaClient, service: Service): Promise<void> {
+    const now: Date = new Date();
+    if (now < (service.metadata as any).expires_at) {
+        return;
+    }
+    const refreshed_data: Record<string, any> = await Nodes.find((node) => node.service === service.providerType)?.refresh(service.metadata) as Record<string, any>;
+    if (!refreshed_data || Object.keys(refreshed_data).length === 0) {
+        return;
+    }
+    const old_data: Record<string, any> = service.metadata as Record<string, any>;
+    old_data.access_token = refreshed_data.access_token;
+    old_data.expires_at = refreshed_data.expires_at;
+    await client.service.update({
+        where: {
+            id: service.id
+        },
+        data: {
+            metadata: old_data
+        }
+    });
+}
+
 async function launchWorker(provider: Provider, actionID: string): Promise<void> {
     setInterval(async () => {
         const prisma: PrismaClient = new PrismaClient();
@@ -51,7 +73,15 @@ async function launchWorker(provider: Provider, actionID: string): Promise<void>
             if (service === null) {
                 return;
             }
-            const triggered: boolean | undefined = await Nodes.find((node) => node.service === provider)?.actions.find((a) => a.id === actionID)?.trigger(userId, service.metadata, metadata);
+            const services: Array<Service> = await prisma.service.findMany({
+                where: {
+                    userId: userId,
+                }
+            });
+            for (const s of services) {
+                await refreshToken(prisma, s);
+            }
+            const triggered: boolean | undefined = await Nodes.find((node) => node.service === provider)?.actions.find((a) => a.id === actionID)?.trigger(action.id, service.metadata, metadata);
             if (triggered) {
                 const reactions: Array<Reaction> = await prisma.reaction.findMany({
                     where: {
@@ -60,14 +90,20 @@ async function launchWorker(provider: Provider, actionID: string): Promise<void>
                 });
                 reactions.forEach(async (reaction) => {
                     const reactionMetadata = reaction.metadata as Record<string, string | number | boolean | Date>;
-                    const triggeredReaction: boolean | undefined = await Nodes.find((node) => node.service === reaction.reactionId.split(":")[0])?.reactions.find((r) => r.id === reaction.reactionId.split(":")[1])?.trigger(userId, service.metadata, reactionMetadata);
+                    const reactionServiceMetadata: Record<string, string | number | boolean | Date> = await prisma.service.findFirst({
+                        where: {
+                            userId: userId,
+                            providerType: reaction.reactionId.split(":")[0] as Provider
+                        }
+                    }).then((s) => s?.metadata as Record<string, string | number | boolean | Date>);
+                    const triggeredReaction: boolean | undefined = await Nodes.find((node) => node.service === reaction.reactionId.split(":")[0])?.reactions.find((r) => r.id === reaction.reactionId.split(":")[1])?.trigger(reaction.id, reactionServiceMetadata, reactionMetadata);
                     if (!triggeredReaction)
                         console.log(`Failed to trigger reaction ${reaction.reactionId}`);
                 });
             }
         });
         prisma.$disconnect();
-    }, 5000);
+    }, 7500);
 }
 
 async function main(): Promise<void> {
