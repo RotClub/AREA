@@ -15,7 +15,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,11 +74,12 @@ fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String,
     linkHref: String, unlinkHref: String, token: String?) {
     if (service == null)
         return
+    var thisLink by remember { mutableStateOf(link) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
-    val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
-    val buttonColor = if (!link) FrispyTheme.Error500 else FrispyTheme.Success500
+    val linkIcon: Int = if (!thisLink) R.drawable.unlink else R.drawable.link
+    val linkIconColor = if (!thisLink) FrispyTheme.TextColor else FrispyTheme.Surface900
+    val buttonColor = if (!thisLink) FrispyTheme.Error500 else FrispyTheme.Success500
     Row (
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
@@ -118,6 +123,16 @@ fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String,
                             context, oauthUrl,
                             token
                         )
+                    }
+                    return@Button
+                }
+                if (unlinkHref == "") {
+                    return@Button
+                }
+                coroutineScope.launch {
+                    val res = RetrofitClient.authApi.apiUnlinkService(unlinkHref, "Bearer $token")
+                    if (res.isSuccessful) {
+                        thisLink = false
                     }
                 }
             },

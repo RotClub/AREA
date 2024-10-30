@@ -20,8 +20,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Area">
-            <tools:validation testUrl="http://10.0.2.2:8081" />
+            android:theme="@style/Theme.Area"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +37,15 @@
                 <data
                     android:host="10.0.2.2"
                     android:port="8081" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="area-app.vercel.app" />
             </intent-filter>
         </activity>
         <meta-data

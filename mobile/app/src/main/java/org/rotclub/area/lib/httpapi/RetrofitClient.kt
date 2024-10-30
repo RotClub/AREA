@@ -35,4 +35,7 @@ interface Api {
 
     @GET
     suspend fun apiGetServiceOauth(@Url url: String, @Header("Authorization") token: String): Response<ServiceOauthResponse>
+
+    @GET
+    suspend fun apiUnlinkService(@Url url: String, @Header("Authorization") token: String): Response<ServiceOauthResponse>
 }

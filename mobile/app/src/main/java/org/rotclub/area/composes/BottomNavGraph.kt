@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import org.rotclub.area.lib.BASE_URL
+import org.rotclub.area.lib.BASE_DEEPLINK_URL
 import org.rotclub.area.lib.BottomBarScreen
 import org.rotclub.area.lib.utils.animatedSlideFullTopComposable
 import org.rotclub.area.lib.utils.noAnimationComposable
@@ -38,13 +38,8 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
             BottomBarScreen.Profile.route,
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = BASE_URL + "app/oauth/link/spotify/{id}"
+                    uriPattern = BASE_DEEPLINK_URL + "app/redirect/"
                     action = Intent.ACTION_VIEW
-                }),
-            argument = listOf(
-                navArgument("id") {
-                    type = NavType.StringType
-                    defaultValue = "none"
                 })
             ) { entry ->
             ProfileScreen(globalNavController = globalNavController, dataEntry = entry)
