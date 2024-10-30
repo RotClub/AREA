@@ -183,6 +183,11 @@ export const DELETE = async ({ request, params }) => {
 	}
 
 	if (body.isAction) {
+		await client.reaction.deleteMany({
+			where: {
+				actionId: body.id
+			}
+		});
 		await client.program.update({
 			where: {
 				id: programId

@@ -36,6 +36,17 @@
 			modalStore.trigger(modal);
 		});
 		if (!newActionId) return;
+		if (Object.keys(getRequiredMetadataFromId(newActionId)).length === 0) {
+			loaded = false;
+			await apiRequest("PUT", `/api/programs/${inspecting_node}/node`, {
+				isAction: true,
+				id: newActionId,
+				metadata: {}
+			});
+			programs = await (await apiRequest("GET", "/api/programs")).json();
+			loaded = true;
+			return;
+		}
 		const newActionMeta: Record<string, string> = await new Promise<Record<string, string>>(
 			(resolve) => {
 				const modal: ModalSettings = {
