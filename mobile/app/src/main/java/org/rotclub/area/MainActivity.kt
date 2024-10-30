@@ -9,6 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.rotclub.area.composes.GlobalRoutes
 import org.rotclub.area.composes.Navigation
 import org.rotclub.area.ui.theme.AreaTheme
+import android.content.Intent
+import android.net.Uri
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

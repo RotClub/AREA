@@ -2,10 +2,11 @@ import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 import { addProvider } from "$lib/provider";
 import { adaptUrl } from "$lib/api";
+import { getToken } from "$lib/web";
 
 export const GET = async (event) => {
 	const openIdParams = queryString.parse(event.url.search);
-	const token = event.url.searchParams.get("token");
+	const token = event.url.searchParams.get(getToken());
 
 	if (!openIdParams["openid.claimed_id"]) {
 		throw error(400, "Invalid Steam OpenID response");

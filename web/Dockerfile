@@ -1,42 +1,69 @@
-FROM node:lts-buster AS builder
-
-WORKDIR /build
-
-COPY . .
-
-RUN npm install
-
-RUN npm run build
-
-
-FROM node:lts-buster AS vercel
+FROM node:lts-buster AS vercel_runner
 
 WORKDIR /app
 
-# Copy the build files and node_modules for Vercel
-COPY --from=builder /build/vercel.json .
-COPY --from=builder /build/.vercel .
-COPY --from=builder /build/node_modules ./node_modules
-COPY --from=builder /build/package*.json .
+COPY . .
+
+ARG VERCEL_TOKEN
+
+# Install Vercel CLI
+RUN npm install --global vercel@latest
+
+# Link the project to Vercel
+RUN npm run link_vercel
+
+# Pull the project settings from Vercel
+RUN vercel pull --yes --environment=preview --token=${VERCEL_TOKEN}
+
+# Set the environment to preview
+RUN npm run env:preview
+
+# Install dependencies
+RUN npm install
+
+# Remove rootDirectory from project.json to avoid Vercel build error
+RUN sed -i.bak '/rootDirectory/d' .vercel/project.json
+
+# Use Vercel adapter for Vite
+RUN mv svelte.config.deploy.js svelte.config.js
+
+# Build the project
+RUN vercel build --yes --token=${VERCEL_TOKEN}
 
 # Expose 24678 for Vite's HMR and 8081 for the server
 EXPOSE 24678
-EXPOSE 8081
+EXPOSE 4173
 
-CMD npx vercel dev --token=$VERCEL_TOKEN --yes
+# Run the project
+CMD npm run preview
 
 
 FROM node:lts-buster AS node_runner
 
 WORKDIR /app
 
-# Copy the build files and node_modules
-COPY --from=builder /build/build ./build
-COPY --from=builder /build/node_modules ./node_modules
-COPY --from=builder /build/package*.json .
+COPY . .
+
+ARG VERCEL_TOKEN
+
+# Install Vercel CLI
+RUN npm install --global vercel@latest
+
+# Link the project to Vercel
+RUN npm run link_vercel
+
+# Set the environment to preview
+RUN npm run env:preview
+
+# Install dependencies
+RUN npm install
+
+# Build the project
+RUN npm run build
 
 # Expose 24678 for Vite's HMR and 3000 for the server
 EXPOSE 24678
-EXPOSE 3000
+EXPOSE 4173
 
-CMD node build
+# Run the project
+CMD npm run preview
