@@ -34,7 +34,7 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         }
         /*noAnimationComposable(BottomBarScreen.Explore.route,) {
             ExploreScreen()
-        }
+        }*/
         noAnimationComposable(
             BottomBarScreen.Profile.route,
             deepLinks = listOf(
