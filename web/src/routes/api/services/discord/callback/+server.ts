@@ -25,7 +25,7 @@ export const GET = async (event) => {
 			grant_type: "authorization_code",
 			code: code || "",
 			redirect_uri: `${adaptUrl()}/api/services/discord/callback`,
-			scope: "identify email openid messages.read connections"
+			scope: "identify email openid messages.read connections guilds"
 		})
 	});
 	const data = await res_discord.json();

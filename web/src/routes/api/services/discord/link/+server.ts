@@ -18,7 +18,7 @@ export const GET = async (event) => {
 			response_type: "code",
 			redirect_uri: `${adaptUrl()}/api/services/discord/callback`,
 			integration_type: 1,
-			scope: "identify email openid messages.read connections",
+			scope: "identify email openid messages.read connections guilds",
 			state: token
 		});
 	return new Response(JSON.stringify({ url: authorizationUrl }), {
