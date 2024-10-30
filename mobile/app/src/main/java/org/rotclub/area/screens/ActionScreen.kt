@@ -158,10 +158,11 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
                         val token = sharedStorage.getToken()
                         if (token != null) {
                             val newMetadata = JsonObject().apply {
-                                addProperty("metadata1", metadata1.text)
-                                addProperty("metadata2", metadata2.text)
+                                add("meta", JsonObject().apply {
+                                    addProperty("track_id", "123")
+                                })
                             }
-                            putAction(token, program.id, 80, newMetadata)
+                            putAction(token, program.id, "SPOTIFY:listening-track", newMetadata)
                             showToast = true
                             toastMessage = "Action updated successfully"
                         }

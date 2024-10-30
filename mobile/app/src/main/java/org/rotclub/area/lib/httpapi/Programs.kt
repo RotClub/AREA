@@ -29,7 +29,7 @@ data class ProgramRequest(
 )
 
 data class NewActionIdRequest(
-    val actionId: Int,
+    val id: String,
     val isAction: Boolean = true,
     val metadata: JsonElement?
 )
@@ -135,22 +135,20 @@ fun deleteActionFromProgram(program: ProgramResponse, actionId: String): Program
     return program.copy(actions = updatedActions)
 }
 
-suspend fun putAction(token: String, inspectingNode: Int, newActionId: Int, newActionMeta: JsonElement): Boolean {
-    if (newActionId <= 0) {
-        println("Invalid action ID")
-        return false
-    }
-
-    return try {
-        val response = RetrofitClient.authApi.apiPutAction(
-            "Bearer $token",
-            inspectingNode,
-            NewActionIdRequest(actionId = newActionId, isAction = true, metadata = newActionMeta)
-        )
+suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, newActionMeta: JsonElement): Boolean {
+    try {
+        val response = RetrofitClient.authApi.apiPutAction("Bearer $token", inspectingNode, NewActionIdRequest(id = newActionId, isAction = true, metadata = newActionMeta))
         println(response)
-        response.code() == 200
+        when (response.code()) {
+            200 -> {
+                return true
+            }
+            else -> {
+                return false
+            }
+        }
     } catch (e: Exception) {
         println("Error occurred: $e")
-        false
+        return false
     }
 }
