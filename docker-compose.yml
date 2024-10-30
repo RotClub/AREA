@@ -17,6 +17,14 @@ services:
     networks:
         - shared_network
 
+  worker:
+    platform: linux/amd64
+    build:
+      context: "./worker"
+      dockerfile: "Dockerfile"
+      args:
+        VERCEL_TOKEN: ${VERCEL_TOKEN}
+
   client_mobile:
     platform: linux/amd64
     build:
