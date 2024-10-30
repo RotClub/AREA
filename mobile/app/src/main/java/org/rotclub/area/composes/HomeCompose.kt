@@ -117,9 +117,9 @@ fun HomeCircleChart() {
         coroutineScope.launch {
             val token = sharedStorage.getToken()
             if (token == null) {
-                // TODO: redirect to login
                 return@launch
             }
+            // TODO: Avoid spamming requests on login
             getServices(services, token)
         }
     }
