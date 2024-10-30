@@ -1,5 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function refreshTwitchToken(service_meta: any): Promise<Record<string, any>> {
+	return {};
+}
+
 export async function actionIsStreamingTrigger(
-	userId: number,
+	nodeId: number,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	service_meta: any,
 	meta: Record<string, string | number | boolean | Date>
@@ -7,12 +12,11 @@ export async function actionIsStreamingTrigger(
 	return false;
 }
 
-export async function actionViewcountReachesTrigger(
-	userId: number,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	service_meta: any,
-	meta: Record<string, string | number | boolean | Date>
+export async function reactionStartCommercialTrigger(
+    nodeId: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    service_meta: any,
+    meta: Record<string, string | number | boolean | Date>
 ): Promise<boolean> {
-    const url: string = `https://api.twitch.tv/helix/users`
     return false;
 }

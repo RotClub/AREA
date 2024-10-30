@@ -70,6 +70,7 @@ export async function addProvider(
 		});
 	}
 	if (correctProvider && data) {
+		data["expires_at"] = new Date((data["expires_in"] as number * 1000) + Date.now()).getTime();
 		await client.user.update({
 			where: {
 				token: token
