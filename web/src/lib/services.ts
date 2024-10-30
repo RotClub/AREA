@@ -1,8 +1,29 @@
 import { PrismaClient, Provider } from "@prisma/client";
-import { actionListeningTrackTrigger, reactionPlayTrackTrigger, reactionSkipToNextTrigger, reactionSkipToPreviousTrigger, refreshSpotifyToken } from "./triggers/spotify";
-import { actionIsStreamingTrigger, reactionStartCommercialTrigger, refreshTwitchToken } from "./triggers/twitch";
-import { actionServerJoinedTrigger, actionUsernameChangedTrigger, refreshDiscordToken } from "./triggers/discord";
-import { actionGainedKarmaTrigger, actionUnreadMessageTrigger, actionUsernameBecameAvailableTrigger, reactionAddFriendTrigger, reactionDeleteFriendTrigger, refreshRedditToken } from "./triggers/reddit";
+import {
+	actionListeningTrackTrigger,
+	reactionPlayTrackTrigger,
+	reactionSkipToNextTrigger,
+	reactionSkipToPreviousTrigger,
+	refreshSpotifyToken
+} from "./triggers/spotify";
+import {
+	actionIsStreamingTrigger,
+	reactionStartCommercialTrigger,
+	refreshTwitchToken
+} from "./triggers/twitch";
+import {
+	actionServerJoinedTrigger,
+	actionUsernameChangedTrigger,
+	refreshDiscordToken
+} from "./triggers/discord";
+import {
+	actionGainedKarmaTrigger,
+	actionUnreadMessageTrigger,
+	actionUsernameBecameAvailableTrigger,
+	reactionAddFriendTrigger,
+	reactionDeleteFriendTrigger,
+	refreshRedditToken
+} from "./triggers/reddit";
 
 export interface ActionMetaDataType {
 	id: string;
@@ -175,7 +196,7 @@ export const Nodes: NodeType = [
 						id: "username",
 						displayName: "Username",
 						type: "string"
-					},
+					}
 				},
 				trigger: actionGainedKarmaTrigger
 			},

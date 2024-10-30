@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function refreshSpotifyToken(service_meta: any): Promise<Record<string, any>> {
-	const basic: string = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64");
+	const basic: string = Buffer.from(
+		`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+	).toString("base64");
 	const url: string = "https://accounts.spotify.com/api/token";
 	const res: Response = await fetch(url, {
 		method: "POST",
@@ -20,7 +22,7 @@ export async function refreshSpotifyToken(service_meta: any): Promise<Record<str
 	}
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const data: Record<string, any> = await res.json();
-	data["expires_at"] = new Date((data["expires_in"] as number * 1000) + Date.now()).getTime();
+	data["expires_at"] = new Date((data["expires_in"] as number) * 1000 + Date.now()).getTime();
 	return data;
 }
 
@@ -90,7 +92,7 @@ export async function reactionSkipToNextTrigger(
 }
 
 export async function reactionSkipToPreviousTrigger(
-nodeId: number,
+	nodeId: number,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	service_meta: any,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

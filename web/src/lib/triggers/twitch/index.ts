@@ -13,10 +13,10 @@ export async function actionIsStreamingTrigger(
 }
 
 export async function reactionStartCommercialTrigger(
-    nodeId: number,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    service_meta: any,
-    meta: Record<string, string | number | boolean | Date>
+	nodeId: number,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	service_meta: any,
+	meta: Record<string, string | number | boolean | Date>
 ): Promise<boolean> {
-    return false;
+	return false;
 }
