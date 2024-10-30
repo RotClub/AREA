@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -109,12 +110,32 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
                 }
             }
         }
+        HorizontalDivider(
+            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
+            color = FrispyTheme.Surface500,
+            thickness = 2.dp
+        )
         Column (
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 5.dp),
+                text = "Configuration",
+                color = Color.White,
+                fontFamily = fontFamily,
+                fontSize = 26.sp
+            )
+            Text(
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 0.dp, 16.dp),
+                text = "Edit here the configuration of the node.",
+                color = Color.White,
+                fontFamily = fontFamily,
+                fontSize = 18.sp
+            )
             BasicTextField(
                 value = metadata1,
                 onValueChange = { metadata1 = it },
