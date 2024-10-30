@@ -14,7 +14,7 @@ export const GET = async (event) => {
 	if (!client_id || !client_secret) {
 		error(500, "Discord client ID or client secret not found");
 	}
-	const client = new PrismaClient()
+	const client = new PrismaClient();
 	const user_service = await client.user.findUnique({
 		where: {
 			token: token
@@ -40,14 +40,12 @@ export const GET = async (event) => {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
-			"Authorization": `Basic ${Buffer.from(`${client_id}:${client_secret}`).toString("base64")}`
+			Authorization: `Basic ${Buffer.from(`${client_id}:${client_secret}`).toString("base64")}`
 		},
-		body: new URLSearchParams(
-			{
-				token: service_data["access_token"],
-				token_type_hint: 'access_token'
-			}
-		)
+		body: new URLSearchParams({
+			token: service_data["access_token"],
+			token_type_hint: "access_token"
+		})
 	});
 	if (!revoke.ok) {
 		error(revoke.status, "Failed to revoke Discord access token");
