@@ -32,10 +32,12 @@ export const createJWTToken = (payload: {
 	password: string;
 	username: string;
 	role: UserRole;
+	old_token?: string;
 }) => {
 	const new_token = jwt.sign(payload, process.env.JWT_SECRET || "", { expiresIn: "1y" });
 	try {
-		return jwt.verify(new_token, process.env.JWT_SECRET || "");
+		jwt.verify(new_token, process.env.JWT_SECRET || "");
+		return new_token as string;
 	} catch (err) {
 		console.error("Error verifying the JWT token:", err);
 		return null;

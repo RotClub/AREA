@@ -1,0 +1,12 @@
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "org.rotclub.area",
+			"sha256_cert_fingerprints": [
+				"07:40:C9:A8:8C:1A:40:A0:B9:2F:28:37:80:BC:AF:14:6B:32:9E:51:22:80:54:B2:95:7B:55:19:3E:03:97:3C"
+			]
+		}
+	}
+]
