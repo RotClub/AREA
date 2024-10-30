@@ -17,8 +17,8 @@ export async function actionIsStreamingTrigger(
 	const response: Response = await fetch(url, {
 		method: "GET",
 		headers: {
-			"Authorization": `Bearer ${service_meta.access_token}`,
-			"Client-ID": require("env").TWITCH_CLIENT_ID || ""
+			Authorization: `Bearer ${service_meta.access_token}`,
+			"Client-ID": process.env.TWITCH_CLIENT_ID || ""
 		}
 	});
 	if (!response.ok) {
@@ -29,6 +29,7 @@ export async function actionIsStreamingTrigger(
 	if (data["data"].length === 0) {
 		return false;
 	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const stream: Record<string, any> = data["data"][0];
 	const action: Action | null = await client.action.findFirst({
 		where: {
@@ -67,8 +68,8 @@ export async function reactionStartCommercialTrigger(
 	const response: Response = await fetch(url, {
 		method: "POST",
 		headers: {
-			"Authorization": `Bearer ${service_meta.access_token}`,
-			"Client-ID": require("env").TWITCH_CLIENT_ID || ""
+			Authorization: `Bearer ${service_meta.access_token}`,
+			"Client-ID": process.env.TWITCH_CLIENT_ID || ""
 		}
 	});
 	return response.ok;

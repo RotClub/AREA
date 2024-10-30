@@ -14,6 +14,7 @@ import {
 import {
 	actionPremiumExpiredTrigger,
 	actionServerJoinedTrigger,
+	actionServerLeftTrigger,
 	actionUsernameChangedTrigger,
 	refreshDiscordToken
 } from "./triggers/discord";
@@ -175,7 +176,7 @@ export const Nodes: NodeType = [
 				id: "server-left",
 				displayName: "Server Left",
 				meta: {},
-				trigger: actionServerJoinedTrigger
+				trigger: actionServerLeftTrigger
 			},
 			{
 				id: "premium-expired",
