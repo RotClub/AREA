@@ -1,5 +1,6 @@
 package org.rotclub.area.composes
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -172,6 +175,9 @@ fun ListView(action: NodeType, check: Boolean) {
 @Composable
 fun TerminateDialog(showDialog: Boolean, onDismiss: () -> Unit, navController: NavController, program: ProgramResponse) {
     var inputText by remember { mutableStateOf("") }
+    var showToast by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf("") }
+    val context = LocalContext.current
     val gson = Gson()
 
     if (showDialog) {
@@ -219,8 +225,11 @@ fun TerminateDialog(showDialog: Boolean, onDismiss: () -> Unit, navController: N
                     )
                     Button(
                         onClick = {
-                            onDismiss()
-                            navController.navigate("node_screen/${gson.toJson(program)}")
+                            val parameterInt = inputText.toIntOrNull()
+                            if (parameterInt != null) {
+                                onDismiss()
+                                navController.navigate("node_screen/${gson.toJson(program)}")
+                            }
                         },
                         shape = RectangleShape,
                         colors = ButtonDefaults.buttonColors(
