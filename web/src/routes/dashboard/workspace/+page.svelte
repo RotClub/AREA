@@ -54,7 +54,7 @@
 		loaded = false;
 		await apiRequest("PUT", `/api/programs/${inspecting_node}/node`, {
 			isAction: true,
-			id: newActionId,
+			id: newActionId,	
 			metadata: newActionMeta
 		});
 		programs = await (await apiRequest("GET", "/api/programs")).json();
