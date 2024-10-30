@@ -51,11 +51,90 @@ export async function actionUsernameChangedTrigger(
 	);
 }
 
+export async function actionPremiumExpiredTrigger(
+	nodeId: number,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	service_meta: any,
+	meta: Record<string, string | number | boolean | Date>
+): Promise<boolean> {
+	const url: string = "https://discord.com/api/users/@me";
+
+	const response: Response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${service_meta.access_token}`
+		}
+	});
+	if (!response.ok) {
+		return false;
+	}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const data: Record<string, any> = await response.json();
+	const client: PrismaClient = new PrismaClient();
+	const action: Action | null = await client.action.findFirst({
+		where: {
+			id: nodeId
+		}
+	});
+	if (action === null) {
+		return false;
+	}
+	await client.action.update({
+		where: {
+			id: nodeId
+		},
+		data: {
+			persistentData: {
+				premium: Number(data["premium_type"])
+			}
+		}
+	});
+	if (!action.metadata) {
+		return false;
+	}
+	return (
+		(action.persistentData as Record<string, number>["premium"]) >
+		Number(data["premium_type"])
+	);
+}
+
 export async function actionServerJoinedTrigger(
 	nodeId: number,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	service_meta: any,
 	meta: Record<string, string | number | boolean | Date>
 ): Promise<boolean> {
-	return false;
+	const client: PrismaClient = new PrismaClient();
+	const url: string = `https://discord.com/api/guilds/${meta.guild_id}/members/@me`;
+
+	const response: Response = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${service_meta.access_token}`
+		}
+	});
+	if (!response.ok) {
+		return false;
+	}
+	const data: Record<string, any> = await response.json();
+	const action: Action | null = await client.action.findFirst({
+		where: {
+			id: nodeId
+		}
+	});
+	if (action === null) {
+		return false;
+	}
+	await client.action.update({
+		where: {
+			id: nodeId
+		},
+		data: {
+			persistentData: {
+				joined: true
+			}
+		}
+	});
+	if (!action.metadata) {
+		return false;
+	}
+	return (action.persistentData as Record<string, boolean>)["joined"];
 }

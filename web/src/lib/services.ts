@@ -12,6 +12,7 @@ import {
 	refreshTwitchToken
 } from "./triggers/twitch";
 import {
+	actionPremiumExpiredTrigger,
 	actionServerJoinedTrigger,
 	actionUsernameChangedTrigger,
 	refreshDiscordToken
@@ -141,6 +142,11 @@ export const Nodes: NodeType = [
 						id: "length",
 						displayName: "Length",
 						type: "number"
+					},
+					channel_id: {
+						id: "channel_id",
+						displayName: "Channel ID",
+						type: "string"
 					}
 				},
 				trigger: reactionStartCommercialTrigger
@@ -164,6 +170,18 @@ export const Nodes: NodeType = [
 				displayName: "Server Joined",
 				meta: {},
 				trigger: actionServerJoinedTrigger
+			},
+			{
+				id: "server-left",
+				displayName: "Server Left",
+				meta: {},
+				trigger: actionServerJoinedTrigger
+			},
+			{
+				id: "premium-expired",
+				displayName: "Premium Expired",
+				meta: {},
+				trigger: actionPremiumExpiredTrigger
 			}
 		],
 		reactions: []
