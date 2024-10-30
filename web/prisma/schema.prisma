@@ -16,7 +16,7 @@ model User {
   token          String    @unique
   hashedPassword String
   createdAt      DateTime  @default(now())
-  username       String    @default("")
+  username       String    @unique
   Service        Service[]
   Program        Program[]
 }
