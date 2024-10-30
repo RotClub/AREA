@@ -9,15 +9,15 @@ export const GET = async () => {
 				return {
 					name: action.id,
 					description: action.displayName
-				}
+				};
 			}),
 			reactions: node.reactions.map((reaction) => {
 				return {
 					name: reaction.id,
 					description: reaction.displayName
-				}
+				};
 			})
-		}
+		};
 	});
 	const data = {
 		client: {
@@ -27,14 +27,12 @@ export const GET = async () => {
 			current_time: Date.now(),
 			services: accessibleServices
 		}
-	}
+	};
 
-	return new Response(JSON.stringify(data),
-		{
-			status: 200,
-			headers: {
-				"Content-Type": "application/json"
-			}
+	return new Response(JSON.stringify(data), {
+		status: 200,
+		headers: {
+			"Content-Type": "application/json"
 		}
-	);
+	});
 };
