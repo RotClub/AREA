@@ -2,6 +2,7 @@ package org.rotclub.area.composes
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -10,11 +11,13 @@ import androidx.navigation.compose.rememberNavController
 import org.rotclub.area.screens.LoginPage
 import org.rotclub.area.screens.MainScreen
 import org.rotclub.area.screens.RegisterPage
+import org.rotclub.area.screens.SettingsScreen
 
 sealed class GlobalRoutes(val route: String) {
     object Login : GlobalRoutes("login")
     object Register : GlobalRoutes("register")
     object MainApp : GlobalRoutes("mainapp")
+    object Settings : GlobalRoutes("settings")
 }
 
 @Composable
@@ -27,10 +30,7 @@ fun Navigation(route: GlobalRoutes) {
                 EnterTransition.None
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(700)
-                )
+                ExitTransition.None
             }
         ) {
             LoginPage(navController = navController)
@@ -41,13 +41,27 @@ fun Navigation(route: GlobalRoutes) {
                 EnterTransition.None
             },
             exitTransition = {
+                ExitTransition.None
+            }
+        ) {
+            RegisterPage(navController = navController)
+        }
+        composable(
+            GlobalRoutes.Settings.route,
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start,
+                    tween(700)
+                )
+            },
+            exitTransition = {
                 return@composable slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.End,
                     tween(700)
                 )
             }
         ) {
-            RegisterPage(navController = navController)
+            SettingsScreen(navController = navController)
         }
         composable(
             GlobalRoutes.MainApp.route,
@@ -55,10 +69,7 @@ fun Navigation(route: GlobalRoutes) {
                 EnterTransition.None
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(700)
-                )
+                ExitTransition.None
             }
         ) {
             MainScreen(globalNavController = navController)

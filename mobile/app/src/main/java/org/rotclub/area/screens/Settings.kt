@@ -18,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import org.rotclub.area.composes.FrispyInput
 import org.rotclub.area.lib.baseUrl
 import org.rotclub.area.lib.fontFamily
@@ -26,8 +28,9 @@ import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
-    val urlInput = remember { mutableStateOf("") }
+fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) {
+    val urlInput = remember { mutableStateOf(baseUrl.value) }
+    val actionStatus = remember { mutableStateOf(true) }
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -54,6 +57,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                 label = "API URL",
                 value = baseUrl,
                 modifier = Modifier.padding(vertical = 10.dp),
+                focusColor = (if (actionStatus.value) FrispyTheme.Primary500 else FrispyTheme.Error500),
                 onValueChange = { urlInput.value = it },
             )
             TextButton(
@@ -63,7 +67,8 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                     .clip(RoundedCornerShape(roundedValue))
                     .background(FrispyTheme.Primary400),
                 onClick = {
-                    RetrofitClient.changeBaseUrl(urlInput.value)
+                    actionStatus.value = RetrofitClient.changeBaseUrl(urlInput.value)
+                    println("Action Status: ${actionStatus.value}")
                 },
             ) {
                 Text(
@@ -73,10 +78,26 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             }
         }
     }
+    TextButton(
+        onClick = {
+            navController.popBackStack()
+        },
+        modifier = Modifier
+            .padding(10.dp)
+            .padding(top = 20.dp)
+            .size(100.dp, 50.dp)
+            .clip(RoundedCornerShape(roundedValue))
+            .background(FrispyTheme.Surface500),
+    ) {
+        Text(
+            "<- Back",
+            color = FrispyTheme.TextColor
+        )
+    }
 }
 
 @Preview
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(navController = rememberNavController())
 }

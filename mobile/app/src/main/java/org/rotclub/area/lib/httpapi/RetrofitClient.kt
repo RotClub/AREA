@@ -17,12 +17,20 @@ object RetrofitClient {
         .build()
         .create(Api::class.java)
 
-    fun changeBaseUrl(newBaseUrl: String) {
-        authApi = Retrofit.Builder()
-            .baseUrl(newBaseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(Api::class.java)
+    fun changeBaseUrl(newBaseUrl: String): Boolean {
+        println("Changing base url to $newBaseUrl")
+        try {
+            authApi = Retrofit.Builder()
+                .baseUrl(newBaseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api::class.java)
+            baseUrl.value = newBaseUrl
+            return true
+        } catch (e: Exception) {
+            println("Error changing base url: $e")
+            return false
+        }
     }
 }
 

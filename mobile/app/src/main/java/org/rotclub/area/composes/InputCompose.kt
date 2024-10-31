@@ -26,7 +26,8 @@ enum class InputType {
 @Composable
 fun FrispyInput(
     value: MutableState<String>, modifier: Modifier = Modifier,
-    onValueChange: ((String) -> Unit) = {}, label: String = "", inputType: InputType = InputType.DEFAULT
+    onValueChange: ((String) -> Unit) = {}, label: String = "", inputType: InputType = InputType.DEFAULT,
+    focusColor: Color = FrispyTheme.Primary500
 ) {
     val thisOnValueChange: (String) -> Unit = { value.value = it; onValueChange(it) }
     OutlinedTextField(
@@ -53,8 +54,8 @@ fun FrispyInput(
             focusedContainerColor = Color.Transparent,
             unfocusedLabelColor = FrispyTheme.Surface400,
             unfocusedBorderColor = FrispyTheme.Surface400,
-            focusedBorderColor = FrispyTheme.Primary500,
-            focusedLabelColor = FrispyTheme.Primary500,
+            focusedBorderColor = focusColor,
+            focusedLabelColor = focusColor,
             cursorColor = FrispyTheme.Primary300,
             focusedTextColor = FrispyTheme.Primary300,
             unfocusedTextColor = FrispyTheme.Surface200
