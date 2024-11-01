@@ -8,7 +8,7 @@ export enum PlatformType {
 export function getPlatformType(request: Request): PlatformType {
 	const userAgent = request.headers.get("user-agent") || "";
 
-	if (/Android/i.test(userAgent) && /wv/.test(userAgent)) {
+	if (userAgent.includes("okhttp")) {
 		return PlatformType.Android;
 	} else {
 		return PlatformType.Web;
