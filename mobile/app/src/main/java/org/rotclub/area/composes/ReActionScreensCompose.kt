@@ -3,6 +3,7 @@ package org.rotclub.area.composes
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun RadioButtonSelectAction(accAction: AccAction) {
+fun RadioButtonSelectAction(accAction: AccAction, service: String, onClick: (AccAction, String) -> Unit) {
     var selected by remember { mutableStateOf(false) }
 
     Row (
@@ -58,7 +59,10 @@ fun RadioButtonSelectAction(accAction: AccAction) {
     ) {
         RadioButton(
             selected = selected,
-            onClick = { selected = !selected },
+            onClick = {
+                selected = !selected
+                onClick(accAction, service)
+            },
             colors = RadioButtonDefaults.colors(
                 selectedColor = FrispyTheme.Primary500,
                 unselectedColor = FrispyTheme.Surface400
@@ -74,7 +78,7 @@ fun RadioButtonSelectAction(accAction: AccAction) {
 }
 
 @Composable
-fun RadioButtonSelectReaction(accReaction: AccReaction) {
+fun RadioButtonSelectReaction(accReaction: AccReaction, onClick: (AccReaction) -> Unit) {
     var selected by remember { mutableStateOf(false) }
 
     Row (
@@ -85,7 +89,10 @@ fun RadioButtonSelectReaction(accReaction: AccReaction) {
     ) {
         RadioButton(
             selected = selected,
-            onClick = { selected = !selected },
+            onClick = {
+                selected = !selected
+                onClick(accReaction)
+            },
             colors = RadioButtonDefaults.colors(
                 selectedColor = FrispyTheme.Primary500,
                 unselectedColor = FrispyTheme.Surface400
@@ -101,7 +108,7 @@ fun RadioButtonSelectReaction(accReaction: AccReaction) {
 }
 
 @Composable
-fun ListView(action: NodeType, check: Boolean) {
+fun ListView(action: NodeType, isSelectable: Boolean, onClick: (AccAction, String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card (
@@ -121,6 +128,7 @@ fun ListView(action: NodeType, check: Boolean) {
         ) {
             Column (
                 modifier = Modifier
+                    .clickable { expanded = !expanded }
                     .weight(1f)
                     .fillMaxWidth()
                     .background(FrispyTheme.Surface700)
@@ -157,129 +165,19 @@ fun ListView(action: NodeType, check: Boolean) {
                     )
                 }
                 if (expanded) {
-                    if (check) {
+                    if (isSelectable) {
                         for (accAction in action.actions) {
-                            RadioButtonSelectAction(accAction = accAction)
+                            RadioButtonSelectAction(accAction = accAction, service = action.service.toString()) { accAction, service ->
+                                onClick(accAction, service)
+                            }
                         }
                     } else {
                         for (accReaction in action.reactions) {
-                            RadioButtonSelectReaction(accReaction = accReaction)
+                            RadioButtonSelectReaction(accReaction = accReaction) { /* handle reaction selection */ }
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun TerminateDialog(showDialog: Boolean, onDismiss: () -> Unit, navController: NavController, program: ProgramResponse) {
-    var inputText by remember { mutableStateOf("") }
-    var showToast by remember { mutableStateOf(false) }
-    var toastMessage by remember { mutableStateOf("") }
-    val context = LocalContext.current
-    val gson = Gson()
-
-    if (showDialog) {
-        Dialog(onDismissRequest = { onDismiss() }) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(FrispyTheme.Surface500)
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
-                        text = "Configuration",
-                        color = Color.White,
-                        fontFamily = fontFamily,
-                        fontSize = 26.sp
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
-                        text = "Edit here the configuration of the node.",
-                        color = Color.White,
-                        fontFamily = fontFamily,
-                        fontSize = 18.sp
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 16.dp),
-                        color = FrispyTheme.Surface700,
-                        thickness = 2.dp
-                    )
-                    TextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
-                        label = { Text("Track") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 0.dp, 0.dp, 16.dp)
-                    )
-                    Button(
-                        onClick = {
-                            val parameterInt = inputText.toIntOrNull()
-                            if (parameterInt != null) {
-                                onDismiss()
-                                navController.navigate("node_screen/${gson.toJson(program)}")
-                            }
-                        },
-                        shape = RectangleShape,
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White,
-                            containerColor = FrispyTheme.Primary500,
-                            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
-                            disabledContentColor = Color.White.copy(alpha = 0.5f)
-                        ),
-                        modifier = Modifier
-                            .height(40.dp)
-                            .fillMaxWidth(),
-                        enabled = true
-                    ) {
-                        Text(
-                            text = "Confirm",
-                            color = Color.White,
-                            fontFamily = fontFamily,
-                            fontSize = 20.sp
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun TerminateButton(program: ProgramResponse, navController: NavController) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = { showDialog = true  },
-        modifier = Modifier
-            .padding(0.dp, 16.dp, 0.dp, 0.dp)
-            .fillMaxWidth(),
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White,
-            containerColor = FrispyTheme.Primary500,
-            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
-            disabledContentColor = Color.White.copy(alpha = 0.5f)
-        ),
-        enabled = true
-    ) {
-        Text(
-            text = "Confirm",
-            color = Color.White,
-            fontFamily = fontFamily,
-            fontSize = 20.sp
-        )
-    }
-    TerminateDialog(showDialog, onDismiss = { showDialog = false }, navController = navController, program = program)
 }

@@ -26,7 +26,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.ListView
-import org.rotclub.area.composes.TerminateButton
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.NodeType
 import org.rotclub.area.lib.httpapi.ProgramResponse
@@ -91,7 +90,7 @@ fun ReactionScreen(navController: NavHostController, backStackEntry: NavBackStac
             )
             accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
                 actionsList.forEach { action ->
-                    ListView(action, false)
+                    /*ListView(action, false)*/
                 }
             }
         }
@@ -101,7 +100,6 @@ fun ReactionScreen(navController: NavHostController, backStackEntry: NavBackStac
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TerminateButton( program = program, navController = navController)
         }
     }
 }

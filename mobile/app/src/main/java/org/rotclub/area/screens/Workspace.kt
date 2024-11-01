@@ -79,7 +79,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                     // TODO: redirect to login
                     return@launch
                 }
-                programs.value += postProgram(token, "caca", mutableStateOf(""))
+                programs.value += postProgram(token, "New program", mutableStateOf(""))
             }
         }, text = "")
     }

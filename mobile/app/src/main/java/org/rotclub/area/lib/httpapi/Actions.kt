@@ -11,8 +11,9 @@ enum class Provider {
 }
 
 data class ActionMetaDataType(
-    val key: String,
-    val value: String
+    val id: String,
+    val displayName: String,
+    val type: String,
 )
 
 data class AccAction(
