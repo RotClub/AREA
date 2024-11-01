@@ -7,7 +7,7 @@ export const actions = {
 	default: async (event) => {
 		const data = await event.request.formData();
 		const email = data.get("email");
-		const login: boolean = Boolean(data.get("login"));
+		const login: boolean = data.get("login") === "on";
 		const password = encryptPWD(String(data.get("password")));
 		const client = new PrismaClient();
 
@@ -16,19 +16,20 @@ export const actions = {
 			if (password !== confirmPassword) {
 				return fail(400, { error: "Passwords do not match" });
 			}
-			const res = await fetch(event.url.host + "/api/auth/register", {
+			const res = await event.fetch("/api/auth/register", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					email: email,
 					password: password,
 					role: "USER",
-					username: email
+					username: data.get("username")
 				})
 			})
 				.then((res) => res.json())
 				.catch((error) => fail(500, { error: "Failed to create user: " + error }));
-			return redirect(301, "/dashboard");
+			console.log(res);
+			return redirect(301, "/auth?login=true");
 		}
 
 		try {
