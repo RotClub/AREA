@@ -1,5 +1,6 @@
 package org.rotclub.area.lib
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -7,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.rotclub.area.R
 
-const val BASE_URL = "http://10.15.193.2:8081/"
+var baseUrl = mutableStateOf("http://10.0.2.2:8081/")
 const val BASE_DEEPLINK_URL = "https://area-app.vercel.app/"
 val roundedValue = 20.dp
 val fontFamily: FontFamily = FontFamily(
