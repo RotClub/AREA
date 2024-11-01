@@ -15,6 +15,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,10 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
+import org.rotclub.area.lib.httpapi.RetrofitClient
 import org.rotclub.area.lib.httpapi.ServiceType
 import org.rotclub.area.lib.roundedValue
+import org.rotclub.area.lib.utils.BrowserUtils
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme
@@ -62,10 +70,16 @@ fun LogoutButton(modifier: Modifier = Modifier, globalNavController: NavHostCont
 }
 
 @Composable
-fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref: String, unlinkHref: String) {
-    val linkIcon: Int = if (!link) R.drawable.unlink else R.drawable.link
-    val linkIconColor = if (!link) FrispyTheme.TextColor else FrispyTheme.Surface900
-    val buttonColor = if (!link) FrispyTheme.Error500 else FrispyTheme.Success500
+fun ProfileApiCards(service: ServiceType?, link: Boolean, title: String,
+    linkHref: String, unlinkHref: String, token: String?) {
+    if (service == null)
+        return
+    var thisLink by remember { mutableStateOf(link) }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val linkIcon: Int = if (!thisLink) R.drawable.unlink else R.drawable.link
+    val linkIconColor = if (!thisLink) FrispyTheme.TextColor else FrispyTheme.Surface900
+    val buttonColor = if (!thisLink) FrispyTheme.Error500 else FrispyTheme.Success500
     Row (
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
@@ -98,7 +112,31 @@ fun ProfileApiCards(service: ServiceType, link: Boolean, title: String, linkHref
             )
         }
         Button(
-            onClick = { /* do something */ },
+            onClick = {
+                if (!link) {
+                    if (linkHref == "") {
+                        return@Button
+                    }
+                    coroutineScope.launch {
+                        val oauthUrl = RetrofitClient.authApi.apiGetServiceOauth(linkHref, token!!).body()?.url
+                            ?: return@launch
+                        BrowserUtils.openUrl(
+                            context, oauthUrl,
+                            token
+                        )
+                    }
+                    return@Button
+                }
+                if (unlinkHref == "") {
+                    return@Button
+                }
+                coroutineScope.launch {
+                    val res = RetrofitClient.authApi.apiUnlinkService(unlinkHref, "Bearer $token")
+                    if (res.isSuccessful) {
+                        thisLink = false
+                    }
+                }
+            },
             shape = RoundedCornerShape(roundedValue),
             colors = ButtonDefaults.buttonColors(
                 contentColor = FrispyTheme.Surface500,
@@ -139,6 +177,13 @@ fun SkeletonProfileApiCards() {
 @Composable
 fun ProfileApiCardsPreview() {
     AreaTheme {
-        ProfileApiCards(ServiceType.SPOTIFY, false, "Spotify", "https://spotify.com", "https://spotify.com")
+        ProfileApiCards(
+            ServiceType.SPOTIFY,
+            false,
+            "Spotify",
+            "https://spotify.com",
+            "https://spotify.com",
+            "token"
+        )
     }
 }

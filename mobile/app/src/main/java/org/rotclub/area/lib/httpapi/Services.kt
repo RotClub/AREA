@@ -9,9 +9,8 @@ enum class ServiceType(val icon: Int)
     STEAM(R.drawable.steam_icon),
     SPOTIFY(R.drawable.spotify_icon),
     BATTLENET(R.drawable.battlenet_icon),
-    EPICGAMES(R.drawable.epicgames_icon),
-    RIOT(R.drawable.riot_icon),
-    X(R.drawable.x_icon),
+    REDDIT(R.drawable.reddit_icon),
+    TWITCH(R.drawable.twitch_icon),
 }
 
 data class Service(

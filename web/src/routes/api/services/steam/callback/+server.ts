@@ -1,12 +1,12 @@
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 import { addProvider } from "$lib/provider";
-import { adaptUrl } from "$lib/api";
-import { getToken } from "$lib/web";
+import { getRedirectionURL, PlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
 	const openIdParams = queryString.parse(event.url.search);
-	const token = event.url.searchParams.get(getToken());
+	const token = event.url.searchParams.get("token");
+	const user_agent = event.url.searchParams.get("user_agent");
 
 	if (!openIdParams["openid.claimed_id"]) {
 		throw error(400, "Invalid Steam OpenID response");
@@ -24,5 +24,5 @@ export const GET = async (event) => {
 		const ans = await res.json();
 		error(400, ans.error);
 	}
-	return redirect(301, `${adaptUrl()}/dashboard`);
+	return redirect(301, getRedirectionURL(PlatformType[user_agent as keyof typeof PlatformType]));
 };
