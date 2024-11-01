@@ -77,7 +77,7 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
         }
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(893.dp)
@@ -93,7 +93,7 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
             fontFamily = fontFamily,
             fontSize = 24.sp,
         )
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -113,33 +113,18 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
             )
             accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
                 actionsList.forEach { action ->
-                    ListView(action, true) { accAction, service ->
-                        selectedService = service
-                        selectedAction = accAction
-                    }
+                    ListView(
+                        action = action,
+                        isSelectable = true,
+                        selectedAction = selectedAction,
+                        onClick = { accAction, service ->
+                            selectedService = service
+                            selectedAction = accAction
+                        }
+                    )
                 }
             }
         }
-        /*accessibleActions.forEach { action ->
-            Text(
-                text = action.toString(),
-                color = FrispyTheme.Primary50,
-                fontFamily = fontFamily,
-                fontSize = 16.sp,
-            )
-        }*/
-        /*Text(
-            text = "Selected service: $selectedService",
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = 22.sp,
-        )
-        Text(
-            text = "Selected action: ${selectedAction?.toString()}",
-            color = FrispyTheme.Primary50,
-            fontFamily = fontFamily,
-            fontSize = 22.sp,
-        )*/
         Button(
             onClick = { showDialog = true },
             modifier = Modifier
@@ -205,10 +190,10 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                             val token = sharedStorage.getToken()
                             if (token != null) {
                                 val newMetadata = JsonObject().apply {
-                                        addProperty(
-                                            selectedAction?.meta?.values?.joinToString(", ") { it.id } ?: "",
-                                            metadata.text
-                                        )
+                                    addProperty(
+                                        selectedAction?.meta?.values?.joinToString(", ") { it.id } ?: "",
+                                        metadata.text
+                                    )
                                 }
                                 val actionUpdated = putAction(token, program.id, "${selectedService}:${selectedAction?.id}", newMetadata)
                                 if (actionUpdated) {

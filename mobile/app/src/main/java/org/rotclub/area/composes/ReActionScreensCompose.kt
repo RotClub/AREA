@@ -48,10 +48,15 @@ import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
-fun RadioButtonSelectAction(accAction: AccAction, service: String, onClick: (AccAction, String) -> Unit) {
-    var selected by remember { mutableStateOf(false) }
+fun RadioButtonSelectAction(
+    accAction: AccAction,
+    service: String,
+    selectedAction: AccAction?,
+    onClick: (AccAction, String) -> Unit
+) {
+    val selected = selectedAction == accAction
 
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(FrispyTheme.Surface700),
@@ -60,7 +65,6 @@ fun RadioButtonSelectAction(accAction: AccAction, service: String, onClick: (Acc
         RadioButton(
             selected = selected,
             onClick = {
-                selected = !selected
                 onClick(accAction, service)
             },
             colors = RadioButtonDefaults.colors(
@@ -108,10 +112,15 @@ fun RadioButtonSelectReaction(accReaction: AccReaction, onClick: (AccReaction) -
 }
 
 @Composable
-fun ListView(action: NodeType, isSelectable: Boolean, onClick: (AccAction, String) -> Unit) {
+fun ListView(
+    action: NodeType,
+    isSelectable: Boolean,
+    selectedAction: AccAction?,
+    onClick: (AccAction, String) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
 
-    Card (
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
@@ -119,21 +128,21 @@ fun ListView(action: NodeType, isSelectable: Boolean, onClick: (AccAction, Strin
             .clip(RoundedCornerShape(8.dp))
             .animateContentSize()
     ) {
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(FrispyTheme.Surface700)
                 .clip(RoundedCornerShape(8.dp))
                 .animateContentSize()
         ) {
-            Column (
+            Column(
                 modifier = Modifier
                     .clickable { expanded = !expanded }
                     .weight(1f)
                     .fillMaxWidth()
                     .background(FrispyTheme.Surface700)
             ) {
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(FrispyTheme.Surface700)
@@ -167,9 +176,12 @@ fun ListView(action: NodeType, isSelectable: Boolean, onClick: (AccAction, Strin
                 if (expanded) {
                     if (isSelectable) {
                         for (accAction in action.actions) {
-                            RadioButtonSelectAction(accAction = accAction, service = action.service.toString()) { accAction, service ->
-                                onClick(accAction, service)
-                            }
+                            RadioButtonSelectAction(
+                                accAction = accAction,
+                                service = action.service.toString(),
+                                selectedAction = selectedAction,
+                                onClick = onClick
+                            )
                         }
                     } else {
                         for (accReaction in action.reactions) {

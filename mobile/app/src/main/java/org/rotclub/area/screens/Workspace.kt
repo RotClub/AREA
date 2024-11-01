@@ -36,6 +36,7 @@ fun WorkspaceScreen(navController: NavHostController) {
     val sharedStorage = SharedStorageUtils(LocalContext.current)
 
     val programs = remember { mutableStateOf(emptyList<ProgramResponse?>()) }
+    val isResponseReceived = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
@@ -45,6 +46,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                 return@launch
             }
             programs.value = getPrograms(token)
+            isResponseReceived.value = true
         }
     }
 
@@ -57,8 +59,8 @@ fun WorkspaceScreen(navController: NavHostController) {
             .padding(20.dp, 80.dp, 20.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (programs.value.isEmpty()) {
-            for (i in 0..3) {
+        if (programs.value.isEmpty() && !isResponseReceived.value) {
+            for (i in 0..2) {
                 SkeletonApiColumnCard()
             }
         }
