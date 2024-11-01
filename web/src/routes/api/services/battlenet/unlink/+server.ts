@@ -1,6 +1,6 @@
-import { adaptUrl } from "$lib/api";
 import { error } from "@sveltejs/kit";
 import { removeProvider } from "$lib/provider";
+import { getPlatformType, getRedirectionURL } from "$lib/cross";
 
 export const GET = async (event) => {
 	const res = await removeProvider("battlenet", event.request);
@@ -8,7 +8,7 @@ export const GET = async (event) => {
 		const ans = await res.json();
 		error(400, ans.error);
 	}
-	return new Response(JSON.stringify({ url: `${adaptUrl()}/dashboard` }), {
+	return new Response(JSON.stringify({ url: getRedirectionURL(getPlatformType(event.request)) }), {
 		headers: {
 			"Content-Type": "application/json"
 		},

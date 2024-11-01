@@ -1,7 +1,15 @@
 import { adaptUrl } from "$lib/api";
 import { AuthorizationCode } from "simple-oauth2";
+import { getPlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
+	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
+	const platform = getPlatformType(event.request)
+	const state = JSON.stringify({
+		jwt: token,
+		user_agent: platform
+	})
+
 	const scope = "openid wow.profile d3.profile sc2.profile";
 	if (!process.env.BATTLENET_CLIENT_ID) {
 		return new Response(JSON.stringify({ error: "No BattleNet client ID provided" }), {
@@ -30,13 +38,11 @@ export const GET = async (event) => {
 			tokenPath: "/token"
 		}
 	});
-	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
 	const authorizationUrl = client.authorizeURL({
 		redirect_uri: `${adaptUrl()}/api/services/battlenet/callback`,
 		scope: scope,
-		state: token
+		state: state
 	});
-
 	return new Response(JSON.stringify({ url: authorizationUrl }), {
 		headers: {
 			"Content-Type": "application/json"

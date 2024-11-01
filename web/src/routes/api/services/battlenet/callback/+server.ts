@@ -2,11 +2,14 @@ import { adaptUrl } from "$lib/api";
 import { error, redirect } from "@sveltejs/kit";
 import queryString from "query-string";
 import { addProvider } from "$lib/provider";
+import { getRedirectionURL, PlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
 	const code = event.url.searchParams.get("code");
 	const err = event.url.searchParams.get("error");
-	const token = event.url.searchParams.get("state");
+	const state = JSON.parse(event.url.searchParams.get("state"));
+	const user_agent = state.user_agent
+	const token = state.jwt
 
 	if (!token) {
 		error(400, "No token provided");
@@ -44,5 +47,5 @@ export const GET = async (event) => {
 		const ans = await res.json();
 		error(400, ans.error);
 	}
-	return redirect(301, `${adaptUrl()}/dashboard`);
+	return redirect(301, getRedirectionURL(PlatformType[user_agent as keyof typeof PlatformType]));
 };
