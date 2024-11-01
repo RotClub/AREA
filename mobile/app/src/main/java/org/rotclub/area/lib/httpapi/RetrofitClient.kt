@@ -17,7 +17,7 @@ object RetrofitClient {
         .build()
         .create(Api::class.java)
 
-    fun changeBaseUrl(newBaseUrl: String): Boolean {
+    suspend fun changeBaseUrl(newBaseUrl: String): Boolean {
         println("Changing base url to $newBaseUrl")
         try {
             authApi = Retrofit.Builder()
@@ -26,6 +26,11 @@ object RetrofitClient {
                 .build()
                 .create(Api::class.java)
             baseUrl.value = newBaseUrl
+            val res = authApi.testConnection()
+            if (!res.isSuccessful) {
+                println("Error changing base url: ${res.errorBody()?.string()}")
+                return false
+            }
             return true
         } catch (e: Exception) {
             println("Error changing base url: $e")
@@ -35,11 +40,13 @@ object RetrofitClient {
 }
 
 interface Api {
+    @GET("/")
+    suspend fun testConnection(): Response<Unit>
+
     @POST("api/auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
     ): Response<LoginResponse>
-
 
     @GET("api/services")
     suspend fun getServices(@Header("Authorization") token: String): Response<List<Service>>

@@ -90,6 +90,7 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
         TextButton(
             onClick = {
                 if (loadingState.value) return@TextButton
+                loginErrorStatus.value = ""
                 coroutineScope.launch {
                     authLogin(email.value, password.value,
                         loadingState, loginResult, loginErrorStatus)

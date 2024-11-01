@@ -27,4 +27,9 @@ sealed class BottomBarScreen(
         title = "Profile",
         iconResId = R.drawable.user
     )
+    data object Settings : BottomBarScreen(
+        route = "settings",
+        title = "Settings",
+        iconResId = R.drawable.settings
+    )
 }
