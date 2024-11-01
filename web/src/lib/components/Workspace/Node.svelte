@@ -123,7 +123,10 @@
 			<img src={getIconPathFromId(action)} alt={action} width="24px" />
 			<span class="ml-2">{getDisplayNameFromId(action)}</span>
 			<div class="flex flex-row flex-grow justify-end">
-				<button disabled={!edit} class="btn-icon text-surface-200" on:click={editNodeMetaData}>
+				<button
+					disabled={!edit}
+					class="btn-icon text-surface-200"
+					on:click={editNodeMetaData}>
 					<Cog />
 				</button>
 				<button disabled={!edit} class="btn-icon text-error-500" on:click={deleteNode}>
