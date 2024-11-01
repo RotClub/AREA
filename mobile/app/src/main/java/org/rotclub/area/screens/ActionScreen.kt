@@ -159,7 +159,7 @@ fun ActionScreen(navController: NavHostController, backStackEntry: NavBackStackE
                         if (token != null) {
                             val newMetadata = JsonObject().apply {
                                 add("meta", JsonObject().apply {
-                                    addProperty("track_id", "123")
+                                    addProperty("track_id", "lol")
                                 })
                             }
                             putAction(token, program.id, "SPOTIFY:listening-track", newMetadata)
