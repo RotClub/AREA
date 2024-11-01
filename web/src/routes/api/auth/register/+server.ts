@@ -43,7 +43,7 @@ export const POST = async ({ request }) => {
 				hashedPassword: password,
 				role: body.role,
 				username: body.username,
-				token: token as string
+				token: token
 			}
 		});
 		const res = new Response(JSON.stringify(user), {

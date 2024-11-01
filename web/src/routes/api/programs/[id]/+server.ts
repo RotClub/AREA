@@ -35,6 +35,26 @@ export const DELETE = async ({ request, params }) => {
 		});
 	}
 
+	const actions = await client.action.findMany({
+		where: {
+			programId: Number(params.id)
+		}
+	});
+
+	actions.forEach(async (action) => {
+		await client.reaction.deleteMany({
+			where: {
+				actionId: action.id
+			}
+		});
+	});
+
+	await client.action.deleteMany({
+		where: {
+			programId: Number(params.id)
+		}
+	});
+
 	await client.program.delete({
 		where: {
 			id: Number(params.id)
