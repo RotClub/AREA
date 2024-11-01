@@ -70,7 +70,7 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
-            text = "Sign In",
+            text = "Login",
             fontSize = 40.sp,
             color = FrispyTheme.TextColor,
             fontFamily = fontFamily,
@@ -94,7 +94,10 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                 coroutineScope.launch {
                     authLogin(email.value, password.value,
                         loadingState, loginResult, loginErrorStatus)
-                    println("Login result: ${loginResult.value}")
+                    if (loginErrorStatus.value.isNotEmpty()) {
+                        loadingState.value = false
+                        return@launch
+                    }
                     if (loginResult.value != null) {
                         val token = loginResult.value?.token
                         if (token == null) {
@@ -103,7 +106,6 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                             return@launch
                         }
                         sharedPreferences.edit().putString("token", token).apply()
-                        println("Login successful. Token: $token")
                         navController.navigate(GlobalRoutes.MainApp.route)
                     }
                 }
@@ -127,7 +129,7 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                 return@TextButton
             }
             Text(
-                text = "Login",
+                text = "Sign In",
                 color = FrispyTheme.TextColor,
                 fontSize = 20.sp,
                 fontFamily = fontFamily,

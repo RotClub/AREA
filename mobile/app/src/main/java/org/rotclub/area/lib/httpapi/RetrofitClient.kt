@@ -48,6 +48,11 @@ interface Api {
         @Body loginRequest: LoginRequest
     ): Response<LoginResponse>
 
+    @POST("api/auth/register")
+    suspend fun register(
+        @Body registerRequest: RegisterRequest
+    ): Response<RegisterResponse>
+
     @GET("api/services")
     suspend fun getServices(@Header("Authorization") token: String): Response<List<Service>>
 
