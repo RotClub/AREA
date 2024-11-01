@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { parse as cookieParser } from "cookie";
 	import { apiRequest } from "$lib";
+	import { goto } from "$app/navigation";
 
 	let userData: {
 		username: string;
@@ -41,9 +42,13 @@
 
 		loading = false;
 	}
+
+	async function signOut() {
+		goto("/dashboard/profile/logout");
+	}
 </script>
 
-<div class="w-full h-full flex justify-center items-center">
+<div class="w-full h-full flex flex-col justify-center items-center gap-2">
 	<div class="card max-w-md w-full p-4 flex flex-col">
 		<span class="text-3xl font-semibold">Profile</span>
 		<hr class="mb-2" />
@@ -87,11 +92,19 @@
 		</div>
 		<div class="w-full flex justify-end">
 			<button
-				class="btn variant-filled-primary w-fit mt-2"
+				class="btn variant-filled-primary mt-2 w-24"
 				on:click={updateProfile}
 				disabled={loading}>
 				Update
 			</button>
 		</div>
+	</div>
+	<div class="card max-w-md w-full p-4 flex flex-row justify-between items-center">
+		<span class="text-lg font-semibold">Disconnect from your account</span>
+		<button class="btn variant-filled-error w-24" on:click={signOut}>Sign out</button>
+	</div>
+	<div class="card max-w-md w-full p-4 flex flex-row justify-between items-center">
+		<span class="text-lg font-semibold">Delete your account</span>
+		<button class="btn variant-filled-error w-24" disabled>Delete</button>
 	</div>
 </div>
