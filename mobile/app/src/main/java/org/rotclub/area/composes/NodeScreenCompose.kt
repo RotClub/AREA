@@ -83,7 +83,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                 )
                 Row (
                     modifier = Modifier
-                        .width(125.dp)
+                        .width(82.dp)
                 )
                 {
                     Icon(
@@ -105,23 +105,6 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                             .size(25.dp)
                             //open dialog
                             .clickable { onDelete() }
-                    )
-                    Icon(
-                        painter = if (!started) {
-                            painterResource(id = R.drawable.play)
-                        } else {
-                            painterResource(id = R.drawable.square)
-                        },
-                        contentDescription = "Add Action",
-                        tint = if (!started) {
-                            FrispyTheme.Success500
-                        } else {
-                            FrispyTheme.Error500
-                        },
-                        modifier = Modifier
-                            .padding(0.dp, 10.dp, 16.dp, 0.dp)
-                            .size(25.dp)
-                            .clickable { started = !started }
                     )
                 }
             }
@@ -158,7 +141,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                     )
                     Row (
                         modifier = Modifier
-                            .width(125.dp)
+                            .width(82.dp)
                     )
                     {
                         Icon(
@@ -178,23 +161,6 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                                 .padding(0.dp, 10.dp, 16.dp, 0.dp)
                                 .size(25.dp)
                                 .clickable { onDelete() }
-                        )
-                        Icon(
-                            painter = if (!started) {
-                                painterResource(id = R.drawable.play)
-                            } else {
-                                painterResource(id = R.drawable.square)
-                            },
-                            contentDescription = "Add Action",
-                            tint = if (!started) {
-                                FrispyTheme.Success500
-                            } else {
-                                FrispyTheme.Error500
-                            },
-                            modifier = Modifier
-                                .padding(0.dp, 10.dp, 16.dp, 0.dp)
-                                .size(25.dp)
-                                .clickable { started = !started }
                         )
                     }
                 }

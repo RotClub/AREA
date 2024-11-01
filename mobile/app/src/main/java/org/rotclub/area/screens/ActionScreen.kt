@@ -36,7 +36,7 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.rotclub.area.composes.BackButton
-import org.rotclub.area.composes.ListView
+import org.rotclub.area.composes.ListViewActions
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.AccAction
 import org.rotclub.area.lib.httpapi.NodeType
@@ -113,9 +113,8 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
             )
             accessibleActions.groupBy { it.service }.forEach { (_, actionsList) ->
                 actionsList.forEach { action ->
-                    ListView(
+                    ListViewActions(
                         action = action,
-                        isSelectable = true,
                         selectedAction = selectedAction,
                         onClick = { accAction, service ->
                             selectedService = service

@@ -82,10 +82,15 @@ fun RadioButtonSelectAction(
 }
 
 @Composable
-fun RadioButtonSelectReaction(accReaction: AccReaction, onClick: (AccReaction) -> Unit) {
-    var selected by remember { mutableStateOf(false) }
+fun RadioButtonSelectReaction(
+    accReaction: AccReaction,
+    service: String,
+    selectedReaction: AccReaction?,
+    onClick: (AccReaction, String) -> Unit
+) {
+    val selected = selectedReaction == accReaction
 
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(FrispyTheme.Surface700),
@@ -94,8 +99,7 @@ fun RadioButtonSelectReaction(accReaction: AccReaction, onClick: (AccReaction) -
         RadioButton(
             selected = selected,
             onClick = {
-                selected = !selected
-                onClick(accReaction)
+                onClick(accReaction, service)
             },
             colors = RadioButtonDefaults.colors(
                 selectedColor = FrispyTheme.Primary500,
@@ -112,9 +116,8 @@ fun RadioButtonSelectReaction(accReaction: AccReaction, onClick: (AccReaction) -
 }
 
 @Composable
-fun ListView(
+fun ListViewActions(
     action: NodeType,
-    isSelectable: Boolean,
     selectedAction: AccAction?,
     onClick: (AccAction, String) -> Unit
 ) {
@@ -174,19 +177,89 @@ fun ListView(
                     )
                 }
                 if (expanded) {
-                    if (isSelectable) {
-                        for (accAction in action.actions) {
-                            RadioButtonSelectAction(
-                                accAction = accAction,
-                                service = action.service.toString(),
-                                selectedAction = selectedAction,
-                                onClick = onClick
-                            )
-                        }
-                    } else {
-                        for (accReaction in action.reactions) {
-                            RadioButtonSelectReaction(accReaction = accReaction) { /* handle reaction selection */ }
-                        }
+                    for (accAction in action.actions) {
+                        RadioButtonSelectAction(
+                            accAction = accAction,
+                            service = action.service.toString(),
+                            selectedAction = selectedAction,
+                            onClick = onClick
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ListViewReactions(
+    action: NodeType,
+    selectedReaction: AccReaction?,
+    onClick: (AccReaction, String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .background(FrispyTheme.Surface700)
+            .clip(RoundedCornerShape(8.dp))
+            .animateContentSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(FrispyTheme.Surface700)
+                .clip(RoundedCornerShape(8.dp))
+                .animateContentSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .clickable { expanded = !expanded }
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(FrispyTheme.Surface700)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(FrispyTheme.Surface700)
+                ) {
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                    ) {
+                        Icon(
+                            painter = if (expanded) {
+                                painterResource(id = R.drawable.chevron_down)
+                            } else {
+                                painterResource(id = R.drawable.chevron_up)
+                            },
+                            contentDescription = if (expanded) {
+                                "Collapse"
+                            } else {
+                                "Expand"
+                            },
+                            tint = Color.White,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+                    Text(
+                        text = action.service.toString(),
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                    )
+                }
+                if (expanded) {
+                    for (accReaction in action.reactions) {
+                        RadioButtonSelectReaction(
+                            accReaction = accReaction,
+                            service = action.service.toString(),
+                            selectedReaction = selectedReaction,
+                            onClick = onClick
+                        )
                     }
                 }
             }
