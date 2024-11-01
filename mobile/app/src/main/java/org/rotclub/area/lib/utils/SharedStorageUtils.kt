@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 class SharedStorageUtils(localContext: Context) {
 
-    var sharedPreferences: SharedPreferences = localContext
+    private var sharedPreferences: SharedPreferences = localContext
         .getSharedPreferences("Area", Context.MODE_PRIVATE)
 
     fun getToken(): String? {
@@ -14,6 +14,10 @@ class SharedStorageUtils(localContext: Context) {
 
     fun clearToken() {
         sharedPreferences.edit().remove("token").apply()
+    }
+
+    fun saveToken(token: String) {
+        sharedPreferences.edit().putString("token", token).apply()
     }
 
 }
