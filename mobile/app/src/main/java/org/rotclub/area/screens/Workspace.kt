@@ -79,7 +79,10 @@ fun WorkspaceScreen(navController: NavHostController) {
                     // TODO: redirect to login
                     return@launch
                 }
-                programs.value += postProgram(token, "New program", mutableStateOf(""))
+                val newProgram = postProgram(token, "New Program", errorMessage = mutableStateOf(""))
+                if (newProgram != null) {
+                    programs.value = getPrograms(token)
+                }
             }
         }, text = "")
     }
