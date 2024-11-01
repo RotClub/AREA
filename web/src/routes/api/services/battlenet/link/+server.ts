@@ -4,11 +4,11 @@ import { getPlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
 	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
-	const platform = getPlatformType(event.request)
+	const platform = getPlatformType(event.request);
 	const state = JSON.stringify({
 		jwt: token,
 		user_agent: platform
-	})
+	});
 
 	const scope = "openid wow.profile d3.profile sc2.profile";
 	if (!process.env.BATTLENET_CLIENT_ID) {

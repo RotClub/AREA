@@ -5,8 +5,8 @@ export enum PlatformType {
 	Web = "Web"
 }
 
-export function getPlatformType(request: Request) : PlatformType {
-	const userAgent = request.headers.get('user-agent') || '';
+export function getPlatformType(request: Request): PlatformType {
+	const userAgent = request.headers.get("user-agent") || "";
 
 	if (/Android/i.test(userAgent) && /wv/.test(userAgent)) {
 		return PlatformType.Android;
@@ -15,7 +15,7 @@ export function getPlatformType(request: Request) : PlatformType {
 	}
 }
 
-export function getRedirectionURL(type: PlatformType) : string {
+export function getRedirectionURL(type: PlatformType): string {
 	switch (type) {
 		case PlatformType.Android:
 			return "https://area-app.vercel.app/app/redirect/";

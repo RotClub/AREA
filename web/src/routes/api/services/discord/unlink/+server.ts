@@ -55,10 +55,13 @@ export const GET = async (event) => {
 		const ans = await res.json();
 		error(res.status, ans.error);
 	}
-	return new Response(JSON.stringify({ url: getRedirectionURL(getPlatformType(event.request)) }), {
-		headers: {
-			"Content-Type": "application/json"
-		},
-		status: 200
-	});
+	return new Response(
+		JSON.stringify({ url: getRedirectionURL(getPlatformType(event.request)) }),
+		{
+			headers: {
+				"Content-Type": "application/json"
+			},
+			status: 200
+		}
+	);
 };

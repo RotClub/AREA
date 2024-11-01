@@ -6,8 +6,8 @@ import { getRedirectionURL, PlatformType } from "$lib/cross";
 export const GET = async (event) => {
 	const code = event.url.searchParams.get("code");
 	const state = JSON.parse(event.url.searchParams.get("state"));
-	const user_agent = state.user_agent
-	const token = state.jwt
+	const user_agent = state.user_agent;
+	const token = state.jwt;
 	const err_msg = event.url.searchParams.get("error_description");
 	const err = event.url.searchParams.get("error");
 

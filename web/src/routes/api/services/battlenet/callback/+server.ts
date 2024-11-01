@@ -8,8 +8,8 @@ export const GET = async (event) => {
 	const code = event.url.searchParams.get("code");
 	const err = event.url.searchParams.get("error");
 	const state = JSON.parse(event.url.searchParams.get("state"));
-	const user_agent = state.user_agent
-	const token = state.jwt
+	const user_agent = state.user_agent;
+	const token = state.jwt;
 
 	if (!token) {
 		error(400, "No token provided");

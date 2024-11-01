@@ -4,11 +4,11 @@ import queryString from "query-string";
 
 export const GET = async (event) => {
 	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
-	const platform = getPlatformType(event.request)
+	const platform = getPlatformType(event.request);
 	const state = JSON.stringify({
 		jwt: token,
 		user_agent: platform
-	})
+	});
 
 	if (!process.env.DISCORD_CLIENT_ID) {
 		return new Response(JSON.stringify({ error: "No Discord client ID provided" }), {
