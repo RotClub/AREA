@@ -22,11 +22,6 @@ data class RegisterRequest(
 )
 
 data class RegisterResponse(
-    val user: RegisterUserResponse?,
-    val error: String?,
-)
-
-data class RegisterUserResponse(
     val id: Int,
     val email: String,
     val role: Role,
@@ -52,7 +47,6 @@ suspend fun authLogin(
             val response = RetrofitClient.authApi.login(
                 LoginRequest(email, password)
             )
-            val errorResponse: ErrorResponse? = Gson().fromJson(response.errorBody()!!.charStream(), ErrorResponse::class.java)
             when (response.code()) {
                 404 -> {
                     loginResult.value = null
@@ -65,6 +59,7 @@ suspend fun authLogin(
                     return
                 }
                 else -> {
+                    val errorResponse: ErrorResponse? = Gson().fromJson(response.errorBody()!!.charStream(), ErrorResponse::class.java)
                     loginResult.value = null
                     loginErrorStatus.value = errorResponse?.error ?: "An error occurred"
                     return
@@ -97,7 +92,6 @@ suspend fun authRegister(
         val response = RetrofitClient.authApi.register(
             RegisterRequest(username, email, password, Role.USER)
         )
-        val errorResponse: ErrorResponse? = Gson().fromJson(response.errorBody()!!.charStream(), ErrorResponse::class.java)
         when (response.code()) {
             200 -> {
                 registerResult.value = response.body()
@@ -105,6 +99,7 @@ suspend fun authRegister(
                 return
             }
             else -> {
+                val errorResponse: ErrorResponse? = Gson().fromJson(response.errorBody()!!.charStream(), ErrorResponse::class.java)
                 registerResult.value = null
                 registerErrorStatus.value = errorResponse?.error ?: "An error occurred"
                 return

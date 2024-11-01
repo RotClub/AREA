@@ -106,7 +106,8 @@ fun RegisterCard(modifier: Modifier = Modifier, navController: NavHostController
                         return@launch
                     }
                     if (registerResult.value != null) {
-                        val token = registerResult.value?.user?.token
+                        val token = registerResult.value?.token
+                        println("Token: $token")
                         if (token == null) {
                             registerResult.value = null
                             registerErrorStatus.value = "An error occurred"
