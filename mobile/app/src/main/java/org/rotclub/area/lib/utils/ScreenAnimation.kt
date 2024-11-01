@@ -5,17 +5,19 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
 fun NavGraphBuilder.animatedSlideFullRightComposable(
     route: String,
+    deepLinks: List<NavDeepLink> = emptyList(),
+    argument: List<NamedNavArgument> = emptyList(),
     content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
@@ -32,12 +34,16 @@ fun NavGraphBuilder.animatedSlideFullRightComposable(
                 tween(700)
             )
         },
+        deepLinks = deepLinks,
+        arguments = argument,
         content = content
     )
 }
 
 fun NavGraphBuilder.animatedSlideFullLeftComposable(
     route: String,
+    deepLinks: List<NavDeepLink> = emptyList(),
+    argument: List<NamedNavArgument> = emptyList(),
     content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
@@ -54,12 +60,16 @@ fun NavGraphBuilder.animatedSlideFullLeftComposable(
                 tween(700)
             )
         },
+        deepLinks = deepLinks,
+        arguments = argument,
         content = content
     )
 }
 
 fun NavGraphBuilder.animatedSlideFullTopComposable(
     route: String,
+    deepLinks: List<NavDeepLink> = emptyList(),
+    argument: List<NamedNavArgument> = emptyList(),
     content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
@@ -76,12 +86,16 @@ fun NavGraphBuilder.animatedSlideFullTopComposable(
                 animationSpec = tween(700)
             )
         },
+        deepLinks = deepLinks,
+        arguments = argument,
         content = content
     )
 }
 
 fun NavGraphBuilder.noAnimationComposable(
     route: String,
+    deepLinks: List<NavDeepLink> = emptyList(),
+    argument: List<NamedNavArgument> = emptyList(),
     content: @Composable (AnimatedContentScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
@@ -92,6 +106,8 @@ fun NavGraphBuilder.noAnimationComposable(
         exitTransition = {
             ExitTransition.None
         },
+        deepLinks = deepLinks,
+        arguments = argument,
         content = content
     )
 }

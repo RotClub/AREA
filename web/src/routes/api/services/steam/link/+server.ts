@@ -1,12 +1,14 @@
 import { adaptUrl } from "$lib/api";
 import queryString from "query-string";
+import { getPlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
 	const steamOpenIdUrl = "https://steamcommunity.com/openid/login";
 	const returnUrl =
 		`${adaptUrl()}/api/services/steam/callback?` +
 		queryString.stringify({
-			token: event.request.headers.get("Authorization")?.replace("Bearer ", "")
+			token: event.request.headers.get("Authorization")?.replace("Bearer ", ""),
+			user_agent: getPlatformType(event.request)
 		});
 	const realm = adaptUrl();
 

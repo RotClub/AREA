@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.roundedValue
@@ -28,7 +31,7 @@ import org.rotclub.area.ui.theme.FrispyTheme
 fun CardColumn(modifier: Modifier, spacing: Dp, content: @Composable ColumnScope.() -> Unit) {
     Column(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(15.dp)
             .padding(top = spacing / 2, bottom = spacing + 30.dp)
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(roundedValue))
@@ -56,9 +59,31 @@ fun TitleHeader(modifier: Modifier = Modifier, iconSize: Dp = 100.dp, titleSize:
         Text(
             text = "Frispy",
             fontSize = titleSize,
-            color = FrispyTheme.Primary50,
+            color = FrispyTheme.TextColor,
             fontFamily = fontFamily,
             modifier = modifier,
+        )
+    }
+}
+
+@Composable
+fun SettingsButton(modifier: Modifier, navController: NavController) {
+    Button(
+        onClick = {
+            navController.navigate(GlobalRoutes.Settings.route)
+        },
+        modifier = modifier
+            .padding(horizontal = 10.dp)
+            .padding(top = 20.dp)
+            .size(70.dp, 70.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = FrispyTheme.Surface500,
+        )
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.settings),
+            contentDescription = "Settings",
+            modifier = Modifier.size(30.dp)
         )
     }
 }
