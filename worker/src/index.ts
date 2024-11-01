@@ -28,15 +28,15 @@ async function refreshToken(client: PrismaClient, service: Service): Promise<voi
     if (!refreshed_data || Object.keys(refreshed_data).length === 0) {
         return;
     }
+    const old_data: Record<string, any> = service.metadata as Record<string, any>;
+    old_data.access_token = refreshed_data.access_token;
+    old_data.expires_at = refreshed_data.expires_at;
     await client.service.update({
         where: {
             id: service.id
         },
         data: {
-            metadata: {
-                access_token: refreshed_data.access_token,
-                expires_at: refreshed_data.expires_at,
-            }
+            metadata: old_data
         }
     });
 }
