@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { RadioGroup, RadioItem, SlideToggle } from "@skeletonlabs/skeleton";
+	import { SlideToggle } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
+	import { page } from "$app/stores";
 
 	let loaded: boolean = false;
 
-	let authToggle: boolean = false;
+	let authToggle: boolean = $page.url.searchParams.get("login") === "true";
 
 	let email: string = "";
 

@@ -5,7 +5,7 @@
 		getRequiredMetadataFromId,
 		type ActionMetaDataType
 	} from "$lib/services";
-	import { Cog, Play, Plus, Trash2 } from "lucide-svelte";
+	import { Cog, Plus, Trash2 } from "lucide-svelte";
 	import { type ModalSettings, type ModalStore, getModalStore } from "@skeletonlabs/skeleton";
 	import { parse as cookieParser } from "cookie";
 	import { apiRequest } from "$lib";
@@ -118,21 +118,19 @@
 
 <div class="card w-full flex-shrink-0 flex flex-col overflow-hidden">
 	<div class="flex flex-col justify-between h-full p-2">
-		<div class="flex flex-row items-center px-2">
+		<div class="flex flex-row items-center p-2 pt-0">
 			<span class="text-xl font-semibold text-secondary-300 mr-3">On: </span>
 			<img src={getIconPathFromId(action)} alt={action} width="24px" />
 			<span class="ml-2">{getDisplayNameFromId(action)}</span>
 			<div class="flex flex-row flex-grow justify-end">
-				{#if edit}
-					<button class="btn-icon text-surface-200" on:click={editNodeMetaData}>
-						<Cog />
-					</button>
-					<button class="btn-icon text-error-500" on:click={deleteNode}>
-						<Trash2 />
-					</button>
-				{/if}
-				<button class="btn-icon text-success-500">
-					<Play fill="#3de184" />
+				<button
+					disabled={!edit}
+					class="btn-icon text-surface-200"
+					on:click={editNodeMetaData}>
+					<Cog />
+				</button>
+				<button disabled={!edit} class="btn-icon text-error-500" on:click={deleteNode}>
+					<Trash2 />
 				</button>
 			</div>
 		</div>
