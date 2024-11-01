@@ -16,16 +16,17 @@ export const actions = {
 			if (password !== confirmPassword) {
 				return fail(400, { error: "Passwords do not match" });
 			}
-			const res = await event.fetch("/api/auth/register", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					email: email,
-					password: password,
-					role: "USER",
-					username: data.get("username")
+			const res = await event
+				.fetch("/api/auth/register", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						email: email,
+						password: password,
+						role: "USER",
+						username: data.get("username")
+					})
 				})
-			})
 				.then((res) => res.json())
 				.catch((error) => fail(500, { error: "Failed to create user: " + error }));
 			console.log(res);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SlideToggle } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
-	import { page } from '$app/stores';
+	import { page } from "$app/stores";
 
 	let loaded: boolean = false;
 
