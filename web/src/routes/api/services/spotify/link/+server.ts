@@ -1,8 +1,14 @@
 import { adaptUrl } from "$lib/api";
 import queryString from "query-string";
+import { getPlatformType } from "$lib/cross";
 
 export const GET = async (event) => {
 	const token = event.request.headers.get("Authorization")?.replace("Bearer ", "");
+	const platform = getPlatformType(event.request);
+	const state = JSON.stringify({
+		jwt: token,
+		user_agent: platform
+	});
 	const scope =
 		"user-read-private user-read-email user-read-currently-playing user-modify-playback-state";
 
@@ -21,7 +27,7 @@ export const GET = async (event) => {
 			client_id: process.env.SPOTIFY_CLIENT_ID,
 			scope: scope,
 			redirect_uri: `${adaptUrl()}/api/services/spotify/callback`,
-			state: token,
+			state: state,
 			show_dialog: true
 		});
 	return new Response(JSON.stringify({ url: authorizationUrl }), {
