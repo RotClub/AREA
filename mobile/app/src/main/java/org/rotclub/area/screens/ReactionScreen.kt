@@ -43,6 +43,7 @@ import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.getAccesibleActions
 import org.rotclub.area.lib.httpapi.getPrograms
 import org.rotclub.area.lib.httpapi.putAction
+import org.rotclub.area.lib.httpapi.putReaction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -52,6 +53,7 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
     val sharedStorage = SharedStorageUtils(LocalContext.current)
 
     val programJson = backStackEntry.arguments?.getString("program")
+    val actionId = backStackEntry.arguments?.getString("actionId")
     val gson = Gson()
     var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
 
@@ -60,6 +62,7 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
     var selectedReaction by remember { mutableStateOf<AccReaction?>(null) }
 
     var metadata by remember { mutableStateOf(TextFieldValue("")) }
+    var metadata2 by remember { mutableStateOf(TextFieldValue("")) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
@@ -178,6 +181,20 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                             fontFamily = fontFamily
                         ),
                     )
+                    BasicTextField(
+                        value = metadata2,
+                        onValueChange = { metadata2 = it },
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                            .background(FrispyTheme.Surface500)
+                            .fillMaxWidth()
+                            .height(25.dp),
+                        textStyle = androidx.compose.ui.text.TextStyle.Default.copy(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            fontFamily = fontFamily
+                        ),
+                    )
                 }
             },
             confirmButton = {
@@ -189,11 +206,11 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                                 val newMetadata = JsonObject().apply {
                                     addProperty(
                                         selectedReaction?.meta?.values?.joinToString(", ") { it.id } ?: "",
-                                        metadata.text
+                                        metadata.text,
                                     )
                                 }
-                                val actionUpdated = putAction(token, program.id, "${selectedService}:${selectedReaction?.id}", newMetadata)
-                                if (actionUpdated) {
+                                val reactionUpdated = putReaction(token, program.id, actionId!!.toInt(),"${selectedService}:${selectedReaction?.id}", newMetadata)
+                                if (reactionUpdated) {
                                     val updatedPrograms = getPrograms(token)
                                     showToast = true
                                     toastMessage = "Reaction updated successfully"

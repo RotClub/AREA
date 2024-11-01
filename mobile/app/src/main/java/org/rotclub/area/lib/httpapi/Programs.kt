@@ -36,7 +36,7 @@ data class NewActionIdRequest(
 
 data class NewReactionIdRequest(
     val isReaction: Boolean = true,
-    val id: String,
+    val id: Int,
     val reactionId: String,
     val metadata: JsonElement?
 )
@@ -160,9 +160,9 @@ suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, n
     }
 }
 
-suspend fun putReaction(token: String, inspectingNode: Int, newReactionId: String, newReactionMeta: JsonElement): Boolean {
+suspend fun putReaction(token: String, inspectingNode: Int, actionId: Int, newReactionId: String, newReactionMeta: JsonElement): Boolean {
     try {
-        val response = RetrofitClient.authApi.apiPutReaction("Bearer $token", inspectingNode, NewReactionIdRequest(isReaction = true, id = newReactionId, reactionId = newReactionId, metadata = newReactionMeta))
+        val response = RetrofitClient.authApi.apiPutReaction("Bearer $token", inspectingNode, NewReactionIdRequest(isReaction = true, id = actionId, reactionId = newReactionId, metadata = newReactionMeta))
         println(response)
         when (response.code()) {
             200 -> {

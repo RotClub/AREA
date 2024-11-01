@@ -36,6 +36,7 @@ import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.Action
 import org.rotclub.area.lib.httpapi.ProgramResponse
+import org.rotclub.area.lib.httpapi.Reaction
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
@@ -53,7 +54,6 @@ fun BackButton(navController: NavController) {
 @Composable
 fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit) {
     var showDialogSet by remember { mutableStateOf(false) }
-    var started by remember { mutableStateOf(false) }
     val gson = Gson()
 
     Column(
@@ -64,28 +64,98 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
             .background(FrispyTheme.Surface900),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column (
+        ActionHeader(action, onDelete, { showDialogSet = true })
+        ActionMetadata(action.metadata.toString())
+        ActionReactions(action.reactions, onDelete, { showDialogSet = true })
+        AddReactionButton(navController, gson, program, action)
+    }
+    if (showDialogSet) {
+        ActionDialog(onDismissRequest = { showDialogSet = false })
+    }
+}
 
+@Composable
+fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .height(50.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "On: ${action.actionId}",
+            color = Color.White,
+            fontSize = 18.sp,
+            fontFamily = fontFamily,
+            modifier = Modifier
+                .padding(16.dp, 10.dp, 0.dp, 0.dp)
+        )
+        Row(
+            modifier = Modifier
+                .width(82.dp)
         ) {
-            Row (
+            Icon(
+                painter = painterResource(id = R.drawable.cog),
+                contentDescription = "Settings Action",
+                tint = Color.White,
+                modifier = Modifier
+                    .padding(0.dp, 10.dp, 16.dp, 0.dp)
+                    .size(25.dp)
+                    .clickable { onSettingsClick() }
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.trash_2),
+                contentDescription = "Delete Action",
+                tint = FrispyTheme.Error500,
+                modifier = Modifier
+                    .padding(0.dp, 10.dp, 16.dp, 0.dp)
+                    .size(25.dp)
+                    .clickable { onDelete() }
+            )
+        }
+    }
+}
+
+@Composable
+fun ActionMetadata(metadata: String) {
+    Text(
+        text = metadata,
+        color = Color.White,
+        fontSize = 18.sp,
+        fontFamily = fontFamily,
+        modifier = Modifier
+            .padding(16.dp, 10.dp, 0.dp, 5.dp)
+    )
+}
+
+@Composable
+fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+    if (reactions.isNotEmpty()) {
+        for (reaction in reactions) {
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(5.dp, 5.dp, 5.dp, 0.dp),
+                color = FrispyTheme.Surface700,
+                thickness = 2.dp
+            )
+            Row(
                 modifier = Modifier
                     .height(50.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "On: ${action.actionId}",
+                    text = "Do: ${reaction.reactionId}",
                     color = Color.White,
                     fontSize = 18.sp,
                     fontFamily = fontFamily,
                     modifier = Modifier
                         .padding(16.dp, 10.dp, 0.dp, 0.dp)
                 )
-                Row (
+                Row(
                     modifier = Modifier
                         .width(82.dp)
-                )
-                {
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cog),
                         contentDescription = "Settings Action",
@@ -93,8 +163,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
                             .size(25.dp)
-                            //open dialog
-                            .clickable { showDialogSet = true }
+                            .clickable { onSettingsClick() }
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.trash_2),
@@ -103,13 +172,12 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
                             .size(25.dp)
-                            //open dialog
                             .clickable { onDelete() }
                     )
                 }
             }
             Text(
-                text = action.metadata.toString(),
+                text = reaction.metadata.toString(),
                 color = Color.White,
                 fontSize = 18.sp,
                 fontFamily = fontFamily,
@@ -117,93 +185,37 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
                     .padding(16.dp, 10.dp, 0.dp, 5.dp)
             )
         }
-        if (action.reactions.isNotEmpty()) {
-            for (reaction in action.reactions) {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(5.dp, 5.dp, 5.dp, 0.dp),
-                    color = FrispyTheme.Surface700,
-                    thickness = 2.dp
-                )
-                Row (
-                    modifier = Modifier
-                        .height(50.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Do: ${reaction.reactionId}",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontFamily = fontFamily,
-                        modifier = Modifier
-                            .padding(16.dp, 10.dp, 0.dp, 0.dp)
-                    )
-                    Row (
-                        modifier = Modifier
-                            .width(82.dp)
-                    )
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.cog),
-                            contentDescription = "Settings Action",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(0.dp, 10.dp, 16.dp, 0.dp)
-                                .size(25.dp)
-                                .clickable { showDialogSet = true }
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.trash_2),
-                            contentDescription = "Delete Action",
-                            tint = FrispyTheme.Error500,
-                            modifier = Modifier
-                                .padding(0.dp, 10.dp, 16.dp, 0.dp)
-                                .size(25.dp)
-                                .clickable { onDelete() }
-                        )
-                    }
-                }
-                Text(
-                    text = reaction.metadata.toString(),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = fontFamily,
-                    modifier = Modifier
-                        .padding(16.dp, 10.dp, 0.dp, 5.dp)
-                )
-            }
-        }
-        Button(
-            onClick = { navController.navigate("reaction_screen/${gson.toJson(program)}")},
-            shape = RectangleShape,
-            colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = FrispyTheme.Primary500,
-                disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
-                disabledContentColor = Color.White.copy(alpha = 0.5f)
-            ),
-            modifier = Modifier
-                .height(45.dp)
-                .fillMaxWidth()
-                .padding(0.dp, 5.dp, 0.dp, 0.dp),
-            enabled = true
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.plus),
-                contentDescription = "Button Icon",
-                modifier = Modifier.size(40.dp)
-            )
-            Text(
-                text = "Add reaction",
-                color = Color.White,
-                fontFamily = fontFamily,
-                fontSize = 20.sp
-            )
-        }
     }
-    if (showDialogSet) {
-        ActionDialog(onDismissRequest = { showDialogSet = false })
+}
+
+@Composable
+fun AddReactionButton(navController: NavController, gson: Gson, program: ProgramResponse, action: Action) {
+    Button(
+        onClick = { navController.navigate("reaction_screen/${gson.toJson(program)}/${action.id}") },
+        shape = RectangleShape,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = FrispyTheme.Primary500,
+            disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+            disabledContentColor = Color.White.copy(alpha = 0.5f)
+        ),
+        modifier = Modifier
+            .height(45.dp)
+            .fillMaxWidth()
+            .padding(0.dp, 5.dp, 0.dp, 0.dp),
+        enabled = true
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.plus),
+            contentDescription = "Button Icon",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = "Add reaction",
+            color = Color.White,
+            fontFamily = fontFamily,
+            fontSize = 20.sp
+        )
     }
 }
 

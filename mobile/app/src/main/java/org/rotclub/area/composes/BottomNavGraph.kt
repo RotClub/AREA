@@ -51,7 +51,7 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         animatedSlideFullTopComposable("action_screen/{program}") { backStackEntry ->
             ActionScreen(navController = navController, backStackEntry = backStackEntry)
         }
-        animatedSlideFullTopComposable("reaction_screen/{program}") { backStackEntry ->
+        animatedSlideFullTopComposable("reaction_screen/{program}/{actionId}") { backStackEntry ->
             ReactionScreen(navController = navController, backStackEntry = backStackEntry)
         }
     }
