@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -36,6 +38,7 @@ import org.rotclub.area.composes.CardColumn
 import org.rotclub.area.composes.FrispyInput
 import org.rotclub.area.composes.GlobalRoutes
 import org.rotclub.area.composes.InputType
+import org.rotclub.area.composes.SettingsButton
 import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.httpapi.LoginResponse
@@ -67,7 +70,7 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
     CardColumn(modifier = modifier, spacing = headerSpacing)
     {
         Text(
-            text = "Sign In",
+            text = "Login",
             fontSize = 40.sp,
             color = FrispyTheme.TextColor,
             fontFamily = fontFamily,
@@ -87,10 +90,14 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
         TextButton(
             onClick = {
                 if (loadingState.value) return@TextButton
+                loginErrorStatus.value = ""
                 coroutineScope.launch {
                     authLogin(email.value, password.value,
                         loadingState, loginResult, loginErrorStatus)
-                    println("Login result: ${loginResult.value}")
+                    if (loginErrorStatus.value.isNotEmpty()) {
+                        loadingState.value = false
+                        return@launch
+                    }
                     if (loginResult.value != null) {
                         val token = loginResult.value?.token
                         if (token == null) {
@@ -99,7 +106,6 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                             return@launch
                         }
                         sharedPreferences.edit().putString("token", token).apply()
-                        println("Login successful. Token: $token")
                         navController.navigate(GlobalRoutes.MainApp.route)
                     }
                 }
@@ -123,7 +129,7 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
                 return@TextButton
             }
             Text(
-                text = "Login",
+                text = "Sign In",
                 color = FrispyTheme.TextColor,
                 fontSize = 20.sp,
                 fontFamily = fontFamily,
@@ -173,11 +179,15 @@ fun LoginCard(modifier: Modifier = Modifier, navController: NavHostController) {
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
-        modifier = modifier.fillMaxSize().background(FrispyTheme.Surface700),
+        modifier = modifier
+            .fillMaxSize()
+            .background(FrispyTheme.Surface700)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TitleHeader(modifier = modifier.padding(headerSpacing))
+        SettingsButton(Modifier.align(Alignment.End), navController)
+        TitleHeader(modifier = modifier, iconSize = 90.dp, titleSize = 60.sp)
         LoginCard(modifier = modifier, navController = navController)
     }
 }

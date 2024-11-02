@@ -3,9 +3,7 @@ package org.rotclub.area.composes
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import org.rotclub.area.lib.BASE_DEEPLINK_URL
 import org.rotclub.area.lib.BottomBarScreen
@@ -17,6 +15,7 @@ import org.rotclub.area.screens.HomeScreen
 import org.rotclub.area.screens.NodeScreen
 import org.rotclub.area.screens.ProfileScreen
 import org.rotclub.area.screens.ReactionScreen
+import org.rotclub.area.screens.SettingsScreen
 import org.rotclub.area.screens.WorkspaceScreen
 
 
@@ -44,6 +43,9 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
                 })
             ) { entry ->
             ProfileScreen(globalNavController = globalNavController, dataEntry = entry)
+        }
+        noAnimationComposable(BottomBarScreen.Settings.route) {
+            SettingsScreen()
         }
         animatedSlideFullTopComposable("node_screen/{program}") { backStackEntry ->
             NodeScreen(navController = navController, backStackEntry = backStackEntry)

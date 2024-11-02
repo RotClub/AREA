@@ -1,6 +1,6 @@
 package org.rotclub.area.lib.httpapi
 
-import org.rotclub.area.lib.BASE_URL
+import org.rotclub.area.lib.baseUrl
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,21 +16,47 @@ import retrofit2.http.HTTP
 import retrofit2.http.Url
 
 object RetrofitClient {
-    val authApi: Api by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(Api::class.java)
+    var authApi: Api = Retrofit.Builder()
+        .baseUrl(baseUrl.value)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(Api::class.java)
+
+    suspend fun changeBaseUrl(newBaseUrl: String): Boolean {
+        println("Changing base url to $newBaseUrl")
+        try {
+            authApi = Retrofit.Builder()
+                .baseUrl(newBaseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api::class.java)
+            baseUrl.value = newBaseUrl
+            val res = authApi.testConnection()
+            if (!res.isSuccessful) {
+                println("Error changing base url: ${res.errorBody()?.string()}")
+                return false
+            }
+            return true
+        } catch (e: Exception) {
+            println("Error changing base url: $e")
+            return false
+        }
     }
 }
 
 interface Api {
+    @GET("/")
+    suspend fun testConnection(): Response<Unit>
+
     @POST("api/auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
     ): Response<LoginResponse>
 
+    @POST("api/auth/register")
+    suspend fun register(
+        @Body registerRequest: RegisterRequest
+    ): Response<RegisterResponse>
 
     @GET("api/services")
     suspend fun getServices(@Header("Authorization") token: String): Response<List<Service>>
