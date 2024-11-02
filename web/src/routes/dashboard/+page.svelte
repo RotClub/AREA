@@ -38,8 +38,8 @@
 			<span class="text-3xl font-semibold"
 				>Hello <span class="text-primary-500">{userData.username || "..."}</span>, welcome
 				to your dashboard.</span>
-			<div class="flex flex-row space-x-8 h-[30rem] !mt-4">
-				<div class="card w-[60%] p-4 flex flex-col">
+			<div class="flex flex-col lg:flex-row gap-8 h-[30rem] !mt-4">
+				<div class="card w-full lg:w-[60%] p-4 flex flex-col">
 					<span class="text-2xl font-semibold">Linked services:</span>
 					<div class="w-full h-full flex flex-row">
 						<div
@@ -70,7 +70,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card w-[40%] p-4 flex flex-col">
+				<div class="card w-full lg:w-[40%] p-4 flex flex-col">
 					<span class="text-2xl font-semibold mb-6">Programs statistics:</span>
 					<div class="flex flex-row justify-evenly">
 						<div class="flex flex-col justify-center items-center">
@@ -88,8 +88,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex flex-row space-x-8 h-[30rem]">
-				<div class="card w-[40%] p-4 flex flex-row justify-between">
+			<div class="flex flex-col lg:flex-row gap-8 h-[30rem]">
+				<div class="card w-full lg:w-[40%] p-4 flex flex-row justify-between">
 					<div class="flex flex-col gap-2">
 						<span class="text-2xl font-semibold mb-2">Profile:</span>
 						<div class="flex flex-row items-end gap-2">
@@ -119,7 +119,7 @@
 						<BoringAvatar name={data.props.avatar_seed} />
 					</div>
 				</div>
-				<div class="card w-[60%] p-4"></div>
+				<div class="card invisible lg:visible w-[60%] p-4"></div>
 			</div>
 		</div>
 	</div>
