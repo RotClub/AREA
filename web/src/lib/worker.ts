@@ -1,5 +1,5 @@
-import { Action, PrismaClient, Provider, Reaction, Service } from "@prisma/client";
-import { Nodes } from "./lib/services";
+import { type Action, PrismaClient, Provider, type Reaction, type Service } from "@prisma/client";
+import { Nodes } from "./services";
 
 async function userStillLinked(client: PrismaClient, provider: Provider, programID: number | null): Promise<boolean> {
     if (!programID) return false;
