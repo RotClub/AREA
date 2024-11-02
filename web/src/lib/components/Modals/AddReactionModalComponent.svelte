@@ -32,7 +32,6 @@
 
 	onMount(async () => {
 		services = await (await apiRequest("GET", "/api/reaction")).json();
-		console.log(services);
 		loaded = true;
 	});
 </script>
