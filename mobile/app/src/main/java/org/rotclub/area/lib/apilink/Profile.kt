@@ -12,7 +12,6 @@ data class UserResponse(
 suspend fun getUser(token: String): UserResponse? {
     try {
         val response = RetrofitClient.authApi.apiGetUser("Bearer $token")
-        println(response)
         when (response.code()) {
             200 -> {
                 return response.body()

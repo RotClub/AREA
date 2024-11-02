@@ -49,7 +49,6 @@ data class ActionIdRequest(
 suspend fun getPrograms(token: String): List<ProgramResponse> {
     try {
         val response = RetrofitClient.authApi.apiGetPrograms("Bearer $token")
-        println(response)
         when (response.code()) {
             200 -> {
                 return response.body() ?: emptyList()
@@ -67,7 +66,6 @@ suspend fun getPrograms(token: String): List<ProgramResponse> {
 suspend fun postProgram(token: String, name: String, errorMessage: MutableState<String>): ProgramResponse? {
     try {
         val response = RetrofitClient.authApi.apiPostProgram("Bearer $token", ProgramRequest(name))
-        println(response)
         when (response.code()) {
             400 -> {
                 errorMessage.value = "Bad request"
@@ -95,7 +93,6 @@ suspend fun postProgram(token: String, name: String, errorMessage: MutableState<
 suspend fun deleteProgram(token: String, id: Int): Boolean {
     try {
         val response = RetrofitClient.authApi.apiDeleteProgram("Bearer $token", id)
-        println(response)
         when (response.code()) {
             200 -> {
                 return true
@@ -113,7 +110,6 @@ suspend fun deleteProgram(token: String, id: Int): Boolean {
 suspend fun patchProgramName(token: String, id: Int, newName: String): Response<ProgramResponse> {
     val programRequest = ProgramRequest(name = newName)
     val response = RetrofitClient.authApi.apiPatchProgramName(token, id, programRequest)
-    println(response)
     return response
 }
 
@@ -129,7 +125,6 @@ suspend fun deleteAction(token: String, programId: Int, actionId: Int): Boolean 
             programId,
             ActionIdRequest(isAction = true, actionId = actionId)
         )
-        println(response)
         response.code() == 200
     } catch (e: Exception) {
         println("Error occurred: $e")
@@ -145,7 +140,6 @@ fun deleteActionFromProgram(program: ProgramResponse, actionId: String): Program
 suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, newActionMeta: JsonElement): Boolean {
     try {
         val response = RetrofitClient.authApi.apiPutAction("Bearer $token", inspectingNode, NewActionIdRequest(id = newActionId, isAction = true, metadata = newActionMeta))
-        println(response)
         when (response.code()) {
             200 -> {
                 return true
@@ -163,7 +157,6 @@ suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, n
 suspend fun putReaction(token: String, inspectingNode: Int, actionId: Int, newReactionId: String, newReactionMeta: JsonElement): Boolean {
     try {
         val response = RetrofitClient.authApi.apiPutReaction("Bearer $token", inspectingNode, NewReactionIdRequest(isReaction = true, id = actionId, reactionId = newReactionId, metadata = newReactionMeta))
-        println(response)
         when (response.code()) {
             200 -> {
                 return true

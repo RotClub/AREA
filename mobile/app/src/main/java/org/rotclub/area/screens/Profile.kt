@@ -52,8 +52,6 @@ fun ProfileScreen(globalNavController: NavHostController, dataEntry: NavBackStac
 
     val services = remember { mutableStateOf(emptyList<Service>()) }
 
-    println(dataEntry.arguments?.getString("id"))
-
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             val token = sharedStorage.getToken()

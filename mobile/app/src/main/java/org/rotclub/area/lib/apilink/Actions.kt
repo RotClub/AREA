@@ -39,7 +39,6 @@ data class NodeType(
 suspend fun getAccesibleActions(token: String): List<NodeType> {
     try {
         val response = RetrofitClient.authApi.apiGetAccesibleActions("Bearer $token")
-        println(response)
         when (response.code()) {
             200 -> {
                 return response.body() ?: emptyList()
