@@ -2,7 +2,10 @@ import { PrismaClient, type Program } from "@prisma/client";
 
 function getProgramNodeAmount(program: Program): number {
 	//@ts-expect-error - This is a hack to get around the fact that linter doesn't know that Actions is a property of Program
-	return program.Actions ? program.Actions.length : 0;
+	return (
+		program.actions.length +
+		program.actions.reduce((acc, action) => acc + action.reactions.length, 0)
+	);
 }
 
 export const GET = async ({ request }) => {

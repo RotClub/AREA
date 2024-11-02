@@ -19,8 +19,6 @@ export const GET = async (event) => {
 	}
 	const client_id = process.env.TWITCH_CLIENT_ID;
 	const client_secret = process.env.TWITCH_CLIENT_SECRET;
-	console.log("client_id", client_id);
-	console.log("client_secret", client_secret);
 	const res_twitch = await fetch("https://id.twitch.tv/oauth2/token", {
 		method: "POST",
 		headers: {

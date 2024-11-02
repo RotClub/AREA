@@ -30,7 +30,6 @@
 		<div class="hidden text-secondary-400 font-semibold h-full space-x-8 md:flex flex-row">
 			<LinkButton href="/dashboard">Home</LinkButton>
 			<LinkButton href="/dashboard/workspace">Workspace</LinkButton>
-			<LinkButton href="/dashboard/explore">Explore</LinkButton>
 			<LinkButton href="/dashboard/services">Services</LinkButton>
 		</div>
 		<div class="hidden md:flex flex-row items-center h-full space-x-8 aspect-1">
@@ -46,5 +45,5 @@
 				}}><Menu /></button>
 		</div>
 	</header>
-	<main class="overflow-auto h-[calc(100%-4rem)]"><slot /></main>
+	<main class="overflow-auto h-[calc(100%-4rem)] relative"><slot /></main>
 </div>
