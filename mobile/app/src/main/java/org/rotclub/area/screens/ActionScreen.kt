@@ -61,7 +61,7 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
     var selectedService by remember { mutableStateOf(String()) }
     var selectedAction by remember { mutableStateOf<AccAction?>(null) }
 
-    var metadata by remember { mutableStateOf(TextFieldValue("")) }
+    var metadataMap by remember { mutableStateOf(mutableMapOf<String, String>()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
@@ -119,6 +119,7 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                         onClick = { accAction, service ->
                             selectedService = service
                             selectedAction = accAction
+                            metadataMap = accAction.meta.values.associate { it.id to "" }.toMutableMap()
                         }
                     )
                 }
@@ -160,26 +161,33 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                         fontFamily = fontFamily,
                         fontSize = 18.sp,
                     )
-                    Text(
-                        text = selectedAction?.meta?.values?.joinToString(", ") { it.displayName + ":" } ?: "",
-                        color = Color.White,
-                        fontFamily = fontFamily,
-                        fontSize = 16.sp,
-                    )
-                    BasicTextField(
-                        value = metadata,
-                        onValueChange = { metadata = it },
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                            .background(FrispyTheme.Surface500)
-                            .fillMaxWidth()
-                            .height(25.dp),
-                        textStyle = androidx.compose.ui.text.TextStyle.Default.copy(
-                            fontSize = 18.sp,
+                    selectedAction?.meta?.values?.forEach { meta ->
+                        var textState by remember { mutableStateOf(TextFieldValue("")) }
+                        Text(
+                            text = meta.displayName,
                             color = Color.White,
-                            fontFamily = fontFamily
-                        ),
-                    )
+                            fontFamily = fontFamily,
+                            fontSize = 16.sp,
+                        )
+                        BasicTextField(
+                            value = textState,
+                            onValueChange = { newValue ->
+                                textState = newValue
+                                metadataMap[meta.id] = newValue.text
+                            },
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                                .background(FrispyTheme.Surface500)
+                                .fillMaxWidth()
+                                .height(25.dp),
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontFamily = fontFamily
+                            ),
+                            singleLine = true
+                        )
+                    }
                 }
             },
             confirmButton = {
@@ -189,10 +197,9 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                             val token = sharedStorage.getToken()
                             if (token != null) {
                                 val newMetadata = JsonObject().apply {
-                                    addProperty(
-                                        selectedAction?.meta?.values?.joinToString(", ") { it.id } ?: "",
-                                        metadata.text
-                                    )
+                                    metadataMap.forEach { (key, value) ->
+                                        addProperty(key, value)
+                                    }
                                 }
                                 val actionUpdated = putAction(token, program.id, "${selectedService}:${selectedAction?.id}", newMetadata)
                                 if (actionUpdated) {

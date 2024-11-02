@@ -65,7 +65,12 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         ActionHeader(action, onDelete, { showDialogSet = true })
-        ActionMetadata(action.metadata.toString())
+        val regex = Regex("\\{[^{}]+\\}")
+        if (regex.containsMatchIn(action.metadata.toString())) {
+            ActionMetadata(action.metadata.toString())
+        } else {
+            ActionMetadata("")
+        }
         ActionReactions(action.reactions, onDelete, { showDialogSet = true })
         AddReactionButton(navController, gson, program, action)
     }
