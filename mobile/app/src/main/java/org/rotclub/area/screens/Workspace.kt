@@ -69,7 +69,7 @@ fun WorkspaceScreen(navController: NavHostController) {
                 ColumnCard(
                     navController = navController,
                     title = program.name,
-                    text = "This is a program",
+                    text = program.actions.size.toString() + " nodes",
                     program = program
                 )
             }
