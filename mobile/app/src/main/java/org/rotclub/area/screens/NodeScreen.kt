@@ -91,13 +91,6 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             program.actions.forEach { action ->
-                Text(
-                    text =  action.reactions.toString(),
-                    color = Color.White,
-                    fontFamily = fontFamily,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp)
-                )
                 ActionCard(navController = navController, action = action, program = program, onDelete = {
                     coroutineScope.launch {
                         val token = sharedStorage.getToken()
@@ -109,6 +102,8 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                             }
                         }
                     }
+                }, onUpdateProgram = { updatedProgram ->
+                    program = updatedProgram
                 })
             }
             PlusButton (onClick = {

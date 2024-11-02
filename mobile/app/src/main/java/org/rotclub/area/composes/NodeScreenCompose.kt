@@ -57,7 +57,7 @@ fun BackButton(navController: NavController) {
 }
 
 @Composable
-fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit) {
+fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit, onUpdateProgram: (ProgramResponse) -> Unit) {
     var showDialogSet by remember { mutableStateOf(false) }
     val gson = Gson()
 
@@ -76,7 +76,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
         } else {
             ActionMetadata("")
         }
-        ActionReactions(action.reactions, { showDialogSet = true }, program)
+        ActionReactions(action.reactions, { showDialogSet = true }, program, onUpdateProgram)
         AddReactionButton(navController, gson, program, action)
     }
     if (showDialogSet) {
@@ -150,7 +150,7 @@ fun ActionMetadata(metadata: String) {
 }
 
 @Composable
-fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, program: ProgramResponse) {
+fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val sharedStorage = SharedStorageUtils(LocalContext.current)
     val regex = Regex("\\{[^{}]+\\}")
@@ -204,21 +204,23 @@ fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, prog
                                     val token = sharedStorage.getToken()
                                     if (token != null) {
                                         val success = deleteReaction(token, program.id, reaction.id)
-                                        // If the deletion was successful, remove the reaction from the actionCard
+                                        if (success) {
+                                            val updatedReactions = program.actions.find { it.id == reaction.actionId }?.reactions?.toMutableList()
+                                            val updatedProgram = program.copy(actions = program.actions.map {
+                                                if (it.id == reaction.actionId) {
+                                                    it.copy(reactions = updatedReactions?.filter { it.id != reaction.id } ?: emptyList())
+                                                } else {
+                                                    it
+                                                }
+                                            })
+                                            onUpdateProgram(updatedProgram)
+                                        }
                                     }
                                 }
                             }
                     )
                 }
             }
-            Text(
-                text = reaction.id.toString(),
-                color = Color.White,
-                fontSize = 18.sp,
-                fontFamily = fontFamily,
-                modifier = Modifier
-                    .padding(16.dp, 10.dp, 0.dp, 5.dp)
-            )
             if (regex.containsMatchIn(reaction.metadata.toString())) {
                 serializedMetadata = Gson().fromJson(reaction.metadata.toString(), Map::class.java)
             }
