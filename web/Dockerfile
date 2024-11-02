@@ -67,3 +67,27 @@ EXPOSE 4173
 
 # Run the project
 CMD npm run preview
+
+
+FROM node:lts-buster AS worker_runner
+
+WORKDIR /app
+
+COPY . .
+
+ARG VERCEL_TOKEN
+
+# Install Vercel CLI
+RUN npm install --global vercel@latest
+
+# Link the project to Vercel
+RUN npm run link_vercel
+
+# Set the environment to preview
+RUN npm run env:preview
+
+# Install dependencies
+RUN npm install
+
+# Run the worker
+CMD npm run worker
