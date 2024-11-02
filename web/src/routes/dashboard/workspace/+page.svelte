@@ -3,7 +3,7 @@
 	import WorkspaceProgramCard from "$lib/components/Workspace/ProgramCard.svelte";
 	import SubNode from "$lib/components/Workspace/SubNode.svelte";
 	import { SlideToggle, getModalStore } from "@skeletonlabs/skeleton";
-	import { X, Info, Plus } from "lucide-svelte";
+	import { X, Plus, ArrowLeft, Trash2 } from "lucide-svelte";
 	import type { ModalSettings, ModalStore } from "@skeletonlabs/skeleton";
 	import { onMount } from "svelte";
 	import { getRequiredMetadataFromId } from "$lib/services";
@@ -108,7 +108,84 @@
 	});
 </script>
 
-<div class="w-full h-full flex flex-row">
+<div class="w-full h-full lg:hidden bg-surface-900">
+	{#if inspecting_node !== -1}
+		<div class="flex flex-row items-center justify-between p-4">
+			<button
+				class="!w-fit !h-fit text-primary-500 flex flex-row"
+				on:click={() => {
+					inspecting_node = -1;
+				}}>
+				<ArrowLeft />
+				<span class="font-medium">Go back</span>
+			</button>
+			<div class="flex flex-row gap-2">
+				<span class="text-2xl font-semibold">Editing</span>
+				<SlideToggle
+					name="editing"
+					bind:checked={editing}
+					disabled={!loaded || inspecting_node === -1}
+					active="bg-primary-500"
+					background="bg-surface-800" />
+			</div>
+			<button
+				class="btn variant-filled-error font-semibold !p-2"
+				on:click={deleteProgram}
+				disabled={!loaded || inspecting_node === -1}>
+				<span>
+					<Trash2 />
+				</span>
+			</button>
+		</div>
+		<div class="flex flex-col overflow-y-scroll p-8 gap-8 h-full">
+			{#if programs && getProgramContent(inspecting_node).actions}
+				{#each getProgramContent(inspecting_node).actions as action}
+					<Node
+						action={action.actionId}
+						meta={action.metadata}
+						actionId={action.id}
+						bind:edit={editing}
+						programId={inspecting_node}
+						bind:programs
+						bind:loaded>
+						{#each action.reactions as reaction}
+							<SubNode
+								reaction={reaction.reactionId}
+								meta={reaction.metadata}
+								bind:edit={editing}
+								bind:programs
+								bind:loaded
+								programId={inspecting_node}
+								reactionId={reaction.id} />
+						{/each}
+					</Node>
+				{/each}
+			{/if}
+			{#if editing}
+				<div class="w-full flex flex-row justify-center items-center">
+					<button class="btn variant-filled-primary" on:click={openAddActionModal}
+						><Plus /> Add action</button>
+				</div>
+			{/if}
+		</div>
+	{:else}
+		<div class="flex flex-row items-center justify-between p-4">
+			<span class="text-2xl font-semibold">Workspace</span>
+			<button class="btn variant-filled-primary" disabled={!loaded} on:click={createProgram}
+				><Plus /> Create program</button>
+		</div>
+		<div class="flex flex-col gap-4 p-4">
+			{#each programs as program}
+				<WorkspaceProgramCard
+					title={program.name}
+					nodes={program.nodeAmount}
+					bind:group={inspecting_node}
+					id={program.id} />
+			{/each}
+		</div>
+	{/if}
+</div>
+<div class="w-full h-full lg:flex flex-row hidden">
 	<div
 		class="h-full w-1/4 bg-surface-700 overflow-y-scroll p-4 space-y-4 border-r-2 border-surface-500 flex flex-col items-center">
 		{#each programs as program}
@@ -127,11 +204,6 @@
 		{/if}
 		<div
 			class="flex flex-row items-center justify-between h-12 w-full bg-surface-700 px-2 border-b-2 border-surface-500">
-			<div class="flex flex-row gap-2 text-secondary-300 items-center">
-				<Info />
-				<span class="text-secondary-300"
-					>Nodes: 0<!--{inspecting_node != -1 ? programs[inspecting_node].nodeAmount : 0}--></span>
-			</div>
 			<div class="flex flex-row justify-center items-center gap-2">
 				<span class="font-semibold text-xl">Editing</span>
 				<SlideToggle
