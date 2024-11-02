@@ -34,6 +34,7 @@ model Action {
   programId Int?
   actionId  String
   metadata  Json?
+  persistentData Json?
   program   Program?   @relation(fields: [programId], references: [id])
   reactions Reaction[]
 }
@@ -43,6 +44,7 @@ model Reaction {
   reactionId String
   actionId   Int?
   metadata   Json?
+  persistentData Json?
   action     Action? @relation(fields: [actionId], references: [id])
 }
 

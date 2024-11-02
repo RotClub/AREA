@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Cog, Trash2, Play } from "lucide-svelte";
+	import { Cog, Trash2 } from "lucide-svelte";
 	import { parse as cookieParser } from "cookie";
 	import { getModalStore, type ModalSettings, type ModalStore } from "@skeletonlabs/skeleton";
 	import {
@@ -65,21 +65,16 @@
 </script>
 
 <div class="w-full flex flex-col border-t-[1px] border-surface-600">
-	<div class="flex flex-row items-center px-2 pt-0">
+	<div class="flex flex-row items-center px-2 pt-1">
 		<span class="text-xl font-semibold text-secondary-300 mr-3">Do: </span>
 		<img src={getIconPathFromId(reaction)} alt={reaction} width="24px" />
 		<span class="ml-2">{getDisplayNameFromId(reaction)}</span>
 		<div class="flex flex-row flex-grow justify-end">
-			{#if edit}
-				<button class="btn-icon text-surface-200" on:click={editNodeMetaData}>
-					<Cog />
-				</button>
-				<button class="btn-icon text-error-500" on:click={deleteNode}>
-					<Trash2 />
-				</button>
-			{/if}
-			<button class="btn-icon text-success-500">
-				<Play fill="#3de184" />
+			<button disabled={!edit} class="btn-icon text-surface-200" on:click={editNodeMetaData}>
+				<Cog />
+			</button>
+			<button disabled={!edit} class="btn-icon text-error-500" on:click={deleteNode}>
+				<Trash2 />
 			</button>
 		</div>
 	</div>
