@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,10 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.ListViewActions
@@ -46,7 +43,6 @@ import org.rotclub.area.lib.httpapi.getPrograms
 import org.rotclub.area.lib.httpapi.putAction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
-import java.time.format.TextStyle
 
 @Composable
 fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry) {

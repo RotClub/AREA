@@ -29,20 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.ListViewReactions
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.AccAction
 import org.rotclub.area.lib.httpapi.AccReaction
 import org.rotclub.area.lib.httpapi.NodeType
 import org.rotclub.area.lib.httpapi.ProgramResponse
 import org.rotclub.area.lib.httpapi.getAccesibleActions
 import org.rotclub.area.lib.httpapi.getPrograms
-import org.rotclub.area.lib.httpapi.putAction
 import org.rotclub.area.lib.httpapi.putReaction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
@@ -61,8 +58,7 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
     var selectedService by remember { mutableStateOf(String()) }
     var selectedReaction by remember { mutableStateOf<AccReaction?>(null) }
 
-    var metadata by remember { mutableStateOf(TextFieldValue("")) }
-    var metadata2 by remember { mutableStateOf(TextFieldValue("")) }
+    var metadataMap by remember { mutableStateOf(mutableMapOf<String, String>()) }
     var showToast by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
@@ -161,40 +157,33 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                         fontFamily = fontFamily,
                         fontSize = 18.sp,
                     )
-                    Text(
-                        text = selectedReaction?.meta?.values?.joinToString(", ") { it.displayName + ":" } ?: "",
-                        color = Color.White,
-                        fontFamily = fontFamily,
-                        fontSize = 16.sp,
-                    )
-                    BasicTextField(
-                        value = metadata,
-                        onValueChange = { metadata = it },
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                            .background(FrispyTheme.Surface500)
-                            .fillMaxWidth()
-                            .height(25.dp),
-                        textStyle = androidx.compose.ui.text.TextStyle.Default.copy(
-                            fontSize = 18.sp,
+                    selectedReaction?.meta?.values?.forEach { meta ->
+                        var textState by remember { mutableStateOf(TextFieldValue("")) }
+                        Text(
+                            text = meta.displayName,
                             color = Color.White,
-                            fontFamily = fontFamily
-                        ),
-                    )
-                    BasicTextField(
-                        value = metadata2,
-                        onValueChange = { metadata2 = it },
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                            .background(FrispyTheme.Surface500)
-                            .fillMaxWidth()
-                            .height(25.dp),
-                        textStyle = androidx.compose.ui.text.TextStyle.Default.copy(
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            fontFamily = fontFamily
-                        ),
-                    )
+                            fontFamily = fontFamily,
+                            fontSize = 16.sp,
+                        )
+                        BasicTextField(
+                            value = textState,
+                            onValueChange = { newValue ->
+                                textState = newValue
+                                metadataMap[meta.id] = newValue.text
+                            },
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                                .background(FrispyTheme.Surface500)
+                                .fillMaxWidth()
+                                .height(25.dp),
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontFamily = fontFamily
+                            ),
+                            singleLine = true
+                        )
+                    }
                 }
             },
             confirmButton = {
@@ -204,10 +193,9 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                             val token = sharedStorage.getToken()
                             if (token != null) {
                                 val newMetadata = JsonObject().apply {
-                                    addProperty(
-                                        selectedReaction?.meta?.values?.joinToString(", ") { it.id } ?: "",
-                                        metadata.text,
-                                    )
+                                    metadataMap.forEach { (key, value) ->
+                                        addProperty(key, value)
+                                    }
                                 }
                                 val reactionUpdated = putReaction(token, program.id, actionId!!.toInt(),"${selectedService}:${selectedReaction?.id}", newMetadata)
                                 if (reactionUpdated) {

@@ -135,6 +135,8 @@ fun ActionMetadata(metadata: String) {
 
 @Composable
 fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+    val regex = Regex("\\{[^{}]+\\}")
+
     if (reactions.isNotEmpty()) {
         for (reaction in reactions) {
             HorizontalDivider(
@@ -182,7 +184,11 @@ fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsC
                 }
             }
             Text(
-                text = reaction.metadata.toString(),
+                text = if (regex.containsMatchIn(reaction.metadata.toString())) {
+                    reaction.metadata.toString()
+                } else {
+                    ""
+                },
                 color = Color.White,
                 fontSize = 18.sp,
                 fontFamily = fontFamily,
