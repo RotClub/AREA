@@ -35,12 +35,12 @@ import kotlinx.coroutines.launch
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.ListViewActions
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.AccAction
-import org.rotclub.area.lib.httpapi.NodeType
-import org.rotclub.area.lib.httpapi.ProgramResponse
-import org.rotclub.area.lib.httpapi.getAccesibleActions
-import org.rotclub.area.lib.httpapi.getPrograms
-import org.rotclub.area.lib.httpapi.putAction
+import org.rotclub.area.lib.apilink.AccAction
+import org.rotclub.area.lib.apilink.NodeType
+import org.rotclub.area.lib.apilink.ProgramResponse
+import org.rotclub.area.lib.apilink.getAccesibleActions
+import org.rotclub.area.lib.apilink.getPrograms
+import org.rotclub.area.lib.apilink.putAction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 

@@ -30,7 +30,7 @@ import org.rotclub.area.composes.HomeCircleChart
 import org.rotclub.area.composes.ProfileCard
 import org.rotclub.area.composes.ProgramsStats
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.getUser
+import org.rotclub.area.lib.apilink.getUser
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 

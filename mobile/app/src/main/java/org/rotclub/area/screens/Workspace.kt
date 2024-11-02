@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 import org.rotclub.area.composes.ColumnCard
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.composes.SkeletonApiColumnCard
-import org.rotclub.area.lib.httpapi.ProgramResponse
-import org.rotclub.area.lib.httpapi.getPrograms
-import org.rotclub.area.lib.httpapi.postProgram
+import org.rotclub.area.lib.apilink.ProgramResponse
+import org.rotclub.area.lib.apilink.getPrograms
+import org.rotclub.area.lib.apilink.postProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 

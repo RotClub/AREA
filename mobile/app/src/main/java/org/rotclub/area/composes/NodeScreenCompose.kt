@@ -34,9 +34,9 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.Action
-import org.rotclub.area.lib.httpapi.ProgramResponse
-import org.rotclub.area.lib.httpapi.Reaction
+import org.rotclub.area.lib.apilink.Action
+import org.rotclub.area.lib.apilink.ProgramResponse
+import org.rotclub.area.lib.apilink.Reaction
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable

@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.Service
-import org.rotclub.area.lib.httpapi.getServices
+import org.rotclub.area.lib.apilink.Service
+import org.rotclub.area.lib.apilink.getServices
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 

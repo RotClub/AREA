@@ -46,8 +46,8 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.ProgramResponse
-import org.rotclub.area.lib.httpapi.patchProgramName
+import org.rotclub.area.lib.apilink.ProgramResponse
+import org.rotclub.area.lib.apilink.patchProgramName
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 

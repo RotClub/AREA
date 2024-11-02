@@ -1,4 +1,4 @@
-package org.rotclub.area.lib.httpapi
+package org.rotclub.area.lib.apilink
 
 //enum provider
 enum class Provider {

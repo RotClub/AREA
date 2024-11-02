@@ -1,4 +1,4 @@
-package org.rotclub.area.lib.httpapi
+package org.rotclub.area.lib.apilink
 
 import androidx.compose.runtime.MutableState
 import org.rotclub.area.R

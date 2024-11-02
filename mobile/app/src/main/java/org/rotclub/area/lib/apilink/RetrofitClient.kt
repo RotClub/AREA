@@ -1,4 +1,4 @@
-package org.rotclub.area.lib.httpapi
+package org.rotclub.area.lib.apilink
 
 import org.rotclub.area.lib.baseUrl
 import retrofit2.Response

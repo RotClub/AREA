@@ -31,10 +31,10 @@ import org.rotclub.area.composes.ActionCard
 import org.rotclub.area.composes.BackButton
 import org.rotclub.area.composes.PlusButton
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.ProgramResponse
-import org.rotclub.area.lib.httpapi.deleteAction
-import org.rotclub.area.lib.httpapi.deleteActionFromProgram
-import org.rotclub.area.lib.httpapi.deleteProgram
+import org.rotclub.area.lib.apilink.ProgramResponse
+import org.rotclub.area.lib.apilink.deleteAction
+import org.rotclub.area.lib.apilink.deleteActionFromProgram
+import org.rotclub.area.lib.apilink.deleteProgram
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
