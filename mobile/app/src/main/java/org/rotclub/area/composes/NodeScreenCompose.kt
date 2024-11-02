@@ -123,8 +123,19 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
 
 @Composable
 fun ActionMetadata(metadata: String) {
+    val serializedMetadata = Gson().fromJson(metadata, Map::class.java)
+    var finalString = ""
+
+    if (serializedMetadata != null) {
+        for ((key, value) in serializedMetadata) {
+            finalString += "$key: $value\n"
+        }
+    }
+    if (finalString.isNotEmpty()) {
+        finalString = finalString.dropLast(1) // Remove the last /n
+    }
     Text(
-        text = metadata,
+        text = finalString,
         color = Color.White,
         fontSize = 18.sp,
         fontFamily = fontFamily,
@@ -136,6 +147,8 @@ fun ActionMetadata(metadata: String) {
 @Composable
 fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
     val regex = Regex("\\{[^{}]+\\}")
+    var serializedMetadata: Map<*, *>? = null
+    var finalString = ""
 
     if (reactions.isNotEmpty()) {
         for (reaction in reactions) {
@@ -183,12 +196,19 @@ fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsC
                     )
                 }
             }
+            if (regex.containsMatchIn(reaction.metadata.toString())) {
+                serializedMetadata = Gson().fromJson(reaction.metadata.toString(), Map::class.java)
+            }
+            if (serializedMetadata != null) {
+                for ((key, value) in serializedMetadata) {
+                    finalString += "$key: $value\n"
+                }
+            }
+            if (finalString.isNotEmpty()) {
+                finalString = finalString.dropLast(1)
+            }
             Text(
-                text = if (regex.containsMatchIn(reaction.metadata.toString())) {
-                    reaction.metadata.toString()
-                } else {
-                    ""
-                },
+                text = finalString,
                 color = Color.White,
                 fontSize = 18.sp,
                 fontFamily = fontFamily,
