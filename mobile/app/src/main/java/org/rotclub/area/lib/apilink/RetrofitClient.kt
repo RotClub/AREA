@@ -78,6 +78,8 @@ interface Api {
     // Nodes
     @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
     suspend fun apiDeleteAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ActionIdRequest): Response<Unit>
+    @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
+    suspend fun apiDeleteReaction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ReactionIdRequest): Response<Unit>
 
     // Actions
     @GET("api/action")

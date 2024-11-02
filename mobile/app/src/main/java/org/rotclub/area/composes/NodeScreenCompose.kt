@@ -21,22 +21,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.apilink.Action
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.Reaction
+import org.rotclub.area.lib.apilink.deleteReaction
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
@@ -52,7 +57,7 @@ fun BackButton(navController: NavController) {
 }
 
 @Composable
-fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit) {
+fun ActionCard(navController: NavController, action: Action, program: ProgramResponse, onDelete: () -> Unit, onUpdateProgram: (ProgramResponse) -> Unit) {
     var showDialogSet by remember { mutableStateOf(false) }
     val gson = Gson()
 
@@ -71,7 +76,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
         } else {
             ActionMetadata("")
         }
-        ActionReactions(action.reactions, onDelete, { showDialogSet = true })
+        ActionReactions(action.reactions, { showDialogSet = true }, program, onUpdateProgram)
         AddReactionButton(navController, gson, program, action)
     }
     if (showDialogSet) {
@@ -123,8 +128,19 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
 
 @Composable
 fun ActionMetadata(metadata: String) {
+    val serializedMetadata = Gson().fromJson(metadata, Map::class.java)
+    var finalString = ""
+
+    if (serializedMetadata != null) {
+        for ((key, value) in serializedMetadata) {
+            finalString += "$key: $value\n"
+        }
+    }
+    if (finalString.isNotEmpty()) {
+        finalString = finalString.dropLast(1) // Remove the last /n
+    }
     Text(
-        text = metadata,
+        text = finalString,
         color = Color.White,
         fontSize = 18.sp,
         fontFamily = fontFamily,
@@ -134,8 +150,12 @@ fun ActionMetadata(metadata: String) {
 }
 
 @Composable
-fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     val regex = Regex("\\{[^{}]+\\}")
+    var serializedMetadata: Map<*, *>? = null
+    var finalString = ""
 
     if (reactions.isNotEmpty()) {
         for (reaction in reactions) {
@@ -179,16 +199,41 @@ fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsC
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
                             .size(25.dp)
-                            .clickable { onDelete() }
+                            .clickable {
+                                coroutineScope.launch {
+                                    val token = sharedStorage.getToken()
+                                    if (token != null) {
+                                        val success = deleteReaction(token, program.id, reaction.id)
+                                        if (success) {
+                                            val updatedReactions = program.actions.find { it.id == reaction.actionId }?.reactions?.toMutableList()
+                                            val updatedProgram = program.copy(actions = program.actions.map {
+                                                if (it.id == reaction.actionId) {
+                                                    it.copy(reactions = updatedReactions?.filter { it.id != reaction.id } ?: emptyList())
+                                                } else {
+                                                    it
+                                                }
+                                            })
+                                            onUpdateProgram(updatedProgram)
+                                        }
+                                    }
+                                }
+                            }
                     )
                 }
             }
+            if (regex.containsMatchIn(reaction.metadata.toString())) {
+                serializedMetadata = Gson().fromJson(reaction.metadata.toString(), Map::class.java)
+            }
+            if (serializedMetadata != null) {
+                for ((key, value) in serializedMetadata) {
+                    finalString += "$key: $value\n"
+                }
+            }
+            if (finalString.isNotEmpty()) {
+                finalString = finalString.dropLast(1)
+            }
             Text(
-                text = if (regex.containsMatchIn(reaction.metadata.toString())) {
-                    reaction.metadata.toString()
-                } else {
-                    ""
-                },
+                text = finalString,
                 color = Color.White,
                 fontSize = 18.sp,
                 fontFamily = fontFamily,

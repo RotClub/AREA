@@ -133,7 +133,7 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                 disabledContentColor = Color.White.copy(alpha = 0.5f),
             )
         ) {
-            Text("Configurer")
+            Text("Configure")
         }
     }
 

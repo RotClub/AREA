@@ -133,7 +133,7 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                 disabledContentColor = Color.White.copy(alpha = 0.5f),
             )
         ) {
-            Text("Configurer")
+            Text("Configure")
         }
     }
 
