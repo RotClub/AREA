@@ -15,7 +15,7 @@ data class Action(
     val id: Int,
     val actionId: String,
     val metadata: JsonElement?,
-    val reactions: List<Reaction>,
+    var reactions: List<Reaction>,
 )
 
 data class ProgramResponse(

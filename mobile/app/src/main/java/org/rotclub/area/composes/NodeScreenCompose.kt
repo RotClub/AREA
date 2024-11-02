@@ -21,22 +21,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.apilink.Action
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.Reaction
+import org.rotclub.area.lib.apilink.deleteReaction
+import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
 @Composable
@@ -71,7 +76,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
         } else {
             ActionMetadata("")
         }
-        ActionReactions(action.reactions, onDelete, { showDialogSet = true })
+        ActionReactions(action.reactions, { showDialogSet = true }, program)
         AddReactionButton(navController, gson, program, action)
     }
     if (showDialogSet) {
@@ -145,7 +150,9 @@ fun ActionMetadata(metadata: String) {
 }
 
 @Composable
-fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, program: ProgramResponse) {
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     val regex = Regex("\\{[^{}]+\\}")
     var serializedMetadata: Map<*, *>? = null
     var finalString = ""
@@ -192,10 +199,26 @@ fun ActionReactions(reactions: List<Reaction>, onDelete: () -> Unit, onSettingsC
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
                             .size(25.dp)
-                            .clickable { onDelete() }
+                            .clickable {
+                                coroutineScope.launch {
+                                    val token = sharedStorage.getToken()
+                                    if (token != null) {
+                                        val success = deleteReaction(token, program.id, reaction.id)
+                                        // If the deletion was successful, remove the reaction from the actionCard
+                                    }
+                                }
+                            }
                     )
                 }
             }
+            Text(
+                text = reaction.id.toString(),
+                color = Color.White,
+                fontSize = 18.sp,
+                fontFamily = fontFamily,
+                modifier = Modifier
+                    .padding(16.dp, 10.dp, 0.dp, 5.dp)
+            )
             if (regex.containsMatchIn(reaction.metadata.toString())) {
                 serializedMetadata = Gson().fromJson(reaction.metadata.toString(), Map::class.java)
             }

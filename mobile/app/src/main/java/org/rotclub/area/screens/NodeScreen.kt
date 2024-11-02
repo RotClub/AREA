@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,7 @@ import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.deleteAction
 import org.rotclub.area.lib.apilink.deleteProgram
+import org.rotclub.area.lib.apilink.deleteReaction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -89,6 +91,13 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             program.actions.forEach { action ->
+                Text(
+                    text =  action.reactions.toString(),
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp)
+                )
                 ActionCard(navController = navController, action = action, program = program, onDelete = {
                     coroutineScope.launch {
                         val token = sharedStorage.getToken()
