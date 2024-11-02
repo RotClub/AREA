@@ -42,8 +42,13 @@ data class NewReactionIdRequest(
 )
 
 data class ActionIdRequest(
-    val actionId: Int,
+    val id: Int,
     val isAction: Boolean = true
+)
+
+data class ReactionIdRequest(
+    val id: Int,
+    val isReaction: Boolean = true
 )
 
 suspend fun getPrograms(token: String): List<ProgramResponse> {
@@ -123,7 +128,7 @@ suspend fun deleteAction(token: String, programId: Int, actionId: Int): Boolean 
         val response = RetrofitClient.authApi.apiDeleteAction(
             "Bearer $token",
             programId,
-            ActionIdRequest(isAction = true, actionId = actionId)
+            ActionIdRequest(isAction = true, id = actionId)
         )
         response.code() == 200
     } catch (e: Exception) {
@@ -132,9 +137,23 @@ suspend fun deleteAction(token: String, programId: Int, actionId: Int): Boolean 
     }
 }
 
-fun deleteActionFromProgram(program: ProgramResponse, actionId: String): ProgramResponse {
-    val updatedActions = program.actions.filterNot { it.actionId == actionId }
-    return program.copy(actions = updatedActions)
+suspend fun deleteReaction(token: String, programId: Int, reactionId: Int): Boolean {
+    if (reactionId <= 0) {
+        println("Invalid reaction ID")
+        return false
+    }
+
+    return try {
+        val response = RetrofitClient.authApi.apiDeleteReaction(
+            "Bearer $token",
+            programId,
+            ReactionIdRequest(isReaction = true, id = reactionId)
+        )
+        response.code() == 200
+    } catch (e: Exception) {
+        println("Error occurred: $e")
+        false
+    }
 }
 
 suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, newActionMeta: JsonElement): Boolean {
