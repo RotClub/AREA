@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -34,6 +35,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -45,9 +47,9 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
-import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.patchProgramName
+import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -76,6 +78,9 @@ fun ColumnCard(navController: NavController, title: String, text: String, progra
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
     Column(
         modifier = Modifier
             .padding(0.dp, 0.dp, 0.dp, 16.dp)
@@ -93,6 +98,7 @@ fun ColumnCard(navController: NavController, title: String, text: String, progra
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
+                    .width(screenWidth * 0.65f)
             ) {
                 TextField(
                     value = titleState,

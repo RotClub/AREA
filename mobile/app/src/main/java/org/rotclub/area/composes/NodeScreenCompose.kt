@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -36,11 +38,11 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
-import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.apilink.Action
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.Reaction
 import org.rotclub.area.lib.apilink.deleteReaction
+import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -86,9 +88,12 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
 
 @Composable
 fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
     Row(
         modifier = Modifier
-            .height(50.dp)
+            .heightIn(50.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -98,6 +103,7 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
             fontSize = 18.sp,
             fontFamily = fontFamily,
             modifier = Modifier
+                .width(screenWidth * 0.65f)
                 .padding(16.dp, 10.dp, 0.dp, 0.dp)
         )
         Row(
