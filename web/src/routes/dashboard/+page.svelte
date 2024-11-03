@@ -125,7 +125,7 @@
 						<div class="w-full h-full flex flex-col justify-center items-center gap-2">
 							<span class="text-xl"
 								>We also offer an Android App, you can find it here</span>
-							<a href="/app.apk" class="btn variant-filled-surface">
+							<a href="/client.apk" class="btn variant-filled-surface">
 								<span class="w-8"
 									><img src="/android-logo.svg" alt="android-logo" /></span>
 								<span>Get the App</span>

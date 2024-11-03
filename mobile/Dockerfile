@@ -41,6 +41,6 @@ FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=kotlin /build/app/build/outputs/apk/debug/app-debug.apk /app/app.apk
+COPY --from=kotlin /build/app/build/outputs/apk/debug/app-debug.apk /app/client.apk
 
 CMD ls -lR /app

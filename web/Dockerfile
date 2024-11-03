@@ -32,10 +32,10 @@ RUN vercel build --yes --token=${VERCEL_TOKEN}
 
 # Expose 24678 for Vite's HMR and 8081 for the server
 EXPOSE 24678
-EXPOSE 4173
+EXPOSE 3000
 
 # Run the project
-CMD npm run preview
+CMD node build
 
 
 FROM node:lts-buster AS node_runner
@@ -63,10 +63,10 @@ RUN npm run build
 
 # Expose 24678 for Vite's HMR and 3000 for the server
 EXPOSE 24678
-EXPOSE 4173
+EXPOSE 3000
 
 # Run the project
-CMD npm run preview
+CMD node build
 
 
 FROM node:lts-buster AS worker_runner
