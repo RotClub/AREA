@@ -283,14 +283,16 @@ fun ActionReactions(reactions: List<Reaction>, program: ProgramResponse, onUpdat
             if (finalString.isNotEmpty()) {
                 finalString = finalString.dropLast(1)
             }
-            Text(
-                text = finalString,
-                color = Color.White,
-                fontSize = 18.sp,
-                fontFamily = fontFamily,
-                modifier = Modifier
-                    .padding(16.dp, 10.dp, 0.dp, 5.dp)
-            )
+            if (reaction.metadata.toString() != "{}") {
+                Text(
+                    text = finalString,
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = fontFamily,
+                    modifier = Modifier
+                        .padding(16.dp, 10.dp, 0.dp, 5.dp)
+                )
+            }
         }
     }
 
