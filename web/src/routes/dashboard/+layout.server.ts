@@ -3,6 +3,7 @@ import { redirect } from "@sveltejs/kit";
 import { checkAccess } from "$lib/api";
 import { PrismaClient, UserRole } from "@prisma/client";
 import { getToken } from "$lib/web";
+import { apiRequest } from "$lib";
 
 export const load: LayoutServerLoad = async (event) => {
 	await event.parent();
@@ -17,13 +18,17 @@ export const load: LayoutServerLoad = async (event) => {
 		console.error("Error during token validation:", error);
 		throw redirect(302, "/auth");
 	}
-	const res = await event.fetch("/api/user");
-	const user = await res.json();
-	if (!user) {
+	const res = await event.fetch("/api/user", {
+		headers: {
+			"Authorization": `Bearer ${token}`
+		}
+	});
+	if (!res.ok) {
 		console.error("Error during user information fetching");
 		throw redirect(302, "/auth");
 	}
-	const avatar_seed = Buffer.from(Object.values(user).join(""), "binary").toString("base64");
+	const user = await res.json();
+	const avatar_seed = Object.values(user).join("");
 	return {
 		props: {
 			...user,
