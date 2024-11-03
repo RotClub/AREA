@@ -50,7 +50,9 @@ jobs:
           repo: AREA
 
       - name: Download APK
-        run: wget -o client.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+        run: |
+          wget "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+          mv area-preview.apk
         working-directory: "./web/static/"
 
       - name: Build & Deploy the Vercel Preview
