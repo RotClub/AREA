@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { LogIn } from "lucide-svelte";
-	import { parse as cookie_parser } from "cookie"
+	import { parse as cookie_parser } from "cookie";
 	import GradientAnimation from "$lib/components/Aceternity/GradientAnimation.svelte";
 	import { goto } from "$app/navigation";
 
@@ -9,9 +9,9 @@
 		if (cookies.token) {
 			await goto("/dashboard");
 		} else {
-			await goto("/auth")
+			await goto("/auth");
 		}
-	}
+	};
 </script>
 
 <div class="h-screen">
@@ -30,27 +30,23 @@
 	</header>
 	<GradientAnimation>
 		<div
-			class="absolute inset-0 z-10 flex-col content-center items-center justify-center px-8 text-center font-bold text-white"
-		>
+			class="absolute inset-0 z-10 flex-col content-center items-center justify-center px-8 text-center font-bold text-white">
 			<p
-				class="bg-gradient-to-bl from-purple-600 to-white/80 bg-clip-text text-transparent drop-shadow-2xl text-3xl md:text-4xl lg:text-7xl"
-			>
+				class="bg-gradient-to-bl from-purple-600 to-white/80 bg-clip-text text-transparent drop-shadow-2xl text-3xl md:text-4xl lg:text-7xl">
 				Connect, Play, React
-				<br>
-				<br>
+				<br />
+				<br />
 				Automate Your Digital Universe.
 			</p>
-			<br>
-			<br>
-			<br>
+			<br />
+			<br />
+			<br />
 			<button
 				on:click={manageWelcome}
-				class="relative mx-auto mt-4 rounded-full border border-emerald-500/20 bg-emerald-300/10 px-4 py-2 text-center text-white backdrop-blur-sm text-2xl md:text-3xl lg:text-4xl"
-			>
+				class="relative mx-auto mt-4 rounded-full border border-emerald-500/20 bg-emerald-300/10 px-4 py-2 text-center text-white backdrop-blur-sm text-2xl md:text-3xl lg:text-4xl">
 				<span>Join now →</span>
 				<div
-					class="absolute inset-x-0 -bottom-px mx-auto h-px w-3/4 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"
-				/>
+					class="absolute inset-x-0 -bottom-px mx-auto h-px w-3/4 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
 			</button>
 		</div>
 	</GradientAnimation>

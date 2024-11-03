@@ -20,7 +20,7 @@ export const load: LayoutServerLoad = async (event) => {
 	}
 	const res = await event.fetch("/api/user", {
 		headers: {
-			"Authorization": `Bearer ${token}`
+			Authorization: `Bearer ${token}`
 		}
 	});
 	if (!res.ok) {
