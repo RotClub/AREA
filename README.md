@@ -1,5 +1,7 @@
 # AREA
 An EPITECH 3rd year project that aims to create a cross-platform web app to centralize players data from video-games API's
+
+[Our production build of the web is found here.](https://area-app.vercel.app/)
 ### Web App (using SvelteKit)
 #### Creating a project
 If you're seeing this, you've probably already done this step. Congrats!
