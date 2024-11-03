@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - dev
+      - ci-cd/*
 
 jobs:
   deploy:
@@ -33,12 +34,27 @@ jobs:
           npm install --global vercel@latest
         working-directory: "./web"
 
-      - name: Link, Configure, Build and Deploy the Vercel Preview
+      - name: Link, Configure, Build project
         run: |
           vercel link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=area-app
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
           vercel env pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} .env
           sed -i.bak '/rootDirectory/d' .vercel/project.json
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: "./web"
+
+      - name: Get latest release
+        id: lts
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: RotClub
+          repo: AREA
+
+      - name: Download APK
+        run: |
+          curl -o app.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+        working-directory: "./web/build/client/mobile"
+
+      - name: Deploy the Vercel Preview
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: "./web"
