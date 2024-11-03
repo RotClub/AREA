@@ -37,9 +37,9 @@ import org.rotclub.area.composes.ProfileApiCards
 import org.rotclub.area.composes.SkeletonProfileApiCards
 import org.rotclub.area.composes.skeletonLoading
 import org.rotclub.area.lib.utils.SharedStorageUtils
-import org.rotclub.area.lib.httpapi.Service
-import org.rotclub.area.lib.httpapi.getServices
-import org.rotclub.area.lib.httpapi.getUser
+import org.rotclub.area.lib.apilink.Service
+import org.rotclub.area.lib.apilink.getServices
+import org.rotclub.area.lib.apilink.getUser
 import org.rotclub.area.ui.theme.AreaTheme
 
 @Composable
@@ -51,8 +51,6 @@ fun ProfileScreen(globalNavController: NavHostController, dataEntry: NavBackStac
     var email by remember { mutableStateOf("") }
 
     val services = remember { mutableStateOf(emptyList<Service>()) }
-
-    println(dataEntry.arguments?.getString("id"))
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {

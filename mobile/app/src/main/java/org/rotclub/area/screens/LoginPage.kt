@@ -41,8 +41,8 @@ import org.rotclub.area.composes.InputType
 import org.rotclub.area.composes.SettingsButton
 import org.rotclub.area.composes.TitleHeader
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.LoginResponse
-import org.rotclub.area.lib.httpapi.authLogin
+import org.rotclub.area.lib.apilink.LoginResponse
+import org.rotclub.area.lib.apilink.authLogin
 import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.ui.theme.AreaTheme
 import org.rotclub.area.ui.theme.FrispyTheme

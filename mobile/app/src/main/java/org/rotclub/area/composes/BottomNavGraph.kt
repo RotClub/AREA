@@ -14,6 +14,7 @@ import org.rotclub.area.screens.ExploreScreen
 import org.rotclub.area.screens.HomeScreen
 import org.rotclub.area.screens.NodeScreen
 import org.rotclub.area.screens.ProfileScreen
+import org.rotclub.area.screens.ReactionScreen
 import org.rotclub.area.screens.SettingsScreen
 import org.rotclub.area.screens.WorkspaceScreen
 
@@ -30,9 +31,9 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         noAnimationComposable(BottomBarScreen.Workspace.route) {
             WorkspaceScreen(navController = navController)
         }
-        noAnimationComposable(BottomBarScreen.Explore.route,) {
+        /*noAnimationComposable(BottomBarScreen.Explore.route,) {
             ExploreScreen()
-        }
+        }*/
         noAnimationComposable(
             BottomBarScreen.Profile.route,
             deepLinks = listOf(
@@ -46,11 +47,14 @@ fun BottomNavGraph(navController:NavHostController, globalNavController: NavHost
         noAnimationComposable(BottomBarScreen.Settings.route) {
             SettingsScreen()
         }
-        animatedSlideFullTopComposable("node_screen") {
-            NodeScreen(navController = navController)
+        animatedSlideFullTopComposable("node_screen/{program}") { backStackEntry ->
+            NodeScreen(navController = navController, backStackEntry = backStackEntry)
         }
-        animatedSlideFullTopComposable("action_screen") {
-            ActionScreen(navController = navController)
+        animatedSlideFullTopComposable("action_screen/{program}") { backStackEntry ->
+            ActionScreen(navController = navController, backStackEntry = backStackEntry)
+        }
+        animatedSlideFullTopComposable("reaction_screen/{program}/{actionId}") { backStackEntry ->
+            ReactionScreen(navController = navController, backStackEntry = backStackEntry)
         }
     }
 }
