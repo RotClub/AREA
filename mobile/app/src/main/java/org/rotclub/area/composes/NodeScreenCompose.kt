@@ -144,7 +144,7 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                 coroutineScope.launch {
                     val token = sharedStorage.getToken()
                     if (token != null) {
-                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata)
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString())
                         val success = patchAction(token, program.id, action.id, newMetadataJson)
                         if (success) {
                             val updatedActions = program.actions.map {
@@ -318,9 +318,9 @@ fun AddReactionButton(navController: NavController, gson: Gson, program: Program
 fun ActionSettingsDialog(
     action: Action,
     onDismissRequest: () -> Unit,
-    onSave: (String) -> Unit
+    onSave: (Map<String, String>) -> Unit
 ) {
-    var newMetadata by remember { mutableStateOf(action.metadata.toString()) }
+    var metadataMap by remember { mutableStateOf(Gson().fromJson(action.metadata.toString(), Map::class.java) as Map<String, String>) }
 
     AlertDialog(
         containerColor = FrispyTheme.Surface700,
@@ -339,27 +339,39 @@ fun ActionSettingsDialog(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                BasicTextField(
-                    value = newMetadata,
-                    onValueChange = { newMetadata = it },
-                    modifier = Modifier
-                        .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                        .background(FrispyTheme.Surface500)
-                        .fillMaxWidth()
-                        .height(25.dp),
-                    textStyle = androidx.compose.ui.text.TextStyle(
-                        fontSize = 18.sp,
+                metadataMap.forEach { (key, value) ->
+                    var textValue by remember { mutableStateOf(value) }
+                    Text(
+                        text = key,
                         color = Color.White,
-                        fontFamily = fontFamily
-                    ),
-                    singleLine = true
-                )
+                        fontFamily = fontFamily,
+                        fontSize = 18.sp
+                    )
+                    BasicTextField(
+                        value = textValue,
+                        onValueChange = {
+                            textValue = it
+                            metadataMap = metadataMap.toMutableMap().apply { put(key, it) }
+                        },
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                            .background(FrispyTheme.Surface500)
+                            .fillMaxWidth()
+                            .height(25.dp),
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            fontFamily = fontFamily
+                        ),
+                        singleLine = true
+                    )
+                }
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    onSave(newMetadata)
+                    onSave(metadataMap)
                     onDismissRequest()
                 },
                 shape = RectangleShape,
