@@ -251,6 +251,7 @@ fun ActionReactions(reactions: List<Reaction>, program: ProgramResponse, onUpdat
                                         val success = deleteReaction(token, program.id, reaction.id)
                                         if (success) {
                                             val updatedReactions = program.actions.find { it.id == reaction.actionId }?.reactions?.toMutableList()
+                                            updatedReactions?.remove(reaction)
                                             val updatedProgram = program.copy(actions = program.actions.map {
                                                 if (it.id == reaction.actionId) {
                                                     it.copy(reactions = updatedReactions ?: emptyList())
