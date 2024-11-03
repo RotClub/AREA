@@ -339,59 +339,70 @@ fun ActionSettingsDialog(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                metadataMap.forEach { (key, value) ->
-                    var textValue by remember { mutableStateOf(value) }
+                if (metadataMap.isEmpty()) {
                     Text(
-                        text = key,
+                        text = "No configuration needed",
                         color = Color.White,
                         fontFamily = fontFamily,
                         fontSize = 18.sp
                     )
-                    BasicTextField(
-                        value = textValue,
-                        onValueChange = {
-                            textValue = it
-                            metadataMap = metadataMap.toMutableMap().apply { put(key, it) }
-                        },
-                        modifier = Modifier
-                            .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                            .background(FrispyTheme.Surface500)
-                            .fillMaxWidth()
-                            .height(25.dp),
-                        textStyle = androidx.compose.ui.text.TextStyle(
-                            fontSize = 18.sp,
+                } else {
+                    metadataMap.forEach { (key, value) ->
+                        var textValue by remember { mutableStateOf(value) }
+                        Text(
+                            text = key,
                             color = Color.White,
-                            fontFamily = fontFamily
-                        ),
-                        singleLine = true
-                    )
+                            fontFamily = fontFamily,
+                            fontSize = 18.sp
+                        )
+                        BasicTextField(
+                            value = textValue,
+                            onValueChange = {
+                                textValue = it
+                                metadataMap = metadataMap.toMutableMap().apply { put(key, it) }
+                            },
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                                .background(FrispyTheme.Surface500)
+                                .fillMaxWidth()
+                                .height(25.dp),
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontFamily = fontFamily
+                            ),
+                            singleLine = true
+                        )
+                    }
                 }
             }
         },
         confirmButton = {
-            Button(
-                onClick = {
-                    onSave(metadataMap)
-                    onDismissRequest()
-                },
-                shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    containerColor = FrispyTheme.Primary500,
-                    disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
-                    disabledContentColor = Color.White.copy(alpha = 0.5f)
-                ),
-                modifier = Modifier
-                    .height(40.dp)
-                    .fillMaxWidth(),
-                enabled = true
-            ) {
-                Text(
-                    text = "Save",
-                    color = Color.White,
-                    fontFamily = fontFamily,
-                    fontSize = 20.sp
-                )
+            if (metadataMap.isNotEmpty()) {
+                Button(
+                    onClick = {
+                        onSave(metadataMap)
+                        onDismissRequest()
+                    },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = FrispyTheme.Primary500,
+                        disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                        disabledContentColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
+                    enabled = true
+                ) {
+                    Text(
+                        text = "Save",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp
+                    )
+                }
             }
         },
         dismissButton = {
