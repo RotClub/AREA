@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - dev
+      - ci-cd/*
 
 jobs:
   deploy:
@@ -21,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           apk update
-          apk add bash curl nodejs npm
+          apk add bash curl nodejs npm wget
 
       - name: Using Vercel adapter i/o Node for SvelteKit app
         run: mv svelte.config.deploy.js svelte.config.js
@@ -49,8 +50,7 @@ jobs:
           repo: AREA
 
       - name: Download APK
-        run: |
-          curl -o client.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+        run: wget -o client.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
         working-directory: "./web/static/"
 
       - name: Build & Deploy the Vercel Preview
