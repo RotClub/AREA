@@ -123,9 +123,11 @@
 					<div class="flex flex-col w-full h-full">
 						<span class="text-2xl font-semibold mb-2">Android Application:</span>
 						<div class="w-full h-full flex flex-col justify-center items-center gap-2">
-							<span class="text-xl">We also offer an Android App, you can find it here</span>
+							<span class="text-xl"
+								>We also offer an Android App, you can find it here</span>
 							<a href="/app.apk" class="btn variant-filled-surface">
-								<span class="w-8"><img src="/android-logo.svg" alt="android-logo"></span>
+								<span class="w-8"
+									><img src="/android-logo.svg" alt="android-logo" /></span>
 								<span>Get the App</span>
 							</a>
 						</div>
