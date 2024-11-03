@@ -145,7 +145,7 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                 coroutineScope.launch {
                     val token = sharedStorage.getToken()
                     if (token != null) {
-                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString())
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString().replace(" ", ""))
                         val success = patchAction(token, program.id, action.id, newMetadataJson)
                         if (success) {
                             val updatedActions = program.actions.map {
@@ -295,7 +295,7 @@ fun ActionReactions(reactions: List<Reaction>, program: ProgramResponse, onUpdat
                 coroutineScope.launch {
                     val token = sharedStorage.getToken()
                     if (token != null) {
-                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString())
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString().replace(" ", ""))
                         val success = patchReaction(token, program.id, selectedReaction!!.id, newMetadataJson)
                         if (success) {
                             val updatedReactions = program.actions.find { it.id == selectedReaction!!.actionId }?.reactions?.map {
