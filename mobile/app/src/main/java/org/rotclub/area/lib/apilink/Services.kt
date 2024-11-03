@@ -1,4 +1,4 @@
-package org.rotclub.area.lib.httpapi
+package org.rotclub.area.lib.apilink
 
 import androidx.compose.runtime.MutableState
 import org.rotclub.area.R
@@ -24,7 +24,6 @@ data class Service(
 suspend fun getServices(services: MutableState<List<Service>>, token: String) {
     try {
         val response = RetrofitClient.authApi.getServices("Bearer $token")
-        println(response)
         when (response.code()) {
             200 -> {
                 services.value = response.body() ?: emptyList()

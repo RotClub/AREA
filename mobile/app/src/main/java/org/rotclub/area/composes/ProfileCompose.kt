@@ -33,8 +33,8 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.RetrofitClient
-import org.rotclub.area.lib.httpapi.ServiceType
+import org.rotclub.area.lib.apilink.RetrofitClient
+import org.rotclub.area.lib.apilink.ServiceType
 import org.rotclub.area.lib.roundedValue
 import org.rotclub.area.lib.utils.BrowserUtils
 import org.rotclub.area.lib.utils.SharedStorageUtils

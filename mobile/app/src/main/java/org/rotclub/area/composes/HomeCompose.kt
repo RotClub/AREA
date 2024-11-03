@@ -1,13 +1,13 @@
 package org.rotclub.area.composes
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.rotclub.area.R
 import org.rotclub.area.lib.fontFamily
-import org.rotclub.area.lib.httpapi.Service
-import org.rotclub.area.lib.httpapi.getServices
+import org.rotclub.area.lib.apilink.Service
+import org.rotclub.area.lib.apilink.getServices
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
 
@@ -125,7 +125,7 @@ fun HomeCircleChart() {
     }
 
     val linkedServicesCount = services.value.count { it.link }
-    val value = 100f / 7
+    val value = 100f / 6
     val multiplier : Int = linkedServicesCount
 
     Column (
@@ -175,7 +175,7 @@ fun HomeCircleChart() {
             value = value * multiplier,
             size = 300.dp,
             strokeWidth = 16.dp,
-            "${linkedServicesCount}/7"
+            "${linkedServicesCount}/6"
         )
     }
 }
@@ -246,12 +246,12 @@ fun ProgramsStats()
 }
 
 @Composable
-fun ProfileCard () {
+fun ProfileCard (username: String, email: String, role: String, createdAt: String) {
     val profileData = listOf(
-        "Username" to "Paul_le_BG",
-        "Email" to "Paul_le_BG@AREA.fr",
-        "Role" to "ADMIN",
-        "Created at" to "2024-10-03"
+        "Username" to username,
+        "Email" to email,
+        "Role" to role,
+        "Created at" to createdAt
     )
 
     Column (
