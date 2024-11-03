@@ -6,11 +6,11 @@ services:
     build:
       context: "./web"
       dockerfile: "Dockerfile"
-      target: "vercel_runner"
+      target: "node_runner"
       args:
         VERCEL_TOKEN: ${VERCEL_TOKEN}
     ports:
-      - "8081:4173"
+      - "8081:3000"
       - "24678:24678"
     volumes:
       - shared_data:/app/build/client/mobile

@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           apk update
-          apk add bash curl nodejs npm
+          apk add bash curl nodejs npm wget
 
       - name: Using Vercel adapter i/o Node for SvelteKit app
         run: mv svelte.config.deploy.js svelte.config.js
@@ -50,7 +50,8 @@ jobs:
 
       - name: Download APK
         run: |
-          curl -o app.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+          wget "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+          mv area-preview.apk client.apk
         working-directory: "./web/static/"
 
       - name: Build & Deploy the Vercel Preview
