@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let name = "Clara Barton";
-	export let colors = ["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"];
+	export let colors = ["#92A1C6", "#2f037e", "#7f3df0", "#e619c3", "#C20D90"];
 	export let title = false;
 	export let square = false;
 	export let size: string | null = null;
