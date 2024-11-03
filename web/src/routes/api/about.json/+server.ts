@@ -1,7 +1,6 @@
-import { adaptUrl } from "$lib/api";
 import { Nodes } from "$lib/services";
 
-export const GET = async () => {
+export const GET = async (event) => {
 	const accessibleServices = Nodes.map((node) => {
 		return {
 			name: node.displayName,
@@ -21,7 +20,7 @@ export const GET = async () => {
 	});
 	const data = {
 		client: {
-			host: adaptUrl()
+			host: event.getClientAddress()
 		},
 		server: {
 			current_time: Date.now(),
