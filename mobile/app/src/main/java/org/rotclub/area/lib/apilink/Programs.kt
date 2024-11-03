@@ -14,7 +14,7 @@ data class Reaction(
 data class Action(
     val id: Int,
     val actionId: String,
-    val metadata: JsonElement?,
+    var metadata: JsonElement?,
     var reactions: List<Reaction>,
 )
 
@@ -49,6 +49,12 @@ data class ActionIdRequest(
 data class ReactionIdRequest(
     val id: Int,
     val isReaction: Boolean = true
+)
+
+data class PatchActionRequest(
+    val isAction: Boolean = true,
+    val id: Int,
+    val metadata: JsonElement?
 )
 
 suspend fun getPrograms(token: String): List<ProgramResponse> {
@@ -176,6 +182,23 @@ suspend fun putAction(token: String, inspectingNode: Int, newActionId: String, n
 suspend fun putReaction(token: String, inspectingNode: Int, actionId: Int, newReactionId: String, newReactionMeta: JsonElement): Boolean {
     try {
         val response = RetrofitClient.authApi.apiPutReaction("Bearer $token", inspectingNode, NewReactionIdRequest(isReaction = true, id = actionId, reactionId = newReactionId, metadata = newReactionMeta))
+        when (response.code()) {
+            200 -> {
+                return true
+            }
+            else -> {
+                return false
+            }
+        }
+    } catch (e: Exception) {
+        println("Error occurred: $e")
+        return false
+    }
+}
+
+suspend fun patchAction(token: String, programId: Int, actionId: Int, newActionMeta: JsonElement): Boolean {
+    try {
+        val response = RetrofitClient.authApi.apiPatchAction("Bearer $token", programId, PatchActionRequest(isAction = true, id = actionId, metadata = newActionMeta))
         when (response.code()) {
             200 -> {
                 return true

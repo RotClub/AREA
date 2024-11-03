@@ -70,16 +70,18 @@ interface Api {
     suspend fun apiDeleteProgram(@Header("Authorization") token: String, @Path("id") id: Int): Response<Unit>
     @PATCH("api/programs/{id}")
     suspend fun apiPatchProgramName(@Header("Authorization") token: String, @Path("id") id: Int, @Body programRequest: ProgramRequest): Response<ProgramResponse>
-    @PUT("api/programs/{inspecting_node}/node")
-    suspend fun apiPutAction(@Header("Authorization") token: String, @Path("inspecting_node") inspectingNode: Int, @Body request: NewActionIdRequest): Response<Unit>
-    @PUT("api/programs/{inspecting_node}/node")
-    suspend fun apiPutReaction(@Header("Authorization") token: String, @Path("inspecting_node") inspectingNode: Int, @Body request: NewReactionIdRequest): Response<Unit>
 
     // Nodes
     @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
     suspend fun apiDeleteAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ActionIdRequest): Response<Unit>
     @HTTP(method = "DELETE", path = "api/programs/{programId}/node", hasBody = true)
     suspend fun apiDeleteReaction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: ReactionIdRequest): Response<Unit>
+    @PUT("api/programs/{inspecting_node}/node")
+    suspend fun apiPutAction(@Header("Authorization") token: String, @Path("inspecting_node") inspectingNode: Int, @Body request: NewActionIdRequest): Response<Unit>
+    @PUT("api/programs/{inspecting_node}/node")
+    suspend fun apiPutReaction(@Header("Authorization") token: String, @Path("inspecting_node") inspectingNode: Int, @Body request: NewReactionIdRequest): Response<Unit>
+    @PATCH("api/programs/{programId}/node")
+    suspend fun apiPatchAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: PatchActionRequest): Response<Unit>
 
     // Actions
     @GET("api/action")

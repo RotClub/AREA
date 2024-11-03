@@ -11,12 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +46,11 @@ import org.rotclub.area.lib.apilink.Action
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.Reaction
 import org.rotclub.area.lib.apilink.deleteReaction
+import org.rotclub.area.lib.apilink.patchAction
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
+import com.google.gson.JsonParser
+import com.google.gson.JsonElement
 
 @Composable
 fun BackButton(navController: NavController) {
@@ -69,7 +77,7 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
             .background(FrispyTheme.Surface900),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        ActionHeader(action, onDelete, { showDialogSet = true })
+        ActionHeader(action, onDelete, { showDialogSet = true }, program, onUpdateProgram)
         val regex = Regex("\\{[^{}]+\\}")
         if (regex.containsMatchIn(action.metadata.toString())) {
             ActionMetadata(action.metadata.toString())
@@ -85,7 +93,11 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
 }
 
 @Composable
-fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
+    var showSettingsDialog by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
+
     Row(
         modifier = Modifier
             .height(50.dp)
@@ -111,7 +123,7 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                 modifier = Modifier
                     .padding(0.dp, 10.dp, 16.dp, 0.dp)
                     .size(25.dp)
-                    .clickable { onSettingsClick() }
+                    .clickable { showSettingsDialog = true }
             )
             Icon(
                 painter = painterResource(id = R.drawable.trash_2),
@@ -123,6 +135,32 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                     .clickable { onDelete() }
             )
         }
+    }
+    if (showSettingsDialog) {
+        ActionSettingsDialog(
+            action = action,
+            onDismissRequest = { showSettingsDialog = false },
+            onSave = { newMetadata ->
+                coroutineScope.launch {
+                    val token = sharedStorage.getToken()
+                    if (token != null) {
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata)
+                        val success = patchAction(token, program.id, action.id, newMetadataJson)
+                        if (success) {
+                            val updatedActions = program.actions.map {
+                                if (it.id == action.id) {
+                                    it.copy(metadata = newMetadataJson)
+                                } else {
+                                    it
+                                }
+                            }
+                            val updatedProgram = program.copy(actions = updatedActions)
+                            onUpdateProgram(updatedProgram)
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
@@ -273,6 +311,101 @@ fun AddReactionButton(navController: NavController, gson: Gson, program: Program
             fontSize = 20.sp
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ActionSettingsDialog(
+    action: Action,
+    onDismissRequest: () -> Unit,
+    onSave: (String) -> Unit
+) {
+    var newMetadata by remember { mutableStateOf(action.metadata.toString()) }
+
+    AlertDialog(
+        containerColor = FrispyTheme.Surface700,
+        onDismissRequest = { onDismissRequest() },
+        title = {
+            Text(
+                text = "Edit Action",
+                color = FrispyTheme.Primary500,
+                fontFamily = fontFamily,
+                fontSize = 20.sp
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                BasicTextField(
+                    value = newMetadata,
+                    onValueChange = { newMetadata = it },
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                        .background(FrispyTheme.Surface500)
+                        .fillMaxWidth()
+                        .height(25.dp),
+                    textStyle = androidx.compose.ui.text.TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontFamily = fontFamily
+                    ),
+                    singleLine = true
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onSave(newMetadata)
+                    onDismissRequest()
+                },
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = FrispyTheme.Primary500,
+                    disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                    disabledContentColor = Color.White.copy(alpha = 0.5f)
+                ),
+                modifier = Modifier
+                    .height(40.dp)
+                    .fillMaxWidth(),
+                enabled = true
+            ) {
+                Text(
+                    text = "Save",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp
+                )
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { onDismissRequest() },
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = FrispyTheme.Error500,
+                    disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                    disabledContentColor = Color.White.copy(alpha = 0.5f)
+                ),
+                modifier = Modifier
+                    .height(40.dp)
+                    .fillMaxWidth(),
+                enabled = true
+            ) {
+                Text(
+                    text = "Cancel",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp
+                )
+            }
+        },
+    )
 }
 
 @Composable
