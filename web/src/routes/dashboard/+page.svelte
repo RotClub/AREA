@@ -34,7 +34,7 @@
 <div class="w-full h-full items-center justify-center">
 	<div
 		class="relative flex h-full flex-col items-center justify-center container mx-auto bg-surface-900 antialiased">
-		<div class="flex flex-col w-full h-full space-y-8 p-8 z-10">
+		<div class="flex flex-col w-full h-full gap-8 p-8 z-10">
 			<span class="text-3xl font-semibold"
 				>Hello <span class="text-primary-500">{userData.username || "..."}</span>, welcome
 				to your dashboard.</span>
@@ -119,7 +119,18 @@
 						<BoringAvatar name={data.props.avatar_seed} />
 					</div>
 				</div>
-				<div class="card invisible lg:visible w-[60%] p-4"></div>
+				<div class="card w-full lg:w-[60%] p-4">
+					<div class="flex flex-col w-full h-full">
+						<span class="text-2xl font-semibold mb-2">Android Application:</span>
+						<div class="w-full h-full flex flex-col justify-center items-center gap-2">
+							<span class="text-xl">We also offer an Android App, you can find it here</span>
+							<a href="/app.apk" class="btn variant-filled-surface">
+								<span class="w-8"><img src="/android-logo.svg" alt="android-logo"></span>
+								<span>Get the App</span>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
