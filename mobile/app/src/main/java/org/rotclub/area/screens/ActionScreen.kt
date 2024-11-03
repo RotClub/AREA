@@ -152,7 +152,11 @@ fun ActionScreen(navController: NavController, backStackEntry: NavBackStackEntry
                 Column {
                     Text(
                         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
-                        text = "Edit here the configuration of the node.",
+                        text = if (selectedAction?.meta?.values?.isEmpty() == true) {
+                            "No configuration needed for this action."
+                        } else {
+                            "Edit here the configuration of the node."
+                        },
                         color = Color.White,
                         fontFamily = fontFamily,
                         fontSize = 18.sp,

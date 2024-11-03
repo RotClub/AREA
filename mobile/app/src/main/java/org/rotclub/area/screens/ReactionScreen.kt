@@ -152,7 +152,11 @@ fun ReactionScreen(navController: NavController, backStackEntry: NavBackStackEnt
                 Column {
                     Text(
                         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp),
-                        text = "Edit here the configuration of the node.",
+                        text = if (selectedReaction?.meta?.values?.isEmpty() == true) {
+                            "No configuration needed for this reaction."
+                        } else {
+                            "Edit here the configuration of the node."
+                        },
                         color = Color.White,
                         fontFamily = fontFamily,
                         fontSize = 18.sp,

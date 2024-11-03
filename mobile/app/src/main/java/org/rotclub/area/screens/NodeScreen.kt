@@ -47,6 +47,10 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
     val gson = Gson()
     var program by remember { mutableStateOf(gson.fromJson(programJson, ProgramResponse::class.java)) }
 
+    fun onUpdateProgram(updatedProgram: ProgramResponse) {
+        program = updatedProgram
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,9 +106,7 @@ fun NodeScreen(navController: NavHostController, backStackEntry: NavBackStackEnt
                             }
                         }
                     }
-                }, onUpdateProgram = { updatedProgram ->
-                    program = updatedProgram
-                })
+                }, onUpdateProgram = ::onUpdateProgram)
             }
             PlusButton (onClick = {
                 navController.navigate("action_screen/${gson.toJson(program)}")

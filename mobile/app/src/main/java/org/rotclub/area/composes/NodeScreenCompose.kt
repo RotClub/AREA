@@ -12,12 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,9 +47,13 @@ import org.rotclub.area.lib.apilink.Action
 import org.rotclub.area.lib.apilink.ProgramResponse
 import org.rotclub.area.lib.apilink.Reaction
 import org.rotclub.area.lib.apilink.deleteReaction
+import org.rotclub.area.lib.apilink.patchAction
+import org.rotclub.area.lib.apilink.patchReaction
 import org.rotclub.area.lib.fontFamily
 import org.rotclub.area.lib.utils.SharedStorageUtils
 import org.rotclub.area.ui.theme.FrispyTheme
+import com.google.gson.JsonParser
+import com.google.gson.JsonElement
 
 @Composable
 fun BackButton(navController: NavController) {
@@ -71,14 +80,14 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
             .background(FrispyTheme.Surface900),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        ActionHeader(action, onDelete, { showDialogSet = true })
+        ActionHeader(action, onDelete, { showDialogSet = true }, program, onUpdateProgram)
         val regex = Regex("\\{[^{}]+\\}")
         if (regex.containsMatchIn(action.metadata.toString())) {
             ActionMetadata(action.metadata.toString())
         } else {
             ActionMetadata("")
         }
-        ActionReactions(action.reactions, { showDialogSet = true }, program, onUpdateProgram)
+        ActionReactions(action.reactions, program, onUpdateProgram)
         AddReactionButton(navController, gson, program, action)
     }
     if (showDialogSet) {
@@ -87,7 +96,10 @@ fun ActionCard(navController: NavController, action: Action, program: ProgramRes
 }
 
 @Composable
-fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit) {
+fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Unit, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
+    var showSettingsDialog by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val sharedStorage = SharedStorageUtils(LocalContext.current)
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
@@ -117,7 +129,7 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                 modifier = Modifier
                     .padding(0.dp, 10.dp, 16.dp, 0.dp)
                     .size(25.dp)
-                    .clickable { onSettingsClick() }
+                    .clickable { showSettingsDialog = true }
             )
             Icon(
                 painter = painterResource(id = R.drawable.trash_2),
@@ -129,6 +141,32 @@ fun ActionHeader(action: Action, onDelete: () -> Unit, onSettingsClick: () -> Un
                     .clickable { onDelete() }
             )
         }
+    }
+    if (showSettingsDialog) {
+        ActionSettingsDialog(
+            action = action,
+            onDismissRequest = { showSettingsDialog = false },
+            onSave = { newMetadata ->
+                coroutineScope.launch {
+                    val token = sharedStorage.getToken()
+                    if (token != null) {
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString().replace(" ", ""))
+                        val success = patchAction(token, program.id, action.id, newMetadataJson)
+                        if (success) {
+                            val updatedActions = program.actions.map {
+                                if (it.id == action.id) {
+                                    it.copy(metadata = newMetadataJson)
+                                } else {
+                                    it
+                                }
+                            }
+                            val updatedProgram = program.copy(actions = updatedActions)
+                            onUpdateProgram(updatedProgram)
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
@@ -156,15 +194,18 @@ fun ActionMetadata(metadata: String) {
 }
 
 @Composable
-fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
+fun ActionReactions(reactions: List<Reaction>, program: ProgramResponse, onUpdateProgram: (ProgramResponse) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val sharedStorage = SharedStorageUtils(LocalContext.current)
     val regex = Regex("\\{[^{}]+\\}")
     var serializedMetadata: Map<*, *>? = null
-    var finalString = ""
+    var showSettingsDialog by remember { mutableStateOf(false) }
+    var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
 
     if (reactions.isNotEmpty()) {
         for (reaction in reactions) {
+            var finalString = ""
+
             HorizontalDivider(
                 modifier = Modifier
                     .padding(5.dp, 5.dp, 5.dp, 0.dp),
@@ -191,16 +232,19 @@ fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, prog
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cog),
-                        contentDescription = "Settings Action",
+                        contentDescription = "Settings Reaction",
                         tint = Color.White,
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
                             .size(25.dp)
-                            .clickable { onSettingsClick() }
+                            .clickable {
+                                selectedReaction = reaction
+                                showSettingsDialog = true
+                            }
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.trash_2),
-                        contentDescription = "Delete Action",
+                        contentDescription = "Delete Reaction",
                         tint = FrispyTheme.Error500,
                         modifier = Modifier
                             .padding(0.dp, 10.dp, 16.dp, 0.dp)
@@ -212,9 +256,10 @@ fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, prog
                                         val success = deleteReaction(token, program.id, reaction.id)
                                         if (success) {
                                             val updatedReactions = program.actions.find { it.id == reaction.actionId }?.reactions?.toMutableList()
+                                            updatedReactions?.remove(reaction)
                                             val updatedProgram = program.copy(actions = program.actions.map {
                                                 if (it.id == reaction.actionId) {
-                                                    it.copy(reactions = updatedReactions?.filter { it.id != reaction.id } ?: emptyList())
+                                                    it.copy(reactions = updatedReactions ?: emptyList())
                                                 } else {
                                                     it
                                                 }
@@ -248,6 +293,39 @@ fun ActionReactions(reactions: List<Reaction>, onSettingsClick: () -> Unit, prog
             )
         }
     }
+
+    if (showSettingsDialog && selectedReaction != null) {
+        ReactionSettingsDialog(
+            reaction = selectedReaction!!,
+            onDismissRequest = { showSettingsDialog = false },
+            onSave = { newMetadata ->
+                coroutineScope.launch {
+                    val token = sharedStorage.getToken()
+                    if (token != null) {
+                        val newMetadataJson: JsonElement = JsonParser.parseString(newMetadata.toString().replace(" ", ""))
+                        val success = patchReaction(token, program.id, selectedReaction!!.id, newMetadataJson)
+                        if (success) {
+                            val updatedReactions = program.actions.find { it.id == selectedReaction!!.actionId }?.reactions?.map {
+                                if (it.id == selectedReaction!!.id) {
+                                    it.copy(metadata = newMetadataJson)
+                                } else {
+                                    it
+                                }
+                            }
+                            val updatedProgram = program.copy(actions = program.actions.map {
+                                if (it.id == selectedReaction!!.actionId) {
+                                    it.copy(reactions = updatedReactions ?: emptyList())
+                                } else {
+                                    it
+                                }
+                            })
+                            onUpdateProgram(updatedProgram)
+                        }
+                    }
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -279,6 +357,242 @@ fun AddReactionButton(navController: NavController, gson: Gson, program: Program
             fontSize = 20.sp
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ActionSettingsDialog(
+    action: Action,
+    onDismissRequest: () -> Unit,
+    onSave: (Map<String, String>) -> Unit
+) {
+    var metadataMap by remember { mutableStateOf(Gson().fromJson(action.metadata.toString(), Map::class.java) as Map<String, String>) }
+
+    AlertDialog(
+        containerColor = FrispyTheme.Surface700,
+        onDismissRequest = { onDismissRequest() },
+        title = {
+            Text(
+                text = "Edit Action",
+                color = FrispyTheme.Primary500,
+                fontFamily = fontFamily,
+                fontSize = 20.sp
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                if (metadataMap.isEmpty()) {
+                    Text(
+                        text = "No configuration needed",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 18.sp
+                    )
+                } else {
+                    metadataMap.forEach { (key, value) ->
+                        var textValue by remember { mutableStateOf(value) }
+                        Text(
+                            text = key,
+                            color = Color.White,
+                            fontFamily = fontFamily,
+                            fontSize = 18.sp
+                        )
+                        BasicTextField(
+                            value = textValue,
+                            onValueChange = {
+                                textValue = it
+                                metadataMap = metadataMap.toMutableMap().apply { put(key, it) }
+                            },
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                                .background(FrispyTheme.Surface500)
+                                .fillMaxWidth()
+                                .height(25.dp),
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontFamily = fontFamily
+                            ),
+                            singleLine = true
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (metadataMap.isNotEmpty()) {
+                Button(
+                    onClick = {
+                        onSave(metadataMap)
+                        onDismissRequest()
+                    },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = FrispyTheme.Primary500,
+                        disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                        disabledContentColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
+                    enabled = true
+                ) {
+                    Text(
+                        text = "Save",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { onDismissRequest() },
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = FrispyTheme.Error500,
+                    disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                    disabledContentColor = Color.White.copy(alpha = 0.5f)
+                ),
+                modifier = Modifier
+                    .height(40.dp)
+                    .fillMaxWidth(),
+                enabled = true
+            ) {
+                Text(
+                    text = "Cancel",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp
+                )
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReactionSettingsDialog(
+    reaction: Reaction,
+    onDismissRequest: () -> Unit,
+    onSave: (Map<String, String>) -> Unit
+) {
+    var metadataMap by remember { mutableStateOf(Gson().fromJson(reaction.metadata.toString(), Map::class.java) as Map<String, Any>) }
+
+    AlertDialog(
+        containerColor = FrispyTheme.Surface700,
+        onDismissRequest = { onDismissRequest() },
+        title = {
+            Text(
+                text = "Edit Reaction",
+                color = FrispyTheme.Primary500,
+                fontFamily = fontFamily,
+                fontSize = 20.sp
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                if (metadataMap.isEmpty()) {
+                    Text(
+                        text = "No configuration needed",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 18.sp
+                    )
+                } else {
+                    metadataMap.forEach { (key, value) ->
+                        var textValue by remember { mutableStateOf(value.toString()) }
+                        Text(
+                            text = key,
+                            color = Color.White,
+                            fontFamily = fontFamily,
+                            fontSize = 18.sp
+                        )
+                        BasicTextField(
+                            value = textValue,
+                            onValueChange = {
+                                textValue = it
+                                metadataMap = metadataMap.toMutableMap().apply { put(key, it) }
+                            },
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 5.dp)
+                                .background(FrispyTheme.Surface500)
+                                .fillMaxWidth()
+                                .height(25.dp),
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontFamily = fontFamily
+                            ),
+                            singleLine = true
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (metadataMap.isNotEmpty()) {
+                Button(
+                    onClick = {
+                        onSave(metadataMap.mapValues { it.value.toString() })
+                        onDismissRequest()
+                    },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = FrispyTheme.Primary500,
+                        disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                        disabledContentColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
+                    enabled = true
+                ) {
+                    Text(
+                        text = "Save",
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { onDismissRequest() },
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = FrispyTheme.Error500,
+                    disabledContainerColor = FrispyTheme.Surface300.copy(alpha = 0.5f),
+                    disabledContentColor = Color.White.copy(alpha = 0.5f)
+                ),
+                modifier = Modifier
+                    .height(40.dp)
+                    .fillMaxWidth(),
+                enabled = true
+            ) {
+                Text(
+                    text = "Cancel",
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontSize = 20.sp
+                )
+            }
+        },
+    )
 }
 
 @Composable
