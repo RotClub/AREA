@@ -82,6 +82,8 @@ interface Api {
     suspend fun apiPutReaction(@Header("Authorization") token: String, @Path("inspecting_node") inspectingNode: Int, @Body request: NewReactionIdRequest): Response<Unit>
     @PATCH("api/programs/{programId}/node")
     suspend fun apiPatchAction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: PatchActionRequest): Response<Unit>
+    @PATCH("api/programs/{programId}/node")
+    suspend fun apiPatchReaction(@Header("Authorization") token: String, @Path("programId") programId: Int, @Body request: PatchReactionRequest): Response<Unit>
 
     // Actions
     @GET("api/action")
