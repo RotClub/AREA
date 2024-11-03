@@ -2,5 +2,9 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
-	redirect(307, "/mobile/client.apk");
+	if (process.env.VERCEL_URL) {
+		redirect(307, "/client.apk");
+	} else {
+		redirect(307, "/mobile/client.apk");
+	}
 };
