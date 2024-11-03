@@ -194,12 +194,13 @@ fun ActionReactions(reactions: List<Reaction>, program: ProgramResponse, onUpdat
     val sharedStorage = SharedStorageUtils(LocalContext.current)
     val regex = Regex("\\{[^{}]+\\}")
     var serializedMetadata: Map<*, *>? = null
-    var finalString = ""
     var showSettingsDialog by remember { mutableStateOf(false) }
     var selectedReaction by remember { mutableStateOf<Reaction?>(null) }
 
     if (reactions.isNotEmpty()) {
         for (reaction in reactions) {
+            var finalString = ""
+
             HorizontalDivider(
                 modifier = Modifier
                     .padding(5.dp, 5.dp, 5.dp, 0.dp),
