@@ -52,7 +52,7 @@ jobs:
       - name: Download APK
         run: |
           wget "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
-          mv area-preview.apk
+          mv area-preview.apk client.apk
         working-directory: "./web/static/"
 
       - name: Build & Deploy the Vercel Preview
