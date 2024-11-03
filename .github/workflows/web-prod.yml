@@ -29,12 +29,28 @@ jobs:
           npm install --global vercel@latest
         working-directory: "./web"
 
-      - name: Link, Configure, Build and Deploy the Vercel Production
+      - name: Link and Configure project
         run: |
           vercel link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=area-app
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           vercel env pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} .env
           sed -i.bak '/rootDirectory/d' .vercel/project.json
+        working-directory: "./web"
+
+      - name: Get latest release
+        id: lts
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: RotClub
+          repo: AREA
+
+      - name: Download APK
+        run: |
+          curl -o app.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+        working-directory: "./web/static/"
+
+      - name: Build & Deploy the Vercel Preview
+        run: |
           vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
           vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: "./web"
