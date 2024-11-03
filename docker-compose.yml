@@ -6,7 +6,7 @@ services:
     build:
       context: "./web"
       dockerfile: "Dockerfile"
-      target: "vercel_runner"
+      target: "node_runner"
       args:
         VERCEL_TOKEN: ${VERCEL_TOKEN}
     ports:

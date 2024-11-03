@@ -50,7 +50,7 @@ jobs:
 
       - name: Download APK
         run: |
-          curl -o app.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
+          curl -o client.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
         working-directory: "./web/static/"
 
       - name: Build & Deploy the Vercel Preview
