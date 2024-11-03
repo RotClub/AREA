@@ -34,13 +34,12 @@ jobs:
           npm install --global vercel@latest
         working-directory: "./web"
 
-      - name: Link, Configure, Build project
+      - name: Link and Configure project
         run: |
           vercel link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=area-app
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
           vercel env pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} .env
           sed -i.bak '/rootDirectory/d' .vercel/project.json
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: "./web"
 
       - name: Get latest release
@@ -53,8 +52,10 @@ jobs:
       - name: Download APK
         run: |
           curl -o app.apk "https://github.com/RotClub/AREA/releases/download/${{ steps.lts.outputs.release }}/area-preview.apk"
-        working-directory: "./web/build/client/mobile"
+        working-directory: "./web/static/"
 
-      - name: Deploy the Vercel Preview
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build & Deploy the Vercel Preview
+        run: |
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: "./web"
