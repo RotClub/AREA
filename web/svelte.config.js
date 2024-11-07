@@ -21,7 +21,7 @@ const config = {
 			envPrefix: ""
 		}),
 		csrf: {
-			checkOrigin: false,
+			checkOrigin: false
 		}
 	}
 };

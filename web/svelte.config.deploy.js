@@ -20,7 +20,7 @@ const config = {
 			runtime: "nodejs20.x"
 		}),
 		csrf: {
-			checkOrigin: false,
+			checkOrigin: false
 		}
 	}
 };
