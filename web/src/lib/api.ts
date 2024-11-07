@@ -5,7 +5,7 @@ export const checkAccess = async (
 	client: PrismaClient,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	request: any,
-	level: UserRole = UserRole.API_USER,
+	level: UserRole = UserRole.USER,
 	apiMode = true
 ) => {
 	let token: string;

@@ -19,7 +19,10 @@ const config = {
 		adapter: adapter({
 			out: "build",
 			envPrefix: ""
-		})
+		}),
+		csrf: {
+			checkOrigin: false,
+		}
 	}
 };
 export default config;
